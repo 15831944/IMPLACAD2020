@@ -1,0 +1,75 @@
+SET INSTALL_DATA="C:\$(ProjectName)\$(ProjectName)"
+SET INSTALL_BUNDLE="C:\$(ProjectName)\$(ProjectName).bundle"
+SET OUT_DATA="C:\ProgramData\$(ProjectName)"
+SET OUT_BUNDLE="C:\ProgramData\Autodesk\ApplicationPlugins\$(ProjectName).bundle"
+
+if not exist "%INSTALL_DATA%" mkdir "%INSTALL_DATA%"
+if not exist "%INSTALL_BUNDLE%" mkdir "%INSTALL_BUNDLE%"
+if not exist "%OUT_DATA%" mkdir "%OUT_DATA%"
+if not exist "%OUT_BUNDLE%" mkdir "%OUT_BUNDLE%"
+
+
+
+
+
+
+
+SET IMPLACADB="IMPLACAD.bundle"
+SET IMPLACAD_INSTALL="C:\$(ProjectName)"
+SET IMPLACAD_DATA="C:\ProgramData\$(ProjectName)"
+SET IMPLACAD_BUNDLE="C:\ProgramData\Autodesk\ApplicationPlugins\%IMPLACADB%"
+
+REM "COPIAR TODO A C:\IMPLASER" Para el instalador y copiar todo a sus ubicaciones
+copy "$(ProjectDir)PackageContents.xml" "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle"
+copy "$(ProjectDir)etiquetaescalera.dwg" "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources\"
+copy "$(ProjectDir)EVACUACION_A4H.dwg" "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources\"
+copy "$(ProjectDir)EVACUACION_A4V.dwg" "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources\"
+copy "$(ProjectDir)EVACUACION_A3H.dwg" "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources\"
+copy "$(ProjectDir)EVACUACION_A3V.dwg" "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources\"
+copy "$(ProjectDir)EVACUACION_A2H.dwg" "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources\"
+copy "$(ProjectDir)EVACUACION_A2V.dwg" "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources\"
+copy "$(ProjectDir)$(TargetName).ico" "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources\"
+copy "$(ProjectDir)$(TargetName).cuix" "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources\"
+copy "$(ProjectDir)evacuacionpri.shx" "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources\"
+copy "$(ProjectDir)evacuacionsec.shx" "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources\"
+copy "$(ProjectDir)rutasevacuacion.lin" "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources\"
+copy "$(TargetDir)$(TargetFileName)" "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2020\"
+copy "$(TargetDir)System.Data.SqlServerCe.dll" "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2020\"
+copy "$(ProjectDir)$(TargetName).sdf" $(TargetDir)
+copy "$(ProjectDir)$(TargetName).sdf" "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2020\"
+copy "$(ProjectDir)$(TargetName).ini" $(TargetDir)
+copy "$(ProjectDir)$(TargetName).ini" "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2020\"
+copy "$(ProjectDir)$(TargetName)Help.htm" "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources\"
+
+REM "A PROGRAMDATA"
+xcopy "$(SolutionDir)..\$(ProjectName)_2020\$(ProjectName)\*.*" "%programdata%\$(ProjectName)\" /E /Y
+
+
+
+
+
+SET INSTALL_DATA="C:\$(ProjectName)\$(ProjectName)"
+SET INSTALL_BUNDLE="C:\$(ProjectName)\$(ProjectName).bundle"
+SET OUT_DATA="C:\ProgramData\$(ProjectName)"
+SET OUT_BUNDLE="C:\ProgramData\Autodesk\ApplicationPlugins\$(ProjectName).bundle"
+
+
+REM "COPIAR TODO A C:\IMPLASER\IMPLASER.bundle" Para el instalador y copiar todo a sus ubicaciones
+xcopy "$(ProjectDir)PackageContents.xml" "%INSTALL_BUNDLE%" /Y
+xcopy "$(ProjectDir)*.dwg" "%INSTALL_BUNDLE%\Contents\Resources\" /E /Y
+xcopy "$(ProjectDir)$(TargetName).ico" "%INSTALL_BUNDLE%\Contents\Resources\" /Y
+xcopy "$(ProjectDir)$(TargetName).cuix" "%INSTALL_BUNDLE%\Contents\Resources\" /Y
+xcopy "$(ProjectDir)$(TargetName)Help.htm" "%INSTALL_BUNDLE%\Contents\Resources\" /Y
+xcopy "$(ProjectDir)$(TargetName).sdf" "%INSTALL_BUNDLE%\Contents\Windows\2020\" /Y
+xcopy "$(ProjectDir)$(TargetName).ini" "%INSTALL_BUNDLE%\Contents\Windows\2020\" /Y
+xcopy "$(ProjectDir)evacuacionpri.shx" "%INSTALL_BUNDLE%\Contents\Resources\" /Y
+xcopy "$(ProjectDir)evacuacionsec.shx" "%INSTALL_BUNDLE%\Contents\Resources\" /Y
+xcopy "$(ProjectDir)rutasevacuacion.lin" "%INSTALL_BUNDLE%\Contents\Resources\" /Y
+xcopy "$(TargetDir)*.dll" "%INSTALL_BUNDLE%\Contents\Windows\2020\" /E /Y
+
+REM "COPIAR BIBLIOTECA A C:\IMPLASER\IMPLASER"
+xcopy "$(SolutionDir)..\$(ProjectName)2020_DOCUMENTOS\$(ProjectName)" "%INSTALL_DATA%" /E /Y
+
+REM "COPIA FINAL A SUS CARPETAS CORRESPONDIENTES"
+REM xcopy "%IMPLACAD_INSTALL%\%IMPLACADB%" "%IMPLACAD_BUNDLE%" /E /Y
+REM xcopy "%IMPLACAD_INSTALL%\$(ProjectName)" "%IMPLACAD_DATA%" /E /Y

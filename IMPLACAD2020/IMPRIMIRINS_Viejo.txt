@@ -1,0 +1,126 @@
+
+        ''
+        <CommandMethod(regAPP, "IMPRIMIRINS", "IMPRIMIRINS", CommandFlags.Modal)> _
+        Public Sub IMPRIMIRINS() ' This method can have any name
+            ' Put your command code here
+            If EsParaTrabajar() = False Then
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                       "Debe abrir el DWG original de trabajo")
+                Exit Sub
+            End If
+            '' Documento sin guardar
+            If oApp.ActiveDocument.FullName = "" Then
+                MsgBox("Este documento aún no se ha guardado" & vbCrLf & vbCrLf & _
+                       "Guarde antes el documento y vuelva a probar...")
+                Exit Sub
+            End If
+            ''
+            If oApp Is Nothing Then _
+        oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication)
+            'oDoc = oApp.ActiveDocument
+            '' 0.- Anular cualquier comando
+            ''oApp.ActiveDocument.PostCommand(Chr(27) & Chr(27))
+            ''
+            'ConfiguraDibujo()
+            textoEstilo = Nothing
+            Dim valorescala As Double = 0
+            Try
+                valorescala = oApp.ActiveDocument.Utility.GetReal( _
+                    vbLf & "Por ejemplo si escala 1/100, escriba 0.01 o 1/100" & _
+                    vbLf & "Si escala 1/500, escriba 0.002 o 1/500" & _
+                    vbLf & vbLf & "Indique la escala del plano : ")
+            Catch ex As System.Exception
+                Exit Sub
+            End Try
+            ''
+            If valorescala = 0 Then
+                Exit Sub
+            End If
+            ''
+            If valorescala < 1 Then
+                'oBl.ScaleEntity(oBl.InsertionPoint, 1)
+                escalaTotal = 0.05 / valorescala
+            Else
+                MsgBox("No se permiten escalas iguales o superiores a 1...")
+                Exit Sub
+                'escalaTotal = 1
+            End If
+            ''
+            '' Guardamos el nuevo documento con el nombre codificado de la escala.
+            '' Borrandolo antes, si existe.
+            '' O abrimos el base
+            Dim nuevoDocBase As String = IO.Path.GetDirectoryName(oApp.ActiveDocument.FullName) & "\" & IO.Path.GetFileNameWithoutExtension(oApp.ActiveDocument.FullName).Split("·")(0)
+            Dim nuevoDocSuf As String = "·" & valorescala.ToString.Replace(".", "").Replace(",", "") & ".dwg"
+            Dim nuevoDoc As String = nuevoDocBase & nuevoDocSuf
+            ''
+            ''
+            If oApp.ActiveDocument.FullName = nuevoDoc Then
+                MsgBox("Este dibujo ya está a la escala indicada..." & vbCrLf & _
+                       "Imprimirlo o PARATRABAJAR para retornar" & vbCrLf & _
+                       "al DWG original de trabajo.")
+                Exit Sub
+            End If
+            '' Borramos antes el fichero, si ya existía.
+            If IO.File.Exists(nuevoDoc) Then IO.File.Delete(nuevoDoc)
+            CapaZonaCoberturaACTDES(CapaEstado.Desactivar)
+            oApp.ActiveDocument.Save()
+            oApp.ActiveDocument.SaveAs(nuevoDoc)
+            ''
+            'oDoc = oApp.ActiveDocument
+            ''
+            'oDoc.Close(True)
+            'oDoc = Nothing
+            'oDoc = oApp.Documents.Open(nuevoDoc)
+            ''
+            'Dim escalafinal As Double = 1
+            '(command "_.scale" nom-obj "" p-ins (/ 0.05 escala))
+            ''
+            '' Opción A4, A3, A2, A1 o A0
+            'Dim ascendentedescendente As String = GetDINDame_NET()
+            'Select Case ascendentedescendente.ToUpper
+            '    Case "A4"
+            '        escalaTotal = 10
+            '    Case "A3"
+            '        escalaTotal = 10
+            '    Case "A2"
+            '        escalaTotal = 15
+            '    Case "A1"
+            '        escalaTotal = 15
+            '    Case "A0"
+            '        escalaTotal = 20
+            '    Case Else
+            '        Exit Sub
+            'End Select
+            ''
+            'Dim mensaje As String = ""
+            'For Each oBe As AcadBlockReference In dame
+            '    mensaje &= oBe.GetAttributes(0).TextString & vbCrLf ' NOMBREESCALERA
+            '    mensaje &= oBe.GetAttributes(1).TextString & vbCrLf ' NUMEROESCALONES
+            '    mensaje &= oBe.GetAttributes(2).TextString & vbCrLf ' CLASE
+            '    mensaje &= oBe.GetAttributes(3).TextString & vbCrLf ' ANCHO
+            '    mensaje &= vbCrLf & StrDup(15, "*") & vbCrLf & vbCrLf
+            'Next
+            'MsgBox(mensaje)
+            'CapaCeroActiva()
+            vermensajes = False
+            Me.TABLADATOS()
+            Me.TABLAESCALERAS()
+            vermensajes = True
+            ''
+            'Dim mensaje As String = ""
+            For Each queID As Long In arrBloquesId
+                Dim oBloque As AcadBlockReference = oApp.ActiveDocument.ObjectIdToObject(queID)
+                oBloque.XScaleFactor = escalaTotal
+                oBloque.YScaleFactor = escalaTotal
+                oBloque.ZScaleFactor = escalaTotal
+                oBloque.Update()
+                oBloque = Nothing
+            Next
+            oApp.ActiveDocument.Regen(AcRegenType.acAllViewports)
+            ''
+            '' Ponemos la propiedad personalizada ESTADO=PARAIMPRIMIR
+            Try
+                oApp.ActiveDocument.SummaryInfo.AddCustomInfo("ESTADO", "PARAIMPRIMIR")
+            Catch ex As System.Exception
+                oApp.ActiveDocument.SummaryInfo.SetCustomByKey("ESTADO", "PARAIMPRIMIR")
+            End Try

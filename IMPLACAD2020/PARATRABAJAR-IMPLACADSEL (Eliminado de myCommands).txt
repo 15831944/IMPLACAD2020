@@ -1,0 +1,113 @@
+
+        ''
+        <CommandMethod(regAPP, "PARATRABAJAR", "PARATRABAJAR", CommandFlags.Modal)> _
+        Public Sub PARATRABAJAR() ' This method can have any name
+            ' Put your command code here
+            If oApp Is Nothing Then _
+        oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication)
+            'oDoc = oApp.ActiveDocument
+            oApp.ActiveDocument.Save()
+            textoEstilo = Nothing
+            '' 0.- Anular cualquier comando
+            ''oApp.ActiveDocument.PostCommand(Chr(27) & Chr(27))
+            ''
+            'ConfiguraDibujo()
+            escalaTotal = 1
+            '' O abrimos el base
+            Dim nuevoDocBase As String = IO.Path.GetDirectoryName(oApp.ActiveDocument.FullName) & "\" & IO.Path.GetFileNameWithoutExtension(oApp.ActiveDocument.FullName).Split("·")(0)
+            Dim nuevoDocSuf As String = ".dwg"
+            Dim nuevoDoc As String = nuevoDocBase & nuevoDocSuf
+            If oApp.ActiveDocument.FullName = nuevoDoc Then
+                '' no hacemos nada. Ya estamos en el documento base
+                MsgBox("Este ya es el DWG original PARATRABAJAR...")
+                Exit Sub
+            End If
+            'oApp.ActiveDocument.Close(True)
+            'oDoc.Close(True)
+            'oDoc = Nothing
+            nombreviejo = oApp.ActiveDocument.FullName
+            'oDoc = Nothing
+            'oDoc = oApp.Documents.Open(nuevoDoc)
+            Call oApp.Documents.Open(nuevoDoc)
+            '' Nuevo Timer con 2 segundos
+            oTimer = New System.Timers.Timer(2000)
+            '' Solo se ejecutará una vez. La primera que se ejecute.
+            oTimer.AutoReset = False
+            oTimer.Enabled = True
+            'oApp.Documents.Item(nombreviejo).Close()
+            ''
+            '' Opción A4, A3, A2, A1 o A0
+            'Dim ascendentedescendente As String = GetDINDame_NET()
+            ''Dim escalafinal As Double = 1
+            'Select Case ascendentedescendente.ToUpper
+            '    Case "A4"
+            '        escalaTotal = 100
+            '    Case "A3"
+            '        escalaTotal = 100
+            '    Case "A2"
+            '        escalaTotal = 100
+            '    Case "A1"
+            '        escalaTotal = 100
+            '    Case "A0"
+            '        escalaTotal = 100
+            '    Case Else
+            '        Exit Sub
+            'End Select
+            ''
+            'Dim mensaje As String = ""
+            'For Each oBe As AcadBlockReference In dame
+            '    mensaje &= oBe.GetAttributes(0).TextString & vbCrLf ' NOMBREESCALERA
+            '    mensaje &= oBe.GetAttributes(1).TextString & vbCrLf ' NUMEROESCALONES
+            '    mensaje &= oBe.GetAttributes(2).TextString & vbCrLf ' CLASE
+            '    mensaje &= oBe.GetAttributes(3).TextString & vbCrLf ' ANCHO
+            '    mensaje &= vbCrLf & StrDup(15, "*") & vbCrLf & vbCrLf
+            'Next
+            'MsgBox(mensaje)
+            'CapaCeroActiva()
+            'vermensajes = False
+            'Me.TABLADATOS()
+            'Me.TABLAESCALERAS()
+            'vermensajes = True
+            ' ''
+            ''Dim mensaje As String = ""
+            'For Each queID As Long In arrBloquesId
+            '    Dim oBloque As AcadBlockReference = oDoc.ObjectIdToObject(queID)
+            '    oBloque.XScaleFactor = escalaTotal
+            '    oBloque.YScaleFactor = escalaTotal
+            '    oBloque.ZScaleFactor = escalaTotal
+            '    oBloque.Update()
+            '    oBloque = Nothing
+            'Next
+            'oDoc.Regen(AcRegenType.acAllViewports)
+        End Sub
+
+
+
+        ''
+        ' Modal Command with pickfirst selection
+        <CommandMethod(regAPP, "IMPLACADSEL", "IMPLACADSEL", CommandFlags.Modal + CommandFlags.UsePickSet)> _
+        Public Sub IMPLACADSEL() ' This method can have any name
+            If EsParaTrabajar() = False Then
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                       "Comando PARATRABAJAR para abrir el DWG original de trabajo")
+                Exit Sub
+            End If
+            If oApp Is Nothing Then _
+       oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication)
+            'oDoc = oApp.ActiveDocument
+            ' Put your command code here
+            '' 0.- Anular cualquier comando
+            ''oApp.ActiveDocument.PostCommand(Chr(27) & Chr(27))
+            CapaCeroActiva()
+            ''
+            Dim result As PromptSelectionResult = Application.DocumentManager.MdiActiveDocument.Editor.GetSelection()
+            If (result.Status = PromptStatus.OK) Then
+                ' There are selected entities
+                ' Put your command using pickfirst set code here
+                MsgBox("Seleccionados : " & result.Value.Count)
+            Else
+                ' There are no selected entities
+                ' Put your command code here
+                MsgBox("No hay entidades seleccionadas...")
+            End If
+        End Sub

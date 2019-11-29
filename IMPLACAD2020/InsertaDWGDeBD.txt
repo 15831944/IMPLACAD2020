@@ -1,0 +1,33 @@
+
+    Private Sub btnInsertar_Click(sender As Object, e As EventArgs) Handles btnInsertar.Click
+        Dim dato As Object = ultimaFila("DWG")
+        If IsDBNull(dato) = False AndAlso IO.File.Exists(dato.ToString) = True Then
+            Dim dwg As System.Byte()
+            dwg = CType(ultimaFila("DWG"), System.Byte())
+            ultimoCaminoDWG = "C:\Temp\" & Me.txtREFERENCIA.Text & ".dwg"
+            Bytes2EscribeFichero(dwg, ultimoCaminoDWG)
+            'MsgBox("Se han escrito en C:\Temp " & dwg.GetLength(0) & " bites")
+            'application
+            'Application.DocumentManager.CurrentDocument.Editor
+            Dim oApp As Autodesk.AutoCAD.Interop.AcadApplication = _
+                CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, 
+Autodesk.AutoCAD.Interop.AcadApplication)
+            Me.Visible = False
+            Dim resultado As PromptPointResult = Application.DocumentManager.CurrentDocument.Editor.GetPoint("Punto de insercion :")
+            If resultado IsNot Nothing Then
+                Dim oPoint As Point3d = resultado.Value
+                Dim puntoInserta(0 To 2) As Double
+                puntoInserta(0) = oPoint.X
+                puntoInserta(1) = oPoint.Y
+                puntoInserta(2) = oPoint.Z
+                Dim inserta As AcadBlockReference = Nothing
+                inserta = oApp.ActiveDocument.ActiveLayout.Block.InsertBlock(puntoInserta, ultimoCaminoDWG, 1, 1, 1, 0)
+                oApp.ActiveDocument.Regen(AcRegenType.acActiveViewport)
+            End If
+            Me.Visible = True
+        Else
+            MsgBox("No hay DWG asociado...")
+        End If
+        'Me.DialogResult = Windows.Forms.DialogResult.OK
+        'Me.Close()
+    End Sub

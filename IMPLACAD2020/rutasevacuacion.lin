@@ -1,0 +1,4 @@
+*EVACUACIONPRI,Ruta de evacuacion primaria
+A,.00001,[EVACUACIONPRI,EVACUACIONPRI,s=1],-1
+*EVACUACIONSEC,Ruta de evacuacion secundaria
+A,.00001,[EVACUACIONSEC,EVACUACIONSEC,s=1],-1

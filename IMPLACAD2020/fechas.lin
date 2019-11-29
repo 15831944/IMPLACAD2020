@@ -1,0 +1,4 @@
+*FLECHAR,Línea de dirección con relleno
+A,8,[FLECHAR,flecha.shx,S=1.5,R=270],16
+*FLECHAH,Línea de dirección sin relleno
+A,8,-1.5,[FLECHAH,flecha.shx,S=1.5,R=270],15.5

@@ -1,0 +1,93 @@
+    ''
+    Public Sub BotonesImplacad(grupo As ActivarBotones, Optional nombre As String = "", Optional activo As Boolean = True)
+        If oApp Is Nothing Then _
+        oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication)
+        ''
+        If oApp.Documents.Count = 0 Then Exit Sub
+        ''
+        '' Buscar el ribbon RefApp = "IMPLACAD"
+        Dim oRib As Autodesk.Windows.RibbonControl = RibbonServices.RibbonPaletteSet.RibbonControl
+        Dim oRTab As Autodesk.Windows.RibbonTab = Nothing
+        Dim oRpan As Autodesk.Windows.RibbonPanel = Nothing
+        Dim oRpanS As Autodesk.Windows.RibbonPanelSource = Nothing
+        Dim oRbut As Autodesk.AutoCAD.Ribbon.RibbonCommandButton = Nothing
+        'Dim oRmac As Autodesk.Windows.RibbonMenuButton
+        ''
+        '' Iterar entre los Ribbons existentes
+        For Each t As Autodesk.Windows.RibbonTab In oRib.Tabs
+            If t.Name = regAPP Then
+                oRTab = t
+                Exit For
+            End If
+        Next
+        ''
+        '' No hemos encontrado el Ribbon IMPLACAD
+        If oRTab Is Nothing Then Exit Sub
+        ''
+        Dim btnTodos As String() = New String() { _
+            "IMPLACADMENU", "INSERTAREDITAR", "ADECUA", "BALIZARSUELO", "BALIZARPARED", _
+            "BALIZARESCALERA", "RUTAEVACUACION", "TABLADATOS", "TABLAESCALERAS", _
+            "CAPASCOBERTURA", "GROSORLINEAS", "ESCALAM", "IMPRIMIRINS", "IMPRIMIREVA", _
+            "EXPLOTAEVA", "TABLAPARCIAL", "_ETRANSMIT...", "ACTUALIZARIMPLACAD"}
+        Dim txtTodos As String = Join(btnTodos, " ")
+        Dim arrTodos As New ArrayList(btnTodos)
+        ''
+        '' Los RibbonPanel de IMPLACAD
+        For Each oRpan In oRTab.Panels
+            oRpanS = oRpan.Source
+            ''
+            For Each oRItem As Autodesk.Windows.RibbonItem In oRpanS.Items
+                Try
+                    ''
+                    If Not (TypeOf oRItem Is Autodesk.AutoCAD.Ribbon.RibbonCommandButton) Then
+                        Continue For
+                    End If
+                    ''
+                    oRbut = oRItem
+                    Select Case grupo
+                        Case ActivarBotones.NoActivado
+                            Try
+                                If oRbut.Macro.ToUpper.Trim.EndsWith("ACTUALIZARIMPLACAD") Then
+                                    oRbut.IsEnabled = True
+                                Else
+                                    oRbut.IsEnabled = False
+                                End If
+                            Catch ex As System.Exception
+                                Continue For
+                            End Try
+                        Case ActivarBotones.SiActivadoConEscala
+                            Try
+                                oRbut.IsEnabled = True
+                            Catch ex As System.Exception
+                                oRItem.IsEnabled = True
+                            End Try
+                        Case ActivarBotones.SiActivadoSinEscala
+                            Try
+                                If oRbut.Macro.ToUpper.Trim.EndsWith("ACTUALIZARIMPLACAD") Or oRbut.Macro.ToUpper.Trim.EndsWith("ESCALAM") Then
+                                    oRbut.IsEnabled = True
+                                Else
+                                    oRbut.IsEnabled = False
+                                End If
+                            Catch ex As System.Exception
+                                Continue For
+                            End Try
+                        Case ActivarBotones.Cualquiera
+                            If nombre = "" Or arrTodos.Contains(nombre.ToUpper) = False Then
+                                Exit Sub
+                            End If
+                            ''
+                            Try
+                                If oRbut.Macro.ToUpper.Trim.EndsWith(nombre.ToUpper) Then
+                                    oRbut.IsEnabled = activo
+                                    Exit For
+                                End If
+                            Catch ex As System.Exception
+                                Continue For
+                            End Try
+                    End Select
+                Catch ex As System.Exception
+                    Continue For
+                End Try
+            Next
+        Next
+    End Sub

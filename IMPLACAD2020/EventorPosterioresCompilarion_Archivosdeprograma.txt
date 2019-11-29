@@ -1,0 +1,73 @@
+mkdir "C:\ProgramData\Autodesk\ApplicationPlugins\YUDIPRO2016.bundle"
+mkdir "C:\ProgramData\Autodesk\ApplicationPlugins\YUDIPRO2016.bundle\Contents"
+mkdir "C:\ProgramData\Autodesk\ApplicationPlugins\YUDIPRO2016.bundle\Contents\Resources"
+mkdir "C:\ProgramData\Autodesk\ApplicationPlugins\YUDIPRO2016.bundle\Contents\Windows"
+mkdir "C:\ProgramData\Autodesk\ApplicationPlugins\YUDIPRO2016.bundle\Contents\Windows\2016"
+copy $(TargetPath) "C:\ProgramData\Autodesk\ApplicationPlugins\YUDIPRO2016.bundle\Contents\Windows\2016\"
+copy $(TargetDir)$(TargetName).ini "C:\ProgramData\Autodesk\ApplicationPlugins\YUDIPRO2016.bundle\Contents\Windows\2016\"
+copy $(ProjectDir)\PackageContents.xml "C:\ProgramData\Autodesk\ApplicationPlugins\YUDIPRO2016.bundle\"
+
+********************************************
+
+mkdir "%programdata%\Autodesk\ApplicationPlugins\YUDIPRO2016.bundle"
+mkdir "%programdata%\Autodesk\ApplicationPlugins\YUDIPRO2016.bundle\Contents"
+mkdir "%programdata%\Autodesk\ApplicationPlugins\YUDIPRO2016.bundle\Contents\Resources"
+mkdir "%programdata%\Autodesk\ApplicationPlugins\YUDIPRO2016.bundle\Contents\Windows"
+mkdir "%programdata%\Autodesk\ApplicationPlugins\YUDIPRO2016.bundle\Contents\Windows\2016"
+copy $(TargetPath) "%programdata%\Autodesk\ApplicationPlugins\YUDIPRO2016.bundle\Contents\Windows\2016\"
+copy $(TargetDir)$(TargetName).ini "%programdata%\Autodesk\ApplicationPlugins\YUDIPRO2016.bundle\Contents\Windows\2016\"
+copy $(ProjectDir)\PackageContents.xml "%programdata%\Autodesk\ApplicationPlugins\YUDIPRO2016.bundle\"
+
+********************************************
+********************************************
+mkdir "C:\ProgramData\Autodesk\ApplicationPlugins\IMPLACAD.bundle"
+mkdir "C:\ProgramData\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents"
+mkdir "C:\ProgramData\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources"
+mkdir "C:\ProgramData\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\"
+mkdir "C:\ProgramData\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2016"
+copy $(ProjectDir)PackageContents.xml "C:\ProgramData\Autodesk\ApplicationPlugins\IMPLACAD.bundle"
+copy $(ProjectDir)etiquetaescalera.dwg "C:\ProgramData\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources"
+copy $(ProjectDir)$(TargetName).ico "C:\ProgramData\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources"
+copy $(ProjectDir)$(TargetName).cuix "C:\ProgramData\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources"
+rem copy $(ProjectDir)$(TargetName).ico "C:\ProgramData\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2016"
+rem copy $(ProjectDir)$(TargetName).cuix "C:\ProgramData\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2016"
+copy $(TargetDir)$(TargetFileName) "C:\ProgramData\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2016"
+copy $(TargetDir)System.Data.SqlServerCe.dll "C:\ProgramData\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2016"
+copy $(ProjectDir)$(TargetName).sdf $(TargetDir)
+copy $(ProjectDir)$(TargetName).sdf "C:\ProgramData\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2016\"
+
+********************************************
+
+mkdir "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle"
+mkdir "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents"
+mkdir "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources"
+mkdir "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\"
+mkdir "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2016"
+copy $(ProjectDir)PackageContents.xml "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle"
+copy $(ProjectDir)etiquetaescalera.dwg "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources"
+copy $(ProjectDir)$(TargetName).ico "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources"
+copy $(ProjectDir)$(TargetName).cuix "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources"
+rem copy $(ProjectDir)$(TargetName).ico "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2016"
+rem copy $(ProjectDir)$(TargetName).cuix "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2016"
+copy $(TargetDir)$(TargetFileName) "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2016"
+copy $(TargetDir)System.Data.SqlServerCe.dll "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2016"
+copy $(ProjectDir)$(TargetName).sdf $(TargetDir)
+copy $(ProjectDir)$(TargetName).sdf "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2016\"
+
+*********************************************
+
+mkdir "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle"
+mkdir "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents"
+mkdir "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources"
+mkdir "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\"
+mkdir "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2016"
+copy $(ProjectDir)PackageContents.xml "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle"
+copy $(ProjectDir)etiquetaescalera.dwg "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources"
+copy $(ProjectDir)$(TargetName).ico "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources"
+copy $(ProjectDir)$(TargetName).cuix "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Resources"
+copy $(TargetDir)$(TargetFileName) "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2016"
+copy $(TargetDir)System.Data.SqlServerCe.dll "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2016"
+copy $(ProjectDir)$(TargetName).sdf $(TargetDir)
+copy $(ProjectDir)$(TargetName).sdf "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2016"
+copy $(ProjectDir)$(TargetName).ini $(TargetDir)
+copy $(ProjectDir)$(TargetName).ini "%programdata%\Autodesk\ApplicationPlugins\IMPLACAD.bundle\Contents\Windows\2016"

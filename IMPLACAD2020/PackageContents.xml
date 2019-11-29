@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ApplicationPackage
+	SchemaVersion="1.0"
+	AutodeskProduct="AutoCAD"
+	ProductType="Application"
+	Name="IMPLACAD"
+	Description="IMPLACAD. Para planificación de etiquetas de seguridad en planos"
+	Author="2aCAD Graitec Group" Icon="IMPLACAD.ico"
+	AppNameSpace="2acad.es"
+	OnlineDocumentation=" "
+	HelpFile="IMPLACADHelp.htm"
+	ProductCode="{7A57503F-7ED0-4D3A-B102-DA2993001CC3}"
+	UpgradeCode="{7A57503F-7ED0-4D3A-B102-DA2993001CC3}"
+	FriendlyVersion="1.0.0"
+	SupportedLocales="Enu|Deu|Esp|Fra|Ita|Plk|Ptb|Chs|Cht|Csy|Hun|Jpn|Kor|Rus">
+	<CompanyDetails
+		Name="2aCAD Graitec Group"
+		Phone="976 45 81 45"
+		Url="http://www.2acad.es/"
+		Email="comercial@2acad.com"/>
+	<RuntimeRequirements
+		SeriesMin="R23.1"
+		SeriesMax="R24.1"
+		Platform="LDT|AIP|AIPRS|AIPSIM|Civil|AOEM|AIS|ECSCAD|ACADM|ACADE|ADT|AutoCAD*|AutoCAD"
+		OS="Win32|Win64" />
+	<Components>
+		<ComponentEntry
+			AppName="IMPLACAD"
+			Version="1.0.0"
+			ModuleName="IMPLACAD.dll"
+			AppDescription="IMPLACAD. Para planificación de etiquetas de seguridad en planos"
+			LoadOnAutoCADStartup="True"
+			LoadOnCommandInvocation="True"
+			LoadOnRequest="True" />
+			<RuntimeRequirements
+				SupportPath="./"
+				OS="Win32|Win64"
+				Platform="LDT|AIP|AIPRS|AIPSIM|Civil|AOEM|AIS|ECSCAD|ACADM|ACADE|ADT|AutoCAD*|AutoCAD"
+				SeriesMin="R23.1"
+				SeriesMax="R24.1"/>
+			<Commands GroupName="IMPLACAD">
+				<Command Local="INSERTAREDITAR" Global="ETIQUETAS" Description="Insertar o Editar etiquetas" />
+			</Commands>
+		<ComponentEntry
+			AppName="IMPLACAD"
+			Version="1.0.0"
+			ModuleName="IMPLACAD.cuix" />
+	</Components>
+</ApplicationPackage>

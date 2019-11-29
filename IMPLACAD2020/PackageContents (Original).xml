@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ApplicationPackage SchemaVersion="1.0" AutodeskProduct="AutoCAD" ProductType="Application"
+	 Name="IMPLACAD 2017"
+	 Description="IMPLACAD. Para planificación de etiquetas de seguridad en planos"
+	 Author="2aCAD Global Group" Icon=".\Contents\Resources\IMPLACAD.ico"
+	 AppNameSpace="2acad.es"
+	 OnlineDocumentation=" "
+	 HelpFile="./Contents/Resources/es-ES/AppManagerHelp.htm"
+	 ProductCode="{BD92208B-41C1-46CA-8D7F-D336E3DD71DD}"
+	 UpgradeCode="{7B73417D-19F7-421C-8593-CB6CB70BD999}"
+	 FriendlyVersion="2.0.0"
+	 SupportedLocales="Enu|Deu|Esp|Fra|Ita|Plk|Ptb|Chs|Cht|Csy|Hun|Jpn|Kor|Rus">
+
+	<CompanyDetails Name="2aCAD Global Group" Phone="976 45 81 45" Url="http://www.2acad.es/" Email="comercial@2acad.com"/>
+	<RuntimeRequirements SeriesMin="R21.0" SeriesMax="R21.1" Platform="LDT|AIP|AIPRS|AIPSIM|Civil|AOEM|AIS|ECSCAD|ACADM|ACADE|ADT|AutoCAD*|AutoCAD" OS="Win32|Win64" />
+	<Components>
+		<ComponentEntry
+			AppName="IMPLACAD"
+			Version="16.0.0"
+			ModuleName="./Contents/Windows/2017/IMPLACAD.dll"
+			AppDescription="IMPLACAD. Para planificación de etiquetas de seguridad en planos"
+			LoadOnAutoCADStartup="True"
+			LoadOnCommandInvocation="True"
+			LoadOnRequest="True">
+			<RuntimeRequirements SupportPath="./Contents/Resources" OS="Win32|Win64" Platform="LDT|AIP|AIPRS|AIPSIM|Civil|AOEM|AIS|ECSCAD|ACADM|ACADE|ADT|AutoCAD*|AutoCAD" SeriesMin="R21.0" SeriesMax="R21.1"/>
+			<Commands GroupName="IMPLACAD">
+				<Command Local="INSERTAREDITAR" Global="ETIQUETAS" Description="Insertar o Editar etiquetas" />
+			</Commands>
+		</ComponentEntry>
+		<ComponentEntry AppName="IMPLACAD" Version="1.3.0" ModuleName="./Contents/Resources/IMPLACAD.cuix" AppDescription="IMPLACAD 2017"/>
+	</Components>
+</ApplicationPackage>
