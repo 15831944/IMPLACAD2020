@@ -72,11 +72,11 @@ Public Class frmEtiquetas
     End Sub
 
     Private Sub btnInsertar_Click(sender As Object, e As EventArgs) Handles btnInsertar.Click
-        If IO.Directory.Exists(dirBase) = False Then
-            MsgBox("No existe el directorio base --> " & dirBase & vbCrLf & vbCrLf & _
+        If IO.Directory.Exists(IMPLACAD_DATA) = False Then
+            MsgBox("No existe el directorio base --> " & IMPLACAD_DATA & vbCrLf & vbCrLf &
                    "Imposible continuar. Verifique fichero .ini con configuración")
         End If
-        Dim dato As Object = dirBase & ultimaFila("DWG")
+        Dim dato As Object = IO.Path.Combine(IMPLACAD_DATA, ultimaFila("DWG"))
         Dim referencia As Object = ultimaFila("REFERENCIA")
         If IsDBNull(dato) = False AndAlso IO.File.Exists(dato.ToString) = True Then
             'Dim dwg As System.Byte()
@@ -192,11 +192,11 @@ Public Class frmEtiquetas
 
 
     Private Sub btnCambiar_Click(sender As Object, e As EventArgs) Handles btnCambiar.Click
-        If IO.Directory.Exists(dirBase) = False Then
-            MsgBox("No existe el directorio base --> " & dirBase & vbCrLf & vbCrLf & _
+        If IO.Directory.Exists(IMPLACAD_DATA) = False Then
+            MsgBox("No existe el directorio base --> " & IMPLACAD_DATA & vbCrLf & vbCrLf &
                    "Imposible continuar. Verifique fichero .ini con configuración")
         End If
-        Dim dato As Object = dirBase & ultimaFila("DWG")
+        Dim dato As Object = IO.Path.Combine(IMPLACAD_DATA, ultimaFila("DWG"))
         If IsDBNull(dato) = False AndAlso IO.File.Exists(dato.ToString) = True Then
             'Dim dwg As System.Byte()
             'dwg = CType(ultimaFila("DWG"), System.Byte())
@@ -265,8 +265,8 @@ Public Class frmEtiquetas
     End Sub
 
     Private Sub lbETIQUETAS_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbETIQUETAS.SelectedIndexChanged
-        If IO.Directory.Exists(dirBase) = False Then
-            MsgBox("No existe el directorio base --> " & dirBase & vbCrLf & vbCrLf & _
+        If IO.Directory.Exists(IMPLACAD_DATA) = False Then
+            MsgBox("No existe el directorio base --> " & IMPLACAD_DATA & vbCrLf & vbCrLf &
                    "Imposible continuar. Verifique fichero .ini con configuración")
         End If
         If lbETIQUETAS.SelectedIndex = -1 Then Exit Sub
@@ -281,17 +281,17 @@ Public Class frmEtiquetas
         'Me.cbStock.Enabled = CBool(ultimaFila("STOCK").ToString)
         Me.cbStock.Checked = CBool(ultimaFila("STOCK").ToString)
         Me.lbDim.Text = "Dimensiones = " & ultimaFila("LARGO").ToString & " x " & ultimaFila("ANCHO").ToString
-        If IO.File.Exists(dirBase & ultimaFila("PNG")) Then
+        If IO.File.Exists(IO.Path.Combine(IMPLACAD_DATA, ultimaFila("PNG").ToString)) Then
             ''
             '' Si la imagen está almacenada en la BD
             ''Me.pbIMAGEN.Image = Bytes2Image(ultimaFila("PNG"))
             ''
             '' Si la imagen la cargamos del disco duro.
-            pbIMAGEN.Image = Drawing.Image.FromFile(dirBase & ultimaFila("PNG").ToString)
+            pbIMAGEN.Image = Drawing.Image.FromFile(IO.Path.Combine(IMPLACAD_DATA, ultimaFila("PNG").ToString))
         Else
             pbIMAGEN.Image = Nothing
         End If
-        Dim dato As Object = dirBase & ultimaFila("DWG")
+        Dim dato As Object = IO.Path.Combine(IMPLACAD_DATA, ultimaFila("DWG"))
         If IsDBNull(dato) = False AndAlso IO.File.Exists(dato.ToString) = True Then
             btnInsertar.Enabled = True
             '    Dim dwg As System.Byte()

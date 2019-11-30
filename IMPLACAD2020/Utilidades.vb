@@ -9,13 +9,14 @@ Module Utilidades
     '' ****************************************
     Public dirApp As String = My.Application.Info.DirectoryPath & "\"
     Public dirAppSin As String = My.Application.Info.DirectoryPath
-    Public recursos As String = dirApp & "RECURSOS\"
+    'Public recursos As String = dirApp & "RECURSOS\"
     Public nApp As String = My.Application.Info.AssemblyName
-    Public nIni As String = dirApp & nApp & ".ini"
-    Public nOpe As String = dirApp & "Operaciones.ini"
-    Public nAyuda As String = dirApp & nApp & ".chm"
-    Public nLog As String = dirApp & nApp & ".txt"
-    Public claveDia As String = dirApp & "ati.txt"
+    Public nIni As String = IO.Path.Combine(dirApp, nApp & ".ini")
+    'Public nOpe As String = IO.Path.Combine(dirApp, "Operaciones.ini")
+    'Public nAyuda As String = IO.Path.Combine(dirApp, nApp & ".chm")
+    Public nLog As String = IO.Path.Combine(dirApp, nApp & "_log.txt")
+    Public nImp As String = IO.Path.Combine(dirApp, nApp & ".imp")
+    'Public claveDia As String = IO.Path.Combine(dirApp, "ati.txt")
     Public log As Boolean = False
     Public CuantoTiempo As Stopwatch
     Public Const nFijo As String = "2aCAD"
@@ -500,14 +501,14 @@ Module Utilidades
     End Function
 
     Public Sub PonLog(ByVal quetexto As String, Optional ByVal borrar As Boolean = False)
-        Dim queF As String = dirApp & nApp & "_log.txt"
+        Dim queF As String = nLog
         If borrar = True Then IO.File.Delete(queF)
         If quetexto.EndsWith(vbCrLf) = False Then quetexto &= vbCrLf
         IO.File.AppendAllText(queF, Date.Now & vbTab & quetexto)
     End Sub
 
     Public Sub PonLogNombre(ByVal quetexto As String, Optional ByVal borrar As Boolean = False, Optional queF As String = "")
-        If queF = "" Then queF = dirApp & nApp & "_log.txt"
+        If queF = "" Then queF = nLog   ' IO.Path.Combine(dirApp, nApp & "_log.txt")
         If borrar = True And IO.File.Exists(queF) Then IO.File.Delete(queF)
         If quetexto.EndsWith(vbCrLf) = False Then quetexto &= vbCrLf
         IO.File.AppendAllText(queF, Date.Now & vbTab & quetexto)

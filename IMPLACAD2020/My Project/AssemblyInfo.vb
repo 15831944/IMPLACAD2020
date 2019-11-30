@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyCompany("2aCAD Global Group (José Alberto Torres Jaraute)")> 
 <Assembly: AssemblyProduct("IMPLACAD")> 
 <Assembly: AssemblyCopyright("2aCAD Global Group - Copyright © 2017")> 
-<Assembly: AssemblyTrademark("IMPLACAD")> 
+<Assembly: AssemblyTrademark("IMPLACAD")>
 
 ' Version information for an assembly consists of the following four values:
 '
@@ -24,8 +24,8 @@ Imports System.Runtime.InteropServices
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
-<Assembly: AssemblyVersion("0.1.0.0")> 
-<Assembly: AssemblyFileVersion("0.1.0.0")> 
+<Assembly: AssemblyVersion("2020.0.0.1")>
+<Assembly: AssemblyFileVersion("2020.0.0.1")>
 
 ' In order to sign your assembly you must specify a key to use. Refer to the 
 ' Microsoft .NET Framework documentation for more information on assembly signing.

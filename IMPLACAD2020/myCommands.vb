@@ -61,7 +61,7 @@ Namespace IMPLACAD
             CapaCeroActiva()
             Try
                 Dim oMg As AcadMenuGroups = Application.MenuGroups
-                Call oMg.Load(dirApp & "..\..\Resources\IMPLACAD.cuix")
+                Call oMg.Load(IO.Path.Combine(dirApp, "IMPLACAD.cuix"))
             Catch ex As Autodesk.AutoCAD.Runtime.Exception
             End Try
         End Sub
@@ -318,9 +318,9 @@ Namespace IMPLACAD
                         Exit Sub
                     End If
                     ''
-                    Dim oBl As AcadBlockReference = oApp.ActiveDocument.ModelSpace.InsertBlock( _
-                        CType(oPt, Point3d).ToArray, _
-                        dirApp & "..\..\Resources\etiquetaescalera.dwg", _
+                    Dim oBl As AcadBlockReference = oApp.ActiveDocument.ModelSpace.InsertBlock(
+                        CType(oPt, Point3d).ToArray,
+                        dirApp & "etiquetaescalera.dwg",
                         0.001, 0.001, 0.001, 0)
 
                     If oBl Is Nothing Then
@@ -914,7 +914,7 @@ Namespace IMPLACAD
             End If
             ''
             '' Nombre de la plantilla para imprimir plano de evacuación
-            plantilla = dirApp & "..\..\Resources\" & prefijo & resultado & tipo & ".dwg"
+            plantilla = IO.Path.Combine(dirApp, prefijo & resultado & tipo & ".dwg")
             ''
             'Select Case resultado.ToUpper
             '    Case "A4"
@@ -1243,7 +1243,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             If ImplacadActivado(False) = False Then
                 Dim resultado As String = InputBox("Codigo VIP de activación --> ", "ACTIVAR " & nApp & " · " & My.Application.Info.Version.ToString)
                 If resultado.ToUpper = codigoactivacion.ToUpper Then
-                    IO.File.WriteAllText(dirApp & nApp & ".imp", codigoactivacion)
+                    IO.File.WriteAllText(nImp, codigoactivacion)
                     MsgBox(nApp & " · " & My.Application.Info.Version.ToString & _
                            " ha sido activada. Ahora podrá elegir si quiere comprobar actualizaciones", MsgBoxStyle.Exclamation)
                 Else
@@ -1271,17 +1271,17 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             '' Descargar DATOS (Fichero .zip que hay que descomprimir)
             Dim mensaje As String = ""
             Dim origenWeb As String = nApp & "DATOS.zip"
-            Dim destinoHD As String = dirBase & origenWeb
+            Dim destinoHD As String = IO.Path.Combine(IMPLACAD_DATA, origenWeb)
             Try
-                If IO.Directory.Exists(dirBase) = False Then
-                    IO.Directory.CreateDirectory(dirBase)
-                    Call PermisosTodoCarpeta(dirBase)
+                If IO.Directory.Exists(IMPLACAD_DATA) = False Then
+                    IO.Directory.CreateDirectory(IMPLACAD_DATA)
+                    Call PermisosTodoCarpeta(IMPLACAD_DATA)
                 End If
             Catch ex As System.Exception
-                MsgBox("No se puede crear el directorio " & dirBase & vbCrLf & vbCrLf & _
-                       "Verifique si dispone de permisos para crearlo en C:\ProgramData" & vbCrLf & _
+                MsgBox("No se puede crear el directorio " & IMPLACAD_DATA & vbCrLf & vbCrLf &
+                       "Verifique si dispone de permisos para crearlo en C:\ProgramData" & vbCrLf &
                        "O creelo a mano y vuelva a probar...")
-                       exit sub
+                Exit sub
             End Try
             ''
             Try
@@ -1292,7 +1292,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             ''
             '' Descargar BD (Fichero .sdf que hay que actualizar)
             origenWeb = nApp & ".sdf"
-            destinoHD = dirApp & origenWeb
+            destinoHD = IO.Path.Combine(dirApp, origenWeb)
             Try
                 mensaje &= DescargaFicheroZIPDescomprime(origenWeb, destinoHD, "Descargando " & origenWeb)
             Catch ex As System.Exception
@@ -1323,9 +1323,9 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             End If
             ''
             '' 2.- Comprobar si existe el directorio con los recursos
-            If IO.Directory.Exists(dirBase) = False Then
+            If IO.Directory.Exists(IMPLACAD_DATA) = False Then
                 'Application.ShowAlertDialog("No se puede actualizar..." & vbCrLf & vbCrLf & "No existe--> " & dirBase)
-                Return queFiWeb & " = " & "No se puede actualizar... No existe--> " & dirBase & vbCrLf
+                Return queFiWeb & " = " & "No se puede actualizar... No existe--> " & IMPLACAD_DATA & vbCrLf
                 Exit Function
             End If
             ''
@@ -1399,7 +1399,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
         End Function
         ''
         ' Modal Command with pickfirst selection
-        <CommandMethod(regAPP, "TABLAPARCIAL", "TABLAPARCIAL", CommandFlags.Modal + CommandFlags.UsePickSet)> _
+        <CommandMethod(regAPP, "TABLAPARCIAL", "TABLAPARCIAL", CommandFlags.Modal + CommandFlags.UsePickSet)>
         Public Sub TABLAPARCIAL() ' This method can have any name
             ''
             If ImplacadActivado() = False Then Exit Sub
@@ -1407,7 +1407,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             ''
             ''
             If EsParaTrabajar() = False Then
-                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
                        "Debe abrir el DWG original de trabajo")
                 Exit Sub
             End If
@@ -1445,6 +1445,24 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             If estadocapa = True Then
                 CapaZonaCoberturaACTDES(CapaEstado.Activar)
             End If
+        End Sub
+
+        ' Modal Command with pickfirst selection
+        <CommandMethod(regAPP, "RESOLVERREFX", "RESOLVERREFX", CommandFlags.Modal + CommandFlags.Session)>
+        Public Sub RESOLVERREFX() ' This method can have any name
+            ''
+            If ImplacadActivado() = False Then Exit Sub
+            If ImplacadEscalaM() = False Then Exit Sub
+            ''
+            ''
+            If EsParaTrabajar() = False Then
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
+                       "Debe abrir el DWG original de trabajo")
+                Exit Sub
+            End If
+            If oApp Is Nothing Then _
+       oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication)
+
         End Sub
 
         ' Application Session Command with localized name

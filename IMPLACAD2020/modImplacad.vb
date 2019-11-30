@@ -1459,7 +1459,7 @@ Module modImplacad
             Dim encontrado As Boolean = False
             If colSustituciones.ContainsKey(bln) Then
                 '' Lo encontramos en colSustitudiones. Definimos su imagen
-                imgPath = dirBase & balizas & "\" & colSustituciones(bln) & ".png"
+                imgPath = IO.Path.Combine(IMPLACAD_DATA, balizas, colSustituciones(bln) & ".png")
                 encontrado = True
             Else
                 '' Buscaremos en colSustituciones para ver si nombre bloque empieza por (menos de 10)
@@ -1468,7 +1468,7 @@ Module modImplacad
                     If queRef.Length >= 10 Then Continue For
                     ''
                     If bln.ToUpper.StartsWith(queRef.ToUpper) Then
-                        imgPath = dirBase & balizas & "\" & colSustituciones(queRef) & ".png"
+                        imgPath = IO.Path.Combine(IMPLACAD_DATA, balizas, colSustituciones(queRef).ToString & ".png")
                         encontrado = True
                         Exit For
                     End If
@@ -1639,7 +1639,7 @@ Module modImplacad
         '' Coger la capa BALIZAMIENTO SUELO o crearla
         Dim oLayer As AcadLayer = Nothing
         Dim tipolinea As String = ""
-        Dim ficherolinea As String = dirApp & "..\..\Resources\rutasevacuacion.lin"
+        Dim ficherolinea As String = dirApp & "rutasevacuacion.lin"
         If queTipo = TipoEvacuacion.Primaria Then
             Try
                 oLayer = oApp.ActiveDocument.Layers.Item("Ruta evacuación primaria")

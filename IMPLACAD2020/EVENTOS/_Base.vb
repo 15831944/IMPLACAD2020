@@ -61,13 +61,13 @@ Partial Public Class Eventos
             End If
         End If
         lIds = New List(Of ObjectId)
-        If AXDocM.Count > 0 Then
-            Subscribe_AXDoc()
-        End If
-        Subscribe_AXEventM()
-        Subscribe_AXApp()
-        Subscribe_COMApp()
-        Subscribe_AXDocM()
+        'If AXDocM.Count > 0 Then
+        '    Subscribe_AXDoc()
+        'End If
+        'Subscribe_AXEventM()
+        'Subscribe_AXApp()
+        'Subscribe_COMApp()
+        'Subscribe_AXDocM()
     End Sub
     Public Shared Sub Eventos_Vacia()
         Try

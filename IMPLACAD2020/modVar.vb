@@ -58,7 +58,7 @@ Module modVar
     ''
     ''
     '' CONSTANTES
-    Public Const IMPLACAD_DATA = "C:\ProgramData\IMPLACAD\"
+    Public IMPLACAD_DATA As String = "C:\ProgramData\IMPLACAD\"
     Public Const IMPLACAD_BUNDLE = "C:\ProgramData\Autodesk\ApplicationPlugins\IMPLACAD.bundle\"
     Public Const regAPP As String = "IMPLACAD"
     Public Const estilotexto As String = "RRC_arial"
@@ -72,7 +72,7 @@ Module modVar
     '' escala=1 (si todo está en mm) / escala=0.1 (si todo está en cm) / escala=0.01 (Si todo esta en m)
     Public escalaTotal As Double = 0.02     '' Con esta variable escalaremos bloques y texto
     'Public dirApp As String
-    Public dirBase As String            '' Directorio Base de bloques C:\ProgramData\IMPLACAD  (Ponemos la barra al final)
+    'Public dirBase As String            '' Directorio Base de bloques C:\ProgramData\IMPLACAD  (Ponemos la barra al final)
     Public actualizardatos As String    '' enlace para descargar actualización de datos
     Public actualizarbd As String       '' enlace para descargar la actualización de bd
     Public webActualiza As String       '' Direccion Web del directorio de descarga.
@@ -100,12 +100,12 @@ Module modVar
         ''preEti=EV,EX,SIA,KIT
         ''
         '' RELLENAR VARIABLES SIMPLES
-        dirBase = cIni.IniGet(nombreINI, "OPCIONES", "dirBase")        ' Directorio base por defecto
-        If dirBase.EndsWith("\") = False Then dirBase &= "\"
+        IMPLACAD_DATA = cIni.IniGet(nombreINI, "OPCIONES", "IMPLACAD_DATA")        ' Directorio base por defecto
+        'If dirBase.EndsWith("\") = False Then dirBase &= "\"
         Try
-            If IO.Directory.Exists(dirBase) = False Then
-                IO.Directory.CreateDirectory(dirBase)
-                Call PermisosTodoCarpeta(dirBase)
+            If IO.Directory.Exists(IMPLACAD_DATA) = False Then
+                IO.Directory.CreateDirectory(IMPLACAD_DATA)
+                Call PermisosTodoCarpeta(IMPLACAD_DATA)
             End If
         Catch ex As System.Exception
             ''
@@ -277,11 +277,11 @@ Module modVar
         Dim resultado As Integer = 0
         ''
         '' Si no está activado. no dejamos hacer nada. Desactivar todos los botones menos actualizar.
-        If IO.File.Exists(dirApp & nApp & ".imp") = False Then
+        If IO.File.Exists(nImp) = False Then
             resultado = Estado.ActiNo
             Exit Function
         Else
-            Dim quecodigo As String = IO.File.ReadAllText(dirApp & nApp & ".imp")
+            Dim quecodigo As String = IO.File.ReadAllText(nImp)
             If quecodigo.ToUpper <> codigoactivacion.ToUpper Then
                 resultado = Estado.ActiNo
                 Exit Function
@@ -368,14 +368,14 @@ Module modVar
         Dim resultado As Boolean = False
         ''
         '' Si no está activado. no dejamos hacer nada. Desactivar todos los botones menos actualizar.
-        If IO.File.Exists(dirApp & nApp & ".imp") = False Then
+        If IO.File.Exists(nImp) = False Then
             If conMensajes Then
-                MsgBox("¡¡ IMPLACAD no está activado !!" & vbCrLf & vbCrLf & _
+                MsgBox("¡¡ IMPLACAD no está activado !!" & vbCrLf & vbCrLf &
                        "Introduzca el código de activación desde ACTUALIZAIMPLACAD.", MsgBoxStyle.Critical)
             End If
             resultado = False
         Else
-            Dim quecodigo As String = IO.File.ReadAllText(dirApp & nApp & ".imp")
+            Dim quecodigo As String = IO.File.ReadAllText(nImp)
             If quecodigo.ToUpper = codigoactivacion.ToUpper Then
                 resultado = True
             Else
