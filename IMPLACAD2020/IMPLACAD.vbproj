@@ -320,6 +320,7 @@
     <None Include="app.config" />
     <None Include="bin\IMPLACAD.ini" />
     <None Include="IMPLACAD.ini" />
+    <None Include="IMPLACAD.xls" />
     <None Include="IMPLACADDataSet.xsc">
       <DependentUpon>IMPLACADDataSet.xsd</DependentUpon>
     </None>
@@ -375,9 +376,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="IMPLACAD.sdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="packages.config" />
     <None Include="RECURSOS\LOGO_IMPLASER.png" />
     <Resource Include="PackageContents.xml" />
@@ -436,7 +434,8 @@ xcopy "$(ProjectDir)*.dwg" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)$(TargetName).ico" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)$(TargetName).cuix" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)$(TargetName)Help.htm" "%25INSTALL_BUNDLE%25\" /Y
-xcopy "$(ProjectDir)$(TargetName).sdf" "%25INSTALL_BUNDLE%25\" /Y
+rem xcopy "$(ProjectDir)$(TargetName).sdf" "%25INSTALL_BUNDLE%25\" /Y
+xcopy "$(ProjectDir)$(TargetName).xls" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)$(TargetName).ini" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)evacuacionpri.shx" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)evacuacionsec.shx" "%25INSTALL_BUNDLE%25\" /Y
@@ -455,6 +454,8 @@ Xcopy "%25INSTALL_BUNDLE%25" "%25OUT_BUNDLE%25" /E /Y</PostBuildEvent>
 SET INSTALL_BUNDLE="C:\$(ProjectName)\$(ProjectName)2020.bundle"
 SET OUT_DATA="C:\ProgramData\$(ProjectName)"
 SET OUT_BUNDLE="C:\ProgramData\Autodesk\ApplicationPlugins\$(ProjectName)2020.bundle"
+
+if exist "%25OUT_BUNDLE%25" rmdir /S / Q "%25OUT_BUNDLE%25"
 
 if not exist "%25INSTALL_DATA%25" mkdir "%25INSTALL_DATA%25"
 if not exist "%25INSTALL_BUNDLE%25" mkdir "%25INSTALL_BUNDLE%25"

@@ -1291,7 +1291,10 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             End Try
             ''
             '' Descargar BD (Fichero .sdf que hay que actualizar)
-            origenWeb = nApp & ".sdf"
+            ''origenWeb = nApp & ".sdf"
+            ''
+            '' Descargar XLS (Fichero .xls que hay que actualizar)
+            origenWeb = nApp & ".xls"
             destinoHD = IO.Path.Combine(dirApp, origenWeb)
             Try
                 mensaje &= DescargaFicheroZIPDescomprime(origenWeb, destinoHD, "Descargando " & origenWeb)
@@ -1462,7 +1465,8 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             End If
             If oApp Is Nothing Then _
        oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication)
-
+            XRef_DWGListar(True)
+            XRef_IMGListar(True)
         End Sub
 
         ' Application Session Command with localized name

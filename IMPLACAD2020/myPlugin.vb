@@ -55,6 +55,7 @@ Namespace IMPLACAD
                 If cIni Is Nothing Then cIni = New clsINI
                 '' Cargar valores del ficheros .ini
                 INICargar()
+                PATHS_Set(arrPaths)
                 '' Añadimos nuestros directorios a TRUSTEDPATHS
                 PonTRUSTEDPATHS()
                 oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication)

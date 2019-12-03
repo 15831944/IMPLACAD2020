@@ -38,8 +38,8 @@ ArchitecturesAllowed=x64
 Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 
 [Files]
-Source: "..\..\..\..\..\..\{#MyAppName}\{#MyAppName}2020.bundle\*.*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs; Permissions: everyone-full
-Source: "..\..\..\..\..\..\{#MyAppName}\{#MyAppName}\*.*"; DestDir: "{#MyAppData}"; Flags: ignoreversion recursesubdirs; Permissions: everyone-full
+Source: "C:\{#MyAppName}\{#MyAppName}2020.bundle\*.*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs; Permissions: everyone-full
+;Source: "C:\{#MyAppName}\{#MyAppName}\*.*"; DestDir: "{#MyAppData}"; Flags: ignoreversion recursesubdirs; Permissions: everyone-full
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 Source: "H:\SOFT\SQLLite\SSCERuntime_x64-ESN.exe"; DestDir: "{app}"
 
@@ -51,8 +51,8 @@ Name: "{group}\{#MyAppName}.ini"; Filename: "{app}\{#MyAppName}.ini"
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\*.*"
 Type: filesandordirs; Name: "{app}"
-Type: filesandordirs; Name: "{#MyAppData}\*.*"
-Type: filesandordirs; Name: "{#MyAppData}"
+;Type: filesandordirs; Name: "{#MyAppData}\*.*"
+;Type: filesandordirs; Name: "{#MyAppData}"
 
 ;[Dirs]
 ;Name: "{#MyAppDir}\Contents\Resources"; Permissions: everyone-full
@@ -62,7 +62,7 @@ Root: "HKCU"; Subkey: "SOFTWARE\Autodesk\AutoCAD\R23.1\ACAD-3001:40A\Variables";
 Root: "HKLM"; Subkey: "SOFTWARE\Autodesk\AutoCAD\R23.1\ACAD-3001\Variables\TRUSTEDPATHS"; ValueType: string; ValueData: "{olddata};{#MyAppDir}"; Flags: dontcreatekey; Permissions: everyone-full
 
 [Dirs]
-Name: "{#MyAppData}"; Flags: uninsneveruninstall; Permissions: everyone-full
+;Name: "{#MyAppData}"; Flags: uninsneveruninstall; Permissions: everyone-full
 Name: "{#MyAppDir}"; Flags: uninsalwaysuninstall; Permissions: everyone-full
 
 [Run]
@@ -75,12 +75,12 @@ Filename: "{sys}\icacls.exe"; Parameters: "{app}\*.* /inheritance:d /t"; Flags: 
 Filename: "{sys}\icacls.exe"; Parameters: "{app}\* /T /reset"; Flags: runmaximized runascurrentuser; Description: "Habilitar herencia en todas sub y files"
 
 ;** IMPLACAD PERMISOS PARA TODOS Y USUARIO ACTUAL A LA CARPETA (Carpeta, Subcarpeta y ficheros - (OI)(CI)
-Filename: "{sys}\icacls.exe"; Parameters: "{#MyAppData} /grant:r Todos:(OI)(CI)F /inheritance:d /t"; Flags: runmaximized runascurrentuser; Description: "Dar permisos a Todos a la carpeta entera"
-Filename: "{sys}\icacls.exe"; Parameters: "{#MyAppData} /grant:r Usuarios:(OI)(CI)F /t"; Flags: runmaximized runascurrentuser; Description: "Dar permisos a Usuarios a la carpeta entera"
-Filename: "{sys}\icacls.exe"; Parameters: "{#MyAppData} /grant:r {username}:(OI)(CI)F /t"; Flags: runmaximized runascurrentuser; Description: "Dar permisos al usuario actual a la carpeta entera"
+;Filename: "{sys}\icacls.exe"; Parameters: "{#MyAppData} /grant:r Todos:(OI)(CI)F /inheritance:d /t"; Flags: runmaximized runascurrentuser; Description: "Dar permisos a Todos a la carpeta entera"
+;Filename: "{sys}\icacls.exe"; Parameters: "{#MyAppData} /grant:r Usuarios:(OI)(CI)F /t"; Flags: runmaximized runascurrentuser; Description: "Dar permisos a Usuarios a la carpeta entera"
+;Filename: "{sys}\icacls.exe"; Parameters: "{#MyAppData} /grant:r {username}:(OI)(CI)F /t"; Flags: runmaximized runascurrentuser; Description: "Dar permisos al usuario actual a la carpeta entera"
 ;** PERMISOS PARA TODOS Y USUARIO ACTUAL A LOS FICHEROS (Por si no está habilitada la herencia) (Carpeta, Subcarpeta y ficheros - (OI)(CI)
-Filename: "{sys}\icacls.exe"; Parameters: "{#MyAppData}\*.* /inheritance:d /t"; Flags: runmaximized runascurrentuser; Description: "Dar permisos a la carpeta entera"
-Filename: "{sys}\icacls.exe"; Parameters: "{#MyAppData}\* /T /reset"; Flags: runmaximized runascurrentuser; Description: "Habilitar herencia en todas sub y files"
+;Filename: "{sys}\icacls.exe"; Parameters: "{#MyAppData}\*.* /inheritance:d /t"; Flags: runmaximized runascurrentuser; Description: "Dar permisos a la carpeta entera"
+;Filename: "{sys}\icacls.exe"; Parameters: "{#MyAppData}\* /T /reset"; Flags: runmaximized runascurrentuser; Description: "Habilitar herencia en todas sub y files"
 
 ; Librerias para leer CompactSQL
 Filename: "{app}\SSCERuntime_x64-ESN.exe"; Flags: postinstall 64bit runascurrentuser

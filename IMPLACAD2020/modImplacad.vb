@@ -6,6 +6,8 @@ Imports Autodesk.AutoCAD.Interop
 Imports Autodesk.AutoCAD.Interop.Common
 Imports Autodesk.AutoCAD.DatabaseServices
 Imports Autodesk.AutoCAD.Ribbon
+Imports System.Linq
+Imports System.Collections.Generic
 
 
 Module modImplacad
@@ -115,7 +117,7 @@ Module modImplacad
         Dim New_paths As List(Of String) = New List(Of String)
 
         New_paths.Add(My.Application.Info.DirectoryPath)
-        New_paths.Add(My.Application.Info.DirectoryPath & "\..\..\Resources")
+        New_paths.Add(IMPLACAD_DATA)
 
         For Each Str As String In New_paths
             If Not Old_Path_Ary.Contains(LCase(Str)) Then
@@ -2111,6 +2113,153 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
         Next
         Return oBl
     End Function
+
+    Public Sub XRef_DWGListar(Optional ConMensaje As Boolean = False)
+        Dim doc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
+        Dim db As Database = doc.Database
+        Dim ed As Editor = doc.Editor
+        Dim mensaje As String = "Listado de Xrefs DWG:" & vbCrLf & vbCrLf
+        Dim cOid As New ObjectIdCollection
+        Using lock As DocumentLock = doc.LockDocument
+            Using tx As Transaction = db.TransactionManager.StartTransaction
+                db.ResolveXrefs(True, False)
+                Dim bTable As BlockTable = tx.GetObject(db.BlockTableId, OpenMode.ForRead)
+                For Each oId As ObjectId In bTable
+                    Dim bTr As BlockTableRecord = tx.GetObject(oId, OpenMode.ForRead)
+                    If bTr IsNot Nothing AndAlso bTr.IsFromExternalReference Then
+                        mensaje &= vbTab & bTr.Name & " = " & bTr.PathName & vbCrLf
+                        ' Solo procesaremos los que contengan IMPLACAD
+                        If IO.File.Exists(bTr.PathName) = True Then Continue For
+                        '
+                        Dim pathOld As String = IO.Path.GetFullPath(bTr.PathName)
+                        Dim partes() As String = pathOld.Split("\")
+                        partes(2) = "IMPLACAD"
+                        Dim pathNew As String = String.Join("\", partes)
+                        If IO.File.Exists(pathNew) = False Then
+                            Dim lista As String() = IO.Directory.GetFiles(IMPLACAD_DATA, IO.Path.GetFileName(pathOld), SearchOption.AllDirectories)
+                            If lista IsNot Nothing AndAlso lista.Length > 0 Then
+                                pathNew = lista(0)
+                            End If
+                        End If
+                        If IO.File.Exists(pathNew) Then
+                            bTr.UpgradeOpen()
+                            bTr.PathName = pathNew  '.Replace("\", "/")
+                            mensaje &= vbTab & IO.Path.GetFileNameWithoutExtension(pathNew) & " = NEW(" & pathNew & ")" & vbCrLf
+                            cOid.Add(bTr.ObjectId)
+                        End If
+                    End If
+                Next
+                Try
+                    If cOid.Count > 0 Then db.ReloadXrefs(cOid)
+                Catch ex As System.Exception
+
+                End Try
+                tx.Commit()
+            End Using
+        End Using
+        If ConMensaje Then MsgBox(mensaje)
+    End Sub
+    Public Sub XRef_IMGListar(Optional ConMensaje As Boolean = False)
+        Dim doc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
+        Dim db As Database = doc.Database
+        Dim ed As Editor = doc.Editor
+        Dim imgDefs As New Dictionary(Of ObjectId, RasterImageDef)
+        Dim cOid As New ObjectIdCollection
+        Dim mensaje As String = "Listado de Xrefs IMG:" & vbCrLf & vbCrLf
+        Using lock As DocumentLock = doc.LockDocument
+            Using tx As Transaction = db.TransactionManager.StartTransaction
+                Dim dNames As DBDictionary = tx.GetObject(db.NamedObjectsDictionaryId, OpenMode.ForRead)
+                Dim PDF_DEFINITION As String = "ACAD_PDFDEFINITIONS"
+                Dim DWF_DEFINITION As String = "ACAD_DWFDEFINITIONS"
+                Dim ACAD_FIELDLIST As String = "ACAD_FIELDLIST"
+                Dim idImgDict As ObjectId = RasterImageDef.GetImageDictionary(db)
+                'Dim imgKeyName As String = Database.UnderlayDefinition.GetDictionaryKey(TypeOf  AcDb.PdfDefinition));
+                Dim imgDic As DBDictionary = tx.GetObject(idImgDict, OpenMode.ForWrite)
+                For Each entry As DictionaryEntry In imgDic
+                    Dim id As ObjectId = entry.Value
+                    Dim imgDef As RasterImageDef = tx.GetObject(id, OpenMode.ForRead)
+                    mensaje &= vbTab & imgDef.SourceFileName & vbCrLf
+                    If IO.File.Exists(imgDef.SourceFileName) = True Then
+                        Continue For
+                    End If
+                    '
+                    Dim pathOld As String = IO.Path.GetFullPath(imgDef.SourceFileName)
+                    Dim partes() As String = pathOld.Split("\")
+                    partes(2) = "IMPLACAD"
+                    Dim pathNew As String = String.Join("\", partes)
+                    If IO.File.Exists(pathNew) = False Then
+                        Dim lista As String() = IO.Directory.GetFiles(IMPLACAD_DATA, IO.Path.GetFileName(pathOld), SearchOption.AllDirectories)
+                        If lista IsNot Nothing AndAlso lista.Length > 0 Then
+                            pathNew = lista(0)
+                        End If
+                    End If
+                    If IO.File.Exists(pathNew) Then
+                        imgDef.UpgradeOpen()
+                        imgDef.SourceFileName = pathNew
+                        imgDef.Load()
+                        mensaje &= vbTab & IO.Path.GetFileNameWithoutExtension(pathNew) & " = NEW(" & pathNew & ")" & vbCrLf
+                    End If
+                Next
+                tx.Commit()
+            End Using
+        End Using
+        If ConMensaje Then MsgBox(mensaje)
+    End Sub
+    'Public Sub XRef_Listar()
+    '    Dim doc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
+    '    Dim db As Database = doc.Database
+    '    Dim ed As Editor = doc.Editor
+    '    Dim mensaje As String = "Listado de Xrefs:" & vbCrLf & vbCrLf
+    '    Using tx As Transaction = db.TransactionManager.StartTransaction
+    '        db.ResolveXrefs(True, False)
+    '        Dim xg As XrefGraph = db.GetHostDwgXrefGraph(True)
+    '        If xg Is Nothing Then Exit Sub
+    '        'mensaje &= "XRef dibujo actual (Graph)" & vbCrLf
+    '        Dim root As GraphNode = xg.RootNode
+    '        If root Is Nothing Then Exit Sub
+    '        ' Recursivamente
+    '        XRef_Listar_Recursivo(mensaje, root, vbTab, ed, tx)
+    '        MsgBox(mensaje)
+    '    End Using
+    'End Sub
+
+    'Public Sub XRef_Listar_Recursivo(ByRef mensaje As String, root As GraphNode, separador As String, ed As Editor, ByRef tx As Transaction)
+    '    For x As Integer = 0 To root.NumOut - 1
+    '        Dim child As XrefGraphNode = root.Out(x)
+    '        If child.XrefStatus = XrefStatus.Resolved Then
+    '            Dim bl As BlockTableRecord = tx.GetObject(child.BlockTableRecordId, OpenMode.ForRead)
+    '            mensaje &= separador & child.Database.Filename
+    '            If bl.IsFromExternalReference Then
+    '                mensaje &= " (" & bl.PathName & ")" & vbCrLf
+    '            End If
+    '            XRef_Listar_Recursivo(mensaje, child, separador & "| ", ed, tx)
+    '        ElseIf child.XrefStatus = XrefStatus.FileNotFound Then
+
+    '        End If
+    '    Next
+    'End Sub
+
+    Public Sub PATHS_Set(New_paths As List(Of String))
+        Dim acad_pref As AcadPreferences = Autodesk.AutoCAD.ApplicationServices.Application.Preferences
+        Dim C_Paths As String = LCase(acad_pref.Files.SupportPath)
+
+        Dim Old_Path_Ary As List(Of String) = New List(Of String)
+        Old_Path_Ary = C_Paths.Split(";").ToList
+
+        'Dim New_paths As List(Of String) = New List(Of String)
+
+        'New_paths.Add("C:\Program files\Folder1")
+        'New_paths.Add("C:\Program files\Folder2")
+        'New_paths.Add("C:\Program files\Folder3")
+        'New_paths.Add("C:\Program files\Folder4")
+
+        For Each Str As String In New_paths
+            If Not Old_Path_Ary.Contains(Str) Then
+                Old_Path_Ary.Add(Str)
+            End If
+        Next
+        acad_pref.Files.SupportPath = String.Join(";", Old_Path_Ary.ToArray())
+    End Sub
 End Module
 
 Public Enum queCapa As Integer

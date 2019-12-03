@@ -23,40 +23,29 @@ Public Class frmEtiquetas
     End Sub
 
     Private Sub frmEtiquetas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'Dim connString As String = "Data Source='IMPLACAD.sdf'; LCID=1033; Password=Bgik8$l.; Encrypt = TRUE;"
-        Dim source As String = My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".sdf"
-        'Dim connString As String = "Data Source='IMPLACAD.sdf'; LCID=1033; Password=; Encrypt = TRUE;"
-        Dim connString As String = "Data Source='" & source & "'; LCID=1033; Password=; Encrypt = TRUE;"
-
-        'Dim engine As New SqlCeEngine(connString)
-        Dim conexion As New SqlCeConnection(connString)
-        conexion.Open()
-        ''
-        Dim oCom As New SqlCeCommand("Select ID, REFERENCIA, TIPO, TIPO1, TIPO2, TIPO3, LARGO, ANCHO, STOCK, DESCRIPCION, PNG, DWG from ETIQUETAS", conexion)
-        'Dim oCom1 As New SqlCeCommand("Select REFERENCIA from ETIQUETAS", conexion)
-        'MsgBox(oCom.ExecuteNonQuery())
-        Dim oDa As New SqlCeDataAdapter(oCom)
-        'Dim oDa1 As New SqlCeDataAdapter(oCom1)
-        'oTabla = New Data.DataTable("ETIQUETAS")
-        Dim oDs As New DataSet
-        'oTablaRef = New Data.DataTable("REFERENCIAS")
-        oDa.Fill(oDs, "ETIQUETAS")
-        oTabla = oDs.Tables("ETIQUETAS")
+        'Dim source As String = My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".sdf"
+        'Dim connString As String = "Data Source='" & source & "'; LCID=1033; Password=; Encrypt = TRUE;"
+        'Dim conexion As New SqlCeConnection(connString)
+        'conexion.Open()
+        'Dim oCom As New SqlCeCommand("Select ID, REFERENCIA, TIPO, TIPO1, TIPO2, TIPO3, LARGO, ANCHO, STOCK, DESCRIPCION, PNG, DWG from ETIQUETAS", conexion)
+        'Dim oDa As New SqlCeDataAdapter(oCom)
+        'Dim oDs As New DataSet
+        'oDa.Fill(oDs, "ETIQUETAS")
+        'oTabla = oDs.Tables("ETIQUETAS")
+        oTabla = UtilesAlberto.Utiles.Excel_DameDatatable(appXLS)
+        oTabla.TableName = "ETIQUETAS"
         Dim claves(0) As DataColumn
         claves(0) = oTabla.Columns("REFERENCIA")
         oTabla.PrimaryKey = claves
-        'oDa1.Fill(oTablaRef)
-        'MsgBox(oTabla.Rows.Count)
-        conexion.Close()
-        'Me.lbETIQUETAS.DisplayMember = oTabla.Columns("REFERENCIA").ColumnName
-        'Me.lbETIQUETAS.DataSource = oTabla
+        'conexion.Close()
+        '
         RellenaListados(oTabla)   ', "REFERENCIA")
         lblCambiar.Text = ""
         btnCambiar.Visible = False
         btnInsertar.Visible = True
         bloqueEditar = Nothing
         Me.Text = My.Application.Info.ProductName & " - v." & My.Application.Info.Version.ToString
-        INICargar()
+        'INICargar()
         Me.cbTIPO.SelectedItem = Tipo
         Me.cbTIPO1.SelectedItem = Tipo1
         Me.cbTIPO2.SelectedItem = Tipo2

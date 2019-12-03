@@ -54,19 +54,25 @@ Module modVar
     Public arrpreEti As ArrayList           '' ArrayList de los prefijos de etiquetas IMPLACAD (Solo estos se tendrán en cuenta) El resto se borrará XData
     Public colConjuntos As Hashtable         '' Hashtable de conjuntos de etiquetas (Key=REFERENCIA, Value=Array de Referencias)
     Public colSustituciones As Hashtable    '' Hashtable de sustituciones para plano EVA (Key=Referencia de bloque, Value=nombre de la imagen que la sustituye [Sin .png])
-
-    ''
-    ''
-    '' CONSTANTES
+    '
+    ' CONSTANTES
     Public IMPLACAD_DATA As String = "C:\ProgramData\IMPLACAD\"
     Public Const IMPLACAD_BUNDLE = "C:\ProgramData\Autodesk\ApplicationPlugins\IMPLACAD.bundle\"
+    Public arrPaths As List(Of String)
     Public Const regAPP As String = "IMPLACAD"
     Public Const estilotexto As String = "RRC_arial"
     Public Const codigoactivacion As String = "VIP2796"
     Public Const balizas As String = "PLANOS_Y_BALIZAMIENTOS"
-    ''
-    ''
-    '' VARIABLES
+    '
+    ' CAMINOS
+    Public appPath As String = System.Reflection.Assembly.GetExecutingAssembly.Location
+    Public appDir As String = IO.Path.GetDirectoryName(appPath)
+    Public appFile As String = IO.Path.GetFileName(appPath)
+    Public appName As String = IO.Path.GetFileNameWithoutExtension(appPath)
+    Public appXLS As String = IO.Path.ChangeExtension(appPath, ".xls")
+    Public appSDF As String = IO.Path.ChangeExtension(appPath, ".sdf")
+    '
+    ' VARIABLES
     'Public bloqueEditar As String = ""      ' Nombre del bloque a cambiar.
     'Public bloqueID As Long          ' Object ID del bloque a cambiar.
     '' escala=1 (si todo está en mm) / escala=0.1 (si todo está en cm) / escala=0.01 (Si todo esta en m)
@@ -111,6 +117,8 @@ Module modVar
             ''
         End Try
         ''
+        arrPaths = New List(Of String)
+        arrPaths.Add(IMPLACAD_DATA) : arrPaths.Add(IMPLACAD_BUNDLE)
         actualizardatos = cIni.IniGet(nombreINI, "OPCIONES", "actualizardatos")        ' Enlace para actualziar datos
         actualizarbd = cIni.IniGet(nombreINI, "OPCIONES", "actualizarbd")        ' Enlace para actualizar BD
         webActualiza = cIni.IniGet(nombreINI, "OPCIONES", "webActualiza")        ' Enlace para actualizar BD
