@@ -699,7 +699,7 @@ Module Utilidades
         Randomize()
         'randomValue = CInt(Math.Floor((upperbound - lowerbound + 1) * Rnd())) + lowerbound
         Dim arrNumeros As New ArrayList
-        For x = 1 To cuantos
+        For x As Integer = 1 To cuantos
             Dim numero As Integer = AleatorioUno(minimo, maximo)
             If arrNumeros.Contains(numero) Then
                 x -= 1

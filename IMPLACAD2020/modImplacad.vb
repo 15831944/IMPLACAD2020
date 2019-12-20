@@ -1040,26 +1040,26 @@ Module modImplacad
                     ''
                     If queArr Is Nothing Then
                         ''
-                        If colConjuntos.ContainsKey(oBloque.Name) = True Then
-                            SumaConjuntos(oBloque.Name, colBloquesCantidad, resultado)
+                        If colConjuntos.ContainsKey(oBloque.EffectiveName) = True Then
+                            SumaConjuntos(oBloque.EffectiveName, colBloquesCantidad, resultado)
                         Else
-                            If colBloquesCantidad.ContainsKey(oBloque.Name) Then
-                                colBloquesCantidad(oBloque.Name) += 1
+                            If colBloquesCantidad.ContainsKey(oBloque.EffectiveName) Then
+                                colBloquesCantidad(oBloque.EffectiveName) += 1
                             Else
-                                colBloquesCantidad.Add(key:=oBloque.Name, value:=1)
+                                colBloquesCantidad.Add(key:=oBloque.EffectiveName, value:=1)
                             End If
                             resultado += 1
                         End If
                         'arrBloquesId.Add(oBloque.ObjectID)
                     ElseIf queArr IsNot Nothing AndAlso queArr.Contains(oEnt.ObjectID) Then
                         ''
-                        If colConjuntos.ContainsKey(oBloque.Name) = True Then
-                            SumaConjuntos(oBloque.Name, colBloquesCantidadParcial, resultado)
+                        If colConjuntos.ContainsKey(oBloque.EffectiveName) = True Then
+                            SumaConjuntos(oBloque.EffectiveName, colBloquesCantidadParcial, resultado)
                         Else
-                            If colBloquesCantidadParcial.ContainsKey(oBloque.Name) Then
-                                colBloquesCantidadParcial(oBloque.Name) += 1
+                            If colBloquesCantidadParcial.ContainsKey(oBloque.EffectiveName) Then
+                                colBloquesCantidadParcial(oBloque.EffectiveName) += 1
                             Else
-                                colBloquesCantidadParcial.Add(key:=oBloque.Name, value:=1)
+                                colBloquesCantidadParcial.Add(key:=oBloque.EffectiveName, value:=1)
                             End If
                             resultado += 1
                             'arrBloquesIdParcial.Add(oBloque.ObjectID)

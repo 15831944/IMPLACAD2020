@@ -43,11 +43,18 @@ Namespace IMPLACAD
                 ' ***** Inicializar los eventos que necesitemos. Y los objetos principales de AutoCAD
                 Eventos.Eventos_Inicializa()
                 ' **************************
-                ''
-                cfg = New UtilesAlberto.Conf("aiiao2K19_2aCAD", System.Reflection.Assembly.GetExecutingAssembly)
-                clsA = New AutoCAD2acad.A2acad.A2acad(Eventos.COMApp, cfg._appFullPath, regAPP, "aiiao2K19_2aCAD")
+                '
+                Dim key As String = "aiiao2K19_2aCAD"
+                cfg = New UtilesAlberto.Conf(key, System.Reflection.Assembly.GetExecutingAssembly)
+                clsA = New AutoCAD2acad.A2acad.A2acad(Eventos.COMApp, cfg._appFullPath, regAPP, key)
+                ua = New UtilesAlberto.Utiles(key)
             Catch ex As [System].Exception
                 MsgBox(ex.ToString)
+                Eventos.Eventos_Vacia()
+                cfg = Nothing
+                clsA = Nothing
+                ua = Nothing
+                Me.Terminate()
                 Exit Sub
             End Try
 

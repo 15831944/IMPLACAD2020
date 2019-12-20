@@ -41,7 +41,7 @@ Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 Source: "C:\{#MyAppName}\{#MyAppName}2020.bundle\*.*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs; Permissions: everyone-full
 ;Source: "C:\{#MyAppName}\{#MyAppName}\*.*"; DestDir: "{#MyAppData}"; Flags: ignoreversion recursesubdirs; Permissions: everyone-full
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: "H:\SOFT\SQLLite\SSCERuntime_x64-ESN.exe"; DestDir: "{app}"
+;Source: "H:\SOFT\SQLLite\SSCERuntime_x64-ESN.exe"; DestDir: "{app}"
 
 [Icons]
 Name: "{group}\..\{cm:ProgramOnTheWeb,{#MyAppEnWeb}}"; Filename: "{#MyAppURL}"; Flags: uninsneveruninstall
@@ -83,4 +83,4 @@ Filename: "{sys}\icacls.exe"; Parameters: "{app}\* /T /reset"; Flags: runmaximiz
 ;Filename: "{sys}\icacls.exe"; Parameters: "{#MyAppData}\* /T /reset"; Flags: runmaximized runascurrentuser; Description: "Habilitar herencia en todas sub y files"
 
 ; Librerias para leer CompactSQL
-Filename: "{app}\SSCERuntime_x64-ESN.exe"; Flags: postinstall 64bit runascurrentuser
+; Filename: "{app}\SSCERuntime_x64-ESN.exe"; Flags: postinstall 64bit runascurrentuser

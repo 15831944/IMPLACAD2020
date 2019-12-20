@@ -67,7 +67,7 @@
     <OptionStrict>Off</OptionStrict>
   </PropertyGroup>
   <PropertyGroup>
-    <OptionInfer>Off</OptionInfer>
+    <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -106,50 +106,93 @@
     <!--ACA Refences End-->
     <!--AME Referebces Begin-->
     <!--AME Reference End-->
-    <Reference Include="AcCoreMgd, Version=23.1.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>H:\DESARROLLO\DLL\AutoCAD\2020\inc\AcCoreMgd.dll</HintPath>
+    <Reference Include="AcCoreMgd, Version=23.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoCAD.NET.Core.23.1.0\lib\net47\AcCoreMgd.dll</HintPath>
+      <Private>True</Private>
       <Private>False</Private>
     </Reference>
     <Reference Include="AcCui, Version=23.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>H:\DESARROLLO\DLL\AutoCAD\2020\inc\AcCui.dll</HintPath>
+      <HintPath>..\packages\AutoCAD.NET.23.1.0\lib\net47\AcCui.dll</HintPath>
+      <Private>True</Private>
       <Private>False</Private>
     </Reference>
-    <Reference Include="AcDbMgd, Version=23.1.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>H:\DESARROLLO\DLL\AutoCAD\2020\inc\AcDbMgd.dll</HintPath>
+    <Reference Include="AcDbMgd, Version=23.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoCAD.NET.Model.23.1.0\lib\net47\AcDbMgd.dll</HintPath>
+      <Private>True</Private>
       <Private>False</Private>
     </Reference>
-    <Reference Include="AcMgd, Version=23.1.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>H:\DESARROLLO\DLL\AutoCAD\2020\inc\AcMgd.dll</HintPath>
+    <Reference Include="acdbmgdbrep, Version=23.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoCAD.NET.Model.23.1.0\lib\net47\acdbmgdbrep.dll</HintPath>
+      <Private>True</Private>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="AcDx, Version=23.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoCAD.NET.23.1.0\lib\net47\AcDx.dll</HintPath>
+      <Private>True</Private>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="AcMgd, Version=23.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoCAD.NET.23.1.0\lib\net47\AcMgd.dll</HintPath>
+      <Private>True</Private>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="AcMr, Version=23.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoCAD.NET.23.1.0\lib\net47\AcMr.dll</HintPath>
+      <Private>True</Private>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="AcSeamless, Version=23.1.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\AutoCAD.NET.23.1.0\lib\net47\AcSeamless.dll</HintPath>
+      <Private>True</Private>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="AcTcMgd, Version=23.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoCAD.NET.23.1.0\lib\net47\AcTcMgd.dll</HintPath>
+      <Private>True</Private>
       <Private>False</Private>
     </Reference>
     <Reference Include="AcWindows, Version=23.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>H:\DESARROLLO\DLL\AutoCAD\2020\inc\AcWindows.dll</HintPath>
+      <HintPath>..\packages\AutoCAD.NET.23.1.0\lib\net47\AcWindows.dll</HintPath>
+      <Private>True</Private>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="AdUIMgd, Version=23.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoCAD.NET.23.1.0\lib\net47\AdUIMgd.dll</HintPath>
+      <Private>True</Private>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="AdUiPalettes, Version=23.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoCAD.NET.23.1.0\lib\net47\AdUiPalettes.dll</HintPath>
+      <Private>True</Private>
       <Private>False</Private>
     </Reference>
     <Reference Include="AdWindows, Version=2018.11.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>H:\DESARROLLO\DLL\AutoCAD\2020\inc\AdWindows.dll</HintPath>
+      <HintPath>..\packages\AutoCAD.NET.23.1.0\lib\net47\AdWindows.dll</HintPath>
+      <Private>True</Private>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Autodesk.AutoCAD.Interop, Version=23.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>H:\DESARROLLO\DLL\AutoCAD\2020\inc-x64\Autodesk.AutoCAD.Interop.dll</HintPath>
+    <Reference Include="ClosedXML, Version=0.94.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.94.2\lib\net46\ClosedXML.dll</HintPath>
     </Reference>
-    <Reference Include="Autodesk.AutoCAD.Interop.Common, Version=23.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>H:\DESARROLLO\DLL\AutoCAD\2020\inc-x64\Autodesk.AutoCAD.Interop.Common.dll</HintPath>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.7.2\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelNumberFormat, Version=1.0.3.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelNumberFormat.1.0.3\lib\net20\ExcelNumberFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="FastMember, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.1.3.0\lib\net45\FastMember.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Packaging, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Packaging.4.0.0\lib\net46\System.IO.Packaging.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase">
@@ -168,6 +211,9 @@
       <RequiredTargetFramework>4.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>4.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
       <RequiredTargetFramework>4.5</RequiredTargetFramework>
     </Reference>
   </ItemGroup>
@@ -269,24 +315,6 @@
     <None Include="2aCAD.snk" />
     <None Include="app.config" />
     <None Include="bin\IMPLACAD.ini" />
-    <None Include="etiquetaescalera.dwg" />
-    <None Include="evacuacionpri.shp" />
-    <None Include="evacuacionpri.shx" />
-    <None Include="evacuacionsec.shp" />
-    <None Include="evacuacionsec.shx" />
-    <None Include="EVACUACION_A2H.dwg" />
-    <None Include="EVACUACION_A2V.dwg" />
-    <None Include="EVACUACION_A3H.dwg" />
-    <None Include="EVACUACION_A3V.dwg" />
-    <None Include="EVACUACION_A4H.dwg" />
-    <None Include="EVACUACION_A4V.dwg" />
-    <None Include="fechas.lin" />
-    <None Include="flechas.shp" />
-    <None Include="flechas1.shp" />
-    <None Include="HKLM_SECURELOAD.reg" />
-    <None Include="HKLM_TRUSTEDPATHS.reg" />
-    <None Include="HK_R22.0_INSTALL.reg" />
-    <None Include="IMPLACAD.cuix" />
     <None Include="IMPLACAD.ini" />
     <None Include="IMPLACAD.xls" />
     <None Include="IMPLACADDataSet.xsc">
@@ -308,7 +336,6 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="rutasevacuacion.lin" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="myCommands.resx">
@@ -345,8 +372,39 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="RECURSOS\LOGO_IMPLASER.png" />
     <Resource Include="PackageContents.xml" />
+    <Content Include="x64\sqlceer40ES.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x64\sqlceme40.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x64\sqlceqp40.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x64\sqlcese40.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x64\System.Data.SqlServerCe.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\sqlceer40ES.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\sqlceme40.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\sqlceqp40.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\sqlcese40.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\System.Data.SqlServerCe.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\_MODULOS-CLASES\AUTOCAD\2020\AutoCAD2acad\AutoCAD2acad.vbproj">
@@ -358,37 +416,12 @@
       <Name>UtilesAlberto</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="ClosedXML">
-      <Version>0.94.2</Version>
-    </PackageReference>
-    <PackageReference Include="DocumentFormat.OpenXml">
-      <Version>2.7.2</Version>
-    </PackageReference>
-    <PackageReference Include="ExcelNumberFormat">
-      <Version>1.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="FastMember">
-      <Version>1.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.IO.FileSystem.Primitives">
-      <Version>4.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.IO.Packaging">
-      <Version>4.0.0</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="IMPLACAD.ico" />
-    <Content Include="IMPLACADHelp.htm" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>SET INSTALL_DATA="C:\INSTALL\$(ProjectName)\$(ProjectName)"
 SET INSTALL_BUNDLE="C:\INSTALL\$(ProjectName)\$(ProjectName)2020.bundle"
 SET OUT_DATA="C:\ProgramData\$(ProjectName)"
 SET OUT_BUNDLE="C:\ProgramData\Autodesk\ApplicationPlugins\$(ProjectName)2020.bundle"
-REM SET OUT_BUNDLE="%25appdata%25\Autodesk\ApplicationPlugins\$(ProjectName)2020.bundle"
 
 
 REM "COPIAR TODO A C:\IMPLASER\IMPLASER.bundle" Para el instalador y copiar todo a sus ubicaciones
@@ -397,26 +430,26 @@ xcopy "$(ProjectDir)*.dwg" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)$(TargetName).ico" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)$(TargetName).cuix" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)$(TargetName)Help.htm" "%25INSTALL_BUNDLE%25\" /Y
+rem xcopy "$(ProjectDir)$(TargetName).sdf" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)$(TargetName).xls" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)$(TargetName).ini" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)evacuacionpri.shx" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)evacuacionsec.shx" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)rutasevacuacion.lin" "%25INSTALL_BUNDLE%25\" /Y
-xcopy "$(TargetDir)*.dll" "%25INSTALL_BUNDLE%25\" /Y
+xcopy "$(TargetDir)*.dll" "%25INSTALL_BUNDLE%25\" /S /Y
 
 REM "COPIAR BIBLIOTECA A C:\IMPLASER\IMPLASER"
 xcopy "$(SolutionDir)..\$(ProjectName)2020_DOCUMENTOS\$(ProjectName)" "%25INSTALL_DATA%25" /E /Y
 
 REM "COPIA FINAL A SUS CARPETAS CORRESPONDIENTES"
 xcopy "%25INSTALL_DATA%25" "%25OUT_DATA%25" /E /Y
-xcopy "%25INSTALL_BUNDLE%25" "%25OUT_BUNDLE%25" /E /Y</PostBuildEvent>
+Xcopy "%25INSTALL_BUNDLE%25" "%25OUT_BUNDLE%25" /E /Y</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>SET INSTALL_DATA="C:\INSTALL\$(ProjectName)\$(ProjectName)"
 SET INSTALL_BUNDLE="C:\INSTALL\$(ProjectName)\$(ProjectName)2020.bundle"
 SET OUT_DATA="C:\ProgramData\$(ProjectName)"
 SET OUT_BUNDLE="C:\ProgramData\Autodesk\ApplicationPlugins\$(ProjectName)2020.bundle"
-REM SET OUT_BUNDLE="%25appdata%25\Autodesk\ApplicationPlugins\$(ProjectName)2020.bundle"
 
 if exist "%25OUT_BUNDLE%25" rmdir /S / Q "%25OUT_BUNDLE%25"
 

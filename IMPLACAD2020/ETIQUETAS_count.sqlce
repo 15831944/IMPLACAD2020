@@ -1,4 +1,0 @@
--- Script Date: 18/02/2016 22:51  - ErikEJ.SqlCeScripting version 3.5.2.58
-SELECT count(*)
-  FROM [ETIQUETAS];
-GO

@@ -5,7 +5,8 @@
 	ProductType="Application"
 	Name="IMPLACAD"
 	Description="IMPLACAD. Para planificación de etiquetas de seguridad en planos"
-	Author="2aCAD Graitec Group" Icon="IMPLACAD.ico"
+	Author="2aCAD Graitec Group"
+	Icon="IMPLACAD.ico"
 	AppNameSpace="2acad.es"
 	OnlineDocumentation=" "
 	HelpFile="IMPLACADHelp.htm"
@@ -45,5 +46,9 @@
 			AppName="IMPLACAD"
 			Version="1.0.0"
 			ModuleName="IMPLACAD.cuix" />
+    <!--<ComponentEntry
+      AppName="AutoCAD2acad"
+      Version="2020.0.0.2"
+      ModuleName="AutoCAD2acad.dll" />-->
 	</Components>
 </ApplicationPackage>

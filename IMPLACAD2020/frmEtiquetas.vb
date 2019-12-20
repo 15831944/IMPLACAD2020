@@ -7,9 +7,6 @@ Imports Autodesk.AutoCAD.EditorInput
 Imports Autodesk.AutoCAD.Interop
 Imports Autodesk.AutoCAD.Interop.Common
 
-'Imports Microsoft.SqlServer.Server
-Imports System.Data.SqlServerCe
-
 Public Class frmEtiquetas
     Dim oTabla As DataTable
     Dim ultimoCaminoDWG As String
@@ -32,14 +29,15 @@ Public Class frmEtiquetas
         'Dim oDs As New DataSet
         'oDa.Fill(oDs, "ETIQUETAS")
         'oTabla = oDs.Tables("ETIQUETAS")
+        'If oTabla Is Nothing Then
         oTabla = UtilesAlberto.Utiles.Excel_DameDatatable(appXLS)
-        oTabla.TableName = "ETIQUETAS"
-        Dim claves(0) As DataColumn
-        claves(0) = oTabla.Columns("REFERENCIA")
-        oTabla.PrimaryKey = claves
-        'conexion.Close()
-        '
-        RellenaListados(oTabla)   ', "REFERENCIA")
+            oTabla.TableName = "ETIQUETAS"
+            Dim claves(0) As DataColumn
+            claves(0) = oTabla.Columns("REFERENCIA")
+            oTabla.PrimaryKey = claves
+            'conexion.Close()
+            RellenaListados(oTabla)   ', "REFERENCIA")
+        'End If
         lblCambiar.Text = ""
         btnCambiar.Visible = False
         btnInsertar.Visible = True
@@ -308,6 +306,9 @@ Public Class frmEtiquetas
     ''
 #Region "RELLENAR LISTADOS"
     Public Sub RellenaListados(ByVal queTabla As DataTable)
+        If LReferencias Is Nothing Then LReferencias = New List(Of String)
+        If LConjuntos Is Nothing Then LConjuntos = New List(Of String)
+        If DEtiquetas Is Nothing Then DEtiquetas = New Dictionary(Of String, Etiqueta)
         If queTabla.Rows.Count = 0 Then Exit Sub
         ''
         '' Borrar los listados y añadir * en los combobox.
@@ -319,11 +320,30 @@ Public Class frmEtiquetas
         ''
         '' Recorrer cada fila para sacar Referencia, Tipo, Tipo1, Tipo2 y Tipo3
         For Each quefila As DataRow In queTabla.Rows
+            'REFERENCIA	TIPO	TIPO1	TIPO2	TIPO3	LARGO	ANCHO	STOCK	DESCRIPCION	PNG	DWG
             Dim Referencia As String = quefila("REFERENCIA").ToString
             Dim Tipo As String = quefila("TIPO").ToString
             Dim Tipo1 As String = quefila("TIPO1").ToString
             Dim Tipo2 As String = quefila("TIPO2").ToString
             Dim Tipo3 As String = quefila("TIPO3").ToString
+            Dim Largo As String = quefila("LARGO").ToString
+            Dim Ancho As String = quefila("ANCHO").ToString
+            Dim STOCK As String = quefila("STOCK").ToString
+            Dim DESCRIPCION As String = quefila("DESCRIPCION").ToString
+            Dim PNG As String = quefila("PNG").ToString
+            Dim DWG As String = quefila("DWG").ToString
+            Dim oEti As New Etiqueta(Referencia, Tipo, Tipo1, Tipo2, Tipo3, Largo, Ancho, STOCK, DESCRIPCION, PNG, DWG)
+            If DEtiquetas.ContainsKey(Referencia) = False Then
+                DEtiquetas.Add(Referencia, oEti)
+            End If
+            oEti = Nothing
+            ' Rellenar List LReferencias y LConjuntos
+            If LReferencias.Contains(Referencia) = False Then LReferencias.Add(Referencia)
+            If (Tipo3.ToUpper = "SEÑAL_CONJUNTO" OrElse Largo = "0" OrElse Ancho = "0") AndAlso
+                LConjuntos.Contains(Referencia) = False Then
+                LConjuntos.Add(Referencia)
+            End If
+            '
             If Me.lbETIQUETAS.Items.Contains(Referencia) = False Then _
                 Me.lbETIQUETAS.Items.Add(Referencia)
             If cbTIPO.Items.Contains(Tipo) = False Then cbTIPO.Items.Add(Tipo)
