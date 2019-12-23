@@ -6,11 +6,12 @@ Imports Autodesk.AutoCAD.Geometry
 Imports Autodesk.AutoCAD.EditorInput
 Imports Autodesk.AutoCAD.Interop
 Imports Autodesk.AutoCAD.Interop.Common
+Imports System.Linq
 
 Public Class frmEtiquetas
     Dim oTabla As DataTable
     Dim ultimoCaminoDWG As String
-    Dim ultimaFila As DataRow = Nothing
+    Dim oEti As Etiqueta = Nothing
     Dim inicio As Boolean = True
     'Dim oTablaRef As DataTable
 
@@ -20,30 +21,20 @@ Public Class frmEtiquetas
     End Sub
 
     Private Sub frmEtiquetas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'Dim source As String = My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".sdf"
-        'Dim connString As String = "Data Source='" & source & "'; LCID=1033; Password=; Encrypt = TRUE;"
-        'Dim conexion As New SqlCeConnection(connString)
-        'conexion.Open()
-        'Dim oCom As New SqlCeCommand("Select ID, REFERENCIA, TIPO, TIPO1, TIPO2, TIPO3, LARGO, ANCHO, STOCK, DESCRIPCION, PNG, DWG from ETIQUETAS", conexion)
-        'Dim oDa As New SqlCeDataAdapter(oCom)
-        'Dim oDs As New DataSet
-        'oDa.Fill(oDs, "ETIQUETAS")
-        'oTabla = oDs.Tables("ETIQUETAS")
-        'If oTabla Is Nothing Then
-        oTabla = UtilesAlberto.Utiles.Excel_DameDatatable(appXLS)
-            oTabla.TableName = "ETIQUETAS"
-            Dim claves(0) As DataColumn
-            claves(0) = oTabla.Columns("REFERENCIA")
-            oTabla.PrimaryKey = claves
-            'conexion.Close()
-            RellenaListados(oTabla)   ', "REFERENCIA")
-        'End If
+        'oEs = New Etiquetas
+        oTabla = UtilesAlberto.Utiles.Excel_DameDatatable(appXLSX)
+        oTabla.TableName = "ETIQUETAS"
+        Dim claves(0) As DataColumn
+        claves(0) = oTabla.Columns("REFERENCIA")
+        oTabla.PrimaryKey = claves
+
+        'Dim t As System.Threading.Tasks = New System.Threading.Tasks(AddressOf RellenaListados(oTabla))
+        RellenaListados(oTabla)
         lblCambiar.Text = ""
         btnCambiar.Visible = False
         btnInsertar.Visible = True
         bloqueEditar = Nothing
         Me.Text = My.Application.Info.ProductName & " - v." & My.Application.Info.Version.ToString
-        'INICargar()
         Me.cbTIPO.SelectedItem = Tipo
         Me.cbTIPO1.SelectedItem = Tipo1
         Me.cbTIPO2.SelectedItem = Tipo2
@@ -63,17 +54,10 @@ Public Class frmEtiquetas
             MsgBox("No existe el directorio base --> " & IMPLACAD_DATA & vbCrLf & vbCrLf &
                    "Imposible continuar. Verifique fichero .ini con configuración")
         End If
-        Dim dato As Object = IO.Path.Combine(IMPLACAD_DATA, ultimaFila("DWG"))
-        Dim referencia As Object = ultimaFila("REFERENCIA")
-        If IsDBNull(dato) = False AndAlso IO.File.Exists(dato.ToString) = True Then
-            'Dim dwg As System.Byte()
-            'dwg = CType(ultimaFila("DWG"), System.Byte())
-            'ultimoCaminoDWG = "C:\Temp\" & Me.txtREFERENCIA.Text & ".dwg"
-            ultimoCaminoDWG = dato.ToString
-            'Bytes2EscribeFichero(dwg, ultimoCaminoDWG)
-            'MsgBox("Se han escrito en C:\Temp " & dwg.GetLength(0) & " bites")
-            'application
-            'Application.DocumentManager.CurrentDocument.Editor
+        Dim PathDwg As String = oEti.DWG
+        Dim referencia As String = oEti.REFERENCIA
+        If IO.File.Exists(PathDwg) = True Then
+            ultimoCaminoDWG = PathDwg
             Try
                 Me.Visible = False
                 If oApp Is Nothing Then _
@@ -83,29 +67,9 @@ Public Class frmEtiquetas
                 '' Poner capa 0 como activa.
                 CapaCeroActiva()
                 CapaZonaCoberturaACTDES(CapaEstado.Desactivar)      '' Crear y desactivar las 2 zonas de cobertura.
-                'oApp.ActiveDocument.ActiveLayer = oApp.ActiveDocument.Layers.Item("0")
-                ''
-                'Me.Visible = False
-                ''
-                '' Insertar el bloque
-                'Dim resultado As PromptPointResult = Application.DocumentManager.CurrentDocument.Editor.GetPoint("Punto de insercion :")
-                'If resultado IsNot Nothing Then
-                'Dim oPoint As Point3d = resultado.Value
-                'Dim puntoInserta(0 To 2) As Double
-                'puntoInserta(0) = oPoint.X
-                'puntoInserta(1) = oPoint.Y
-                'puntoInserta(2) = oPoint.Z
                 Dim inserta As AcadBlockReference = Nothing
                 Dim ultimoBlo As Autodesk.AutoCAD.Interop.Common.AcadEntity = Nothing
-                'inserta = oApp.ActiveDocument.ActiveLayout.Block.InsertBlock(puntoInserta, ultimoCaminoDWG, escalaTotal, escalaTotal, escalaTotal, 0)
-                'oApp.ActiveDocument.SendCommand("-insert " & ultimoCaminoDWG & " ") 'pause 1  pause")
-                'oApp.ActiveDocument.SendCommand( _
-                '    "-insert" & vbCr & _
-                '    ultimoCaminoDWG & vbCr & _
-                '    "pause" & vbCr & _
-                '     vbCr & vbCr & _
-                '     "pause")
-                oApp.ActiveDocument.SendCommand( _
+                oApp.ActiveDocument.SendCommand(
                 "(Command ""-insert"" """ & ultimoCaminoDWG.Replace("\", "\\") & """ pause ""0.001"" ""0.001"" pause)" & vbCr)
                 ''
                 Try
@@ -133,33 +97,6 @@ Public Class frmEtiquetas
                 End If
                 ''
                 Me.Visible = True
-                ''
-                '' Configurar la capa de cobertura desactivada e inutilizada.
-                'Dim oLayer As AcadLayer = Nothing
-                'Try
-                '    oLayer = oApp.ActiveDocument.Layers.Item("Zona Cobertura Evacuación")
-                '    If oLayer.LayerOn = True Then oLayer.LayerOn = False
-                '    If oLayer.Freeze = False Then oLayer.Freeze = True
-                'Catch ex As System.Exception
-                '    ''
-                'End Try
-                'Try
-                '    oLayer = oApp.ActiveDocument.Layers.Item("Zona Cobertura Extincion")
-                '    If oLayer.LayerOn = True Then oLayer.LayerOn = False
-                '    If oLayer.Freeze = False Then oLayer.Freeze = True
-                'Catch ex As System.Exception
-                '    ''
-                'End Try
-                'oLayer = Nothing
-                ''''
-                '' Girar el bloque insertado
-                'Try
-                '    Dim cadenaPunto As String = inserta.InsertionPoint(0) & "," & inserta.InsertionPoint(1) & "," & inserta.InsertionPoint(2)
-                '    oApp.ActiveDocument.SendCommand("GIRA LT  " & cadenaPunto & " pause ")
-                'Catch ex As System.Exception
-                '    '' no hacemos nada.
-                '    Debug.Print(ex.Message)
-                'End Try
                 CapaZonaCoberturaACTDES(CapaEstado.Activar)
                 oApp.ActiveDocument.Regen(AcRegenType.acActiveViewport)
                 'End If
@@ -172,9 +109,6 @@ Public Class frmEtiquetas
         Else
             MsgBox("No hay DWG asociado...")
         End If
-        'Me.DialogResult = Windows.Forms.DialogResult.OK
-        'Me.Close()
-        'CapaZonaCoberturaACTDES(CapaEstado.Desactivar)      '' Crear y desactivar las 2 zonas de cobertura.
     End Sub
 
 
@@ -183,29 +117,20 @@ Public Class frmEtiquetas
             MsgBox("No existe el directorio base --> " & IMPLACAD_DATA & vbCrLf & vbCrLf &
                    "Imposible continuar. Verifique fichero .ini con configuración")
         End If
-        Dim dato As Object = IO.Path.Combine(IMPLACAD_DATA, ultimaFila("DWG"))
-        If IsDBNull(dato) = False AndAlso IO.File.Exists(dato.ToString) = True Then
-            'Dim dwg As System.Byte()
-            'dwg = CType(ultimaFila("DWG"), System.Byte())
-            'ultimoCaminoDWG = "C:\Temp\" & Me.txtREFERENCIA.Text & ".dwg"
-            ultimoCaminoDWG = dato.ToString
-            'Bytes2EscribeFichero(dwg, ultimoCaminoDWG)
-            'MsgBox("Se han escrito en C:\Temp " & dwg.GetLength(0) & " bites")
-            'application
-            'Application.DocumentManager.CurrentDocument.Editor
+        Dim PathDwg As String = oEti.DWG
+        If IO.File.Exists(PathDwg) = True Then
+            ultimoCaminoDWG = PathDwg
             Try
                 Me.Visible = False
-                Dim oApp As Autodesk.AutoCAD.Interop.AcadApplication = _
-                    CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, 
+                Dim oApp As Autodesk.AutoCAD.Interop.AcadApplication =
+                    CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication,
     Autodesk.AutoCAD.Interop.AcadApplication)
                 '' Poner capa 0 como activa.
                 If oApp.ActiveDocument.ActiveLayer.Name <> "0" Then
                     oApp.ActiveDocument.ActiveLayer = oApp.ActiveDocument.Layers.Item("0")
                 End If
-                ''
-                'Me.Visible = False
-                ''
-                '' Insertar el bloque seleccionado en el punto de inserción del existente.
+                '
+                ' Insertar el bloque seleccionado en el punto de inserción del existente.
                 'Dim resultado As PromptPointResult = Application.DocumentManager.CurrentDocument.Editor.GetPoint("Punto de insercion :")
                 'If resultado IsNot Nothing Then
                 Dim puntoInserta As Object = bloqueEditar.InsertionPoint
@@ -252,42 +177,33 @@ Public Class frmEtiquetas
     End Sub
 
     Private Sub lbETIQUETAS_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbETIQUETAS.SelectedIndexChanged
+        VaciaFicha()
+
         If IO.Directory.Exists(IMPLACAD_DATA) = False Then
             MsgBox("No existe el directorio base --> " & IMPLACAD_DATA & vbCrLf & vbCrLf &
                    "Imposible continuar. Verifique fichero .ini con configuración")
         End If
         If lbETIQUETAS.SelectedIndex = -1 Then Exit Sub
-        ultimaFila = oTabla.Rows.Find(lbETIQUETAS.Text)
-        If ultimaFila Is Nothing Then Exit Sub
-        Me.txtREFERENCIA.Text = ultimaFila("REFERENCIA").ToString
-        Me.txtTIPO.Text = ultimaFila("TIPO").ToString
-        Me.txtTIPO1.Text = ultimaFila("TIPO1").ToString
-        Me.txtTIPO2.Text = ultimaFila("TIPO2").ToString
-        Me.txtTIPO3.Text = ultimaFila("TIPO3").ToString
-        Me.txtDESCRIPCION.Text = ultimaFila("DESCRIPCION").ToString
-        'Me.cbStock.Enabled = CBool(ultimaFila("STOCK").ToString)
-        Me.cbStock.Checked = CBool(ultimaFila("STOCK").ToString)
-        Me.lbDim.Text = "Dimensiones = " & ultimaFila("LARGO").ToString & " x " & ultimaFila("ANCHO").ToString
-        If IO.File.Exists(IO.Path.Combine(IMPLACAD_DATA, ultimaFila("PNG").ToString)) Then
-            ''
-            '' Si la imagen está almacenada en la BD
-            ''Me.pbIMAGEN.Image = Bytes2Image(ultimaFila("PNG"))
-            ''
-            '' Si la imagen la cargamos del disco duro.
-            pbIMAGEN.Image = Drawing.Image.FromFile(IO.Path.Combine(IMPLACAD_DATA, ultimaFila("PNG").ToString))
+        oEti = oEtis.DReferencias(lbETIQUETAS.Text)
+        If oEti Is Nothing Then Exit Sub
+        '
+        Me.txtREFERENCIA.Text = oEti.REFERENCIA
+        Me.txtTIPO.Text = oEti.TIPO
+        Me.txtTIPO1.Text = oEti.TIPO1
+        Me.txtTIPO2.Text = oEti.TIPO2
+        Me.txtTIPO3.Text = oEti.TIPO3
+        Me.txtDESCRIPCION.Text = oEti.DESCRIPCION
+        Me.cbStock.Checked = oEti.STOCK
+        Me.lbDim.Text = "Dimensiones = " & oEti.LARGO.ToString & " x " & oEti.ANCHO.ToString
+        If IO.File.Exists(oEti.PNG) Then
+            pbIMAGEN.Image = Drawing.Image.FromFile(oEti.PNG)
         Else
             pbIMAGEN.Image = Nothing
         End If
-        Dim dato As Object = IO.Path.Combine(IMPLACAD_DATA, ultimaFila("DWG"))
-        If IsDBNull(dato) = False AndAlso IO.File.Exists(dato.ToString) = True Then
+        Dim PathDwg As String = oEti.DWG
+        If IO.File.Exists(PathDwg) = True Then
             btnInsertar.Enabled = True
-            '    Dim dwg As System.Byte()
-            '    dwg = CType(ultimaFila("DWG"), System.Byte())
-            '    ultimoCaminoDWG = "C:\Temp\" & Me.txtREFERENCIA.Text & ".dwg"
-            '    Bytes2EscribeFichero(dwg, ultimoCaminoDWG)
-            '    'MsgBox("Se han escrito en C:\Temp " & dwg.GetLength(0) & " bites")
         Else
-            '    'MsgBox("No hay DWG asociado...")
             btnInsertar.Enabled = False
         End If
     End Sub
@@ -306,9 +222,7 @@ Public Class frmEtiquetas
     ''
 #Region "RELLENAR LISTADOS"
     Public Sub RellenaListados(ByVal queTabla As DataTable)
-        If LReferencias Is Nothing Then LReferencias = New List(Of String)
         If LConjuntos Is Nothing Then LConjuntos = New List(Of String)
-        If DEtiquetas Is Nothing Then DEtiquetas = New Dictionary(Of String, Etiqueta)
         If queTabla.Rows.Count = 0 Then Exit Sub
         ''
         '' Borrar los listados y añadir * en los combobox.
@@ -330,16 +244,9 @@ Public Class frmEtiquetas
             Dim Ancho As String = quefila("ANCHO").ToString
             Dim STOCK As String = quefila("STOCK").ToString
             Dim DESCRIPCION As String = quefila("DESCRIPCION").ToString
-            Dim PNG As String = quefila("PNG").ToString
-            Dim DWG As String = quefila("DWG").ToString
-            Dim oEti As New Etiqueta(Referencia, Tipo, Tipo1, Tipo2, Tipo3, Largo, Ancho, STOCK, DESCRIPCION, PNG, DWG)
-            If DEtiquetas.ContainsKey(Referencia) = False Then
-                DEtiquetas.Add(Referencia, oEti)
-            End If
-            oEti = Nothing
-            ' Rellenar List LReferencias y LConjuntos
-            If LReferencias.Contains(Referencia) = False Then LReferencias.Add(Referencia)
-            If (Tipo3.ToUpper = "SEÑAL_CONJUNTO" OrElse Largo = "0" OrElse Ancho = "0") AndAlso
+            Dim oEti As New Etiqueta(Referencia, Tipo, Tipo1, Tipo2, Tipo3, Largo, Ancho, STOCK, DESCRIPCION)
+            'oEti = Nothing
+            If (Tipo3.ToUpper = "CONJUNTO" OrElse Largo = "0" OrElse Ancho = "0") AndAlso
                 LConjuntos.Contains(Referencia) = False Then
                 LConjuntos.Add(Referencia)
             End If
@@ -367,6 +274,51 @@ Public Class frmEtiquetas
 
 #Region "FILTRAR DATOS"
     Public Sub FiltraListado()
+        If oEtis Is Nothing Then Exit Sub
+        If oEtis.LReferencias Is Nothing OrElse oEtis.LReferencias.Count = 0 Then Exit Sub
+        '
+        ' Borrar listado etiquetas solo.
+        Me.lbETIQUETAS.Items.Clear()
+        Dim filtro As String = ""
+        Dim fTipo As String = ""
+        Dim fTipo1 As String = ""
+        Dim fTipo2 As String = ""
+        Dim fTipo3 As String = ""
+        '' Todos los objetos Etiqueta en oFiltro
+        Dim oFiltro As List(Of Etiqueta) = oEtis.LReferencias.Where(Function(p) p.REFERENCIA <> "").ToList
+        Dim oFiltroFin As List(Of Etiqueta) = oFiltro.ToList
+        '
+        If cbTIPO.Text <> "*" Then
+            oFiltroFin = oFiltro.Where(Function(p) p.TIPO.Contains(cbTIPO.Text)).ToList
+            oFiltro = oFiltroFin
+        End If
+        If cbTIPO1.Text <> "*" Then
+            oFiltroFin = oFiltro.Where(Function(p) p.TIPO1.Contains(cbTIPO1.Text)).ToList
+            oFiltro = oFiltroFin
+        End If
+        If cbTIPO2.Text <> "*" AndAlso cbTIPO2.Text <> "" Then
+            oFiltroFin = oFiltro.Where(Function(p) p.TIPO2.Contains(cbTIPO2.Text)).ToList
+            oFiltro = oFiltroFin
+        End If
+        If cbTIPO3.Text <> "*" AndAlso cbTIPO3.Text <> "" Then
+            oFiltroFin = oFiltro.Where(Function(p) p.TIPO3.Contains(cbTIPO3.Text)).ToList
+            oFiltro = oFiltroFin
+        End If
+        '
+        Me.lbETIQUETAS.Items.AddRange((From x In oFiltro.ToList Select x.REFERENCIA).ToArray)
+        '
+        'For Each eti As Etiqueta In oFiltro.ToList
+        '    Me.lbETIQUETAS.Items.Add(eti.REFERENCIA)
+        'Next
+        ' Ordenar listados y poner valores por defecto.
+        Me.lbETIQUETAS.Sorted = True
+        Me.lbETIQUETAS.SelectedIndex = -1
+        lbCuantos.Text = lbETIQUETAS.Items.Count & " Etiquetas"
+        VaciaFicha()
+    End Sub
+    ''
+
+    Public Sub FiltraListado_Tabla()
         If oTabla.Rows.Count = 0 Then Exit Sub
         ''
         '' Borrar listado etiquetas solo.
@@ -413,7 +365,6 @@ Public Class frmEtiquetas
         lbCuantos.Text = lbETIQUETAS.Items.Count & " Etiquetas"
         VaciaFicha()
     End Sub
-    ''
     ''
     Private Sub cbTIPO_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbTIPO.SelectedIndexChanged, cbTIPO1.SelectedIndexChanged, cbTIPO2.SelectedIndexChanged, cbTIPO3.SelectedIndexChanged
         If inicio = True Then Exit Sub
@@ -473,11 +424,49 @@ Public Class frmEtiquetas
     End Sub
 
     Private Sub txtBusca_TextChanged(sender As Object, e As EventArgs) Handles txtBusca.TextChanged
-        If txtBusca.Text = "" Then Exit Sub
-        Dim indice As Integer = lbETIQUETAS.FindString(txtBusca.Text.ToUpper, -1)
-        If indice > -1 Then
-            lbETIQUETAS.SetSelected(indice, True)
-            lbETIQUETAS.SelectedIndex = indice
+        'If txtBusca.Text = "" Then Exit Sub
+        'Dim indice As Integer = lbETIQUETAS.FindString(txtBusca.Text.ToUpper, -1)
+        'If indice > -1 Then
+        '    lbETIQUETAS.SetSelected(indice, True)
+        '    lbETIQUETAS.SelectedIndex = indice
+        'End If
+        txtBusca.Text = txtBusca.Text.ToUpper
+    End Sub
+
+    Private Sub BtnBuscar_Click(sender As Object, e As EventArgs) Handles BtnBuscar.Click
+        ' Busca solo en Resultados
+        'If txtBusca.Text = "" Then Exit Sub
+        'Dim indice As Integer = lbETIQUETAS.FindString(txtBusca.Text.ToUpper, -1)
+        'If indice > -1 Then
+        '    lbETIQUETAS.SetSelected(indice, True)
+        '    lbETIQUETAS.SelectedIndex = indice
+        'End If
+        '
+        ' Busca en todas las etiquetas
+        inicio = True
+        lbETIQUETAS.Items.Clear()
+        cbTIPO.Text = "*"
+        cbTIPO1.Text = "*"
+        cbTIPO2.Text = "*"
+        cbTIPO3.Text = "*"
+        txtBusca.Text = txtBusca.Text.ToUpper
+        If oEtis Is Nothing Then Exit Sub
+        If oEtis.LReferencias Is Nothing OrElse oEtis.LReferencias.Count = 0 Then Exit Sub
+        '
+        ' Borrar listado etiquetas solo.
+        Me.lbETIQUETAS.Items.Clear()
+        ' Todos los objetos Etiqueta
+        Dim oFiltro As List(Of Etiqueta) = oEtis.LReferencias.Where(Function(p) p.REFERENCIA.Contains(txtBusca.Text)).ToList
+        '
+        If oFiltro IsNot Nothing AndAlso oFiltro.Count > 0 Then
+            Me.lbETIQUETAS.Items.AddRange((From x In oFiltro.ToList Select x.REFERENCIA).ToArray)
         End If
+        '
+        ' Ordenar listados y poner valores por defecto.
+        Me.lbETIQUETAS.Sorted = True
+        Me.lbETIQUETAS.SelectedIndex = -1
+        lbCuantos.Text = lbETIQUETAS.Items.Count & " Etiquetas"
+        VaciaFicha()
+        inicio = False
     End Sub
 End Class

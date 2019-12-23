@@ -39,6 +39,7 @@ Module modVar
     Public clsA As a2.A2acad = Nothing
     Public cfg As UtilesAlberto.Conf = Nothing
     Public ua As UtilesAlberto.Utiles = Nothing
+    Public oEtis As Etiquetas = Nothing
     ''
     '' OTROS OBJETOS
     'Public WithEvents oTimer As Timer
@@ -55,9 +56,7 @@ Module modVar
     Public arrpreEti As ArrayList           '' ArrayList de los prefijos de etiquetas IMPLACAD (Solo estos se tendrán en cuenta) El resto se borrará XData
     Public colConjuntos As Hashtable         '' Hashtable de conjuntos de etiquetas (Key=REFERENCIA, Value=Array de Referencias)
     Public colSustituciones As Hashtable    '' Hashtable de sustituciones para plano EVA (Key=Referencia de bloque, Value=nombre de la imagen que la sustituye [Sin .png])
-    Public LReferencias As List(Of String)  ' List de la columna REFERENCIA (Todas)
     Public LConjuntos As List(Of String)    ' List de Conjuntos (TIPO3=SEÑAL_CONJUNTO o Largo/Ancho=0)
-    Public DEtiquetas As Dictionary(Of String, Etiqueta)
     '
     ' CONSTANTES
     Public IMPLACAD_DATA As String = "C:\ProgramData\IMPLACAD\"
@@ -67,13 +66,14 @@ Module modVar
     Public Const estilotexto As String = "RRC_arial"
     Public Const codigoactivacion As String = "VIP2796"
     Public Const balizas As String = "PLANOS_Y_BALIZAMIENTOS"
+    Public sep As String = IO.Path.DirectorySeparatorChar
     '
     ' CAMINOS
     Public appPath As String = System.Reflection.Assembly.GetExecutingAssembly.Location
     Public appDir As String = IO.Path.GetDirectoryName(appPath)
     Public appFile As String = IO.Path.GetFileName(appPath)
     Public appName As String = IO.Path.GetFileNameWithoutExtension(appPath)
-    Public appXLS As String = IO.Path.ChangeExtension(appPath, ".xls")
+    Public appXLSX As String = IO.Path.ChangeExtension(appPath, ".xlsx")
     'Public appSDF As String = IO.Path.ChangeExtension(appPath, ".sdf")
     '
     ' VARIABLES
@@ -157,6 +157,19 @@ Module modVar
         LeeLlenaConjuntos(nombreINI)
         LeeLlenaSustituciones(nombreINI)
         'LlenaConjuntos()
+        ' Por si no existe IMPLACAD.xlsx
+        If IO.File.Exists(appXLSX) = False Then
+            Dim ressourceName = My.Application.Info.AssemblyName & "." & IO.Path.GetFileName(appXLSX)   ' "Dwf3D2aCAD.AdskAssetViewer.dll"
+            Using stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(ressourceName)
+                Dim assemblyData(CInt(stream.Length) - 1) As Byte
+                stream.Read(assemblyData, 0, assemblyData.Length)
+                'If IO.File.Exists(appXLSX) = False Then
+                IO.File.WriteAllBytes(appXLSX, assemblyData)
+                'End If
+                ' Si es una DLL, hay que cargarla.
+                'Return System.Reflection.Assembly.LoadFrom(appXLSX)
+            End Using
+        End If
         INICargar = mensaje
     End Function
     ''

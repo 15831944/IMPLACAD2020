@@ -1042,6 +1042,21 @@ Module modImplacad
                         ''
                         If colConjuntos.ContainsKey(oBloque.EffectiveName) = True Then
                             SumaConjuntos(oBloque.EffectiveName, colBloquesCantidad, resultado)
+                            Dim oSubs As Object = oBloque.Explode
+                            For Each oSubEnt As AcadEntity In oBloque.Explode
+                                If TypeOf oSubEnt Is AcadBlockReference = False Then Continue For
+                                Dim oBint As AcadBlockReference = oDoc.HandleToObject(oSubEnt.ObjectID)
+                                If colBloquesCantidad.ContainsKey(oBint.EffectiveName) Then
+                                    colBloquesCantidad(oBint.EffectiveName) += 1
+                                Else
+                                    colBloquesCantidad.Add(key:=oBint.EffectiveName, value:=1)
+                                End If
+                                resultado += 1
+
+                            Next
+                            For Each oE As AcadEntity In oSubs
+                                oE.Delete()
+                            Next
                         Else
                             If colBloquesCantidad.ContainsKey(oBloque.EffectiveName) Then
                                 colBloquesCantidad(oBloque.EffectiveName) += 1
@@ -2146,6 +2161,13 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
                             bTr.PathName = pathNew  '.Replace("\", "/")
                             mensaje &= vbTab & IO.Path.GetFileNameWithoutExtension(pathNew) & " = NEW(" & pathNew & ")" & vbCrLf
                             cOid.Add(bTr.ObjectId)
+                        Else
+                            Dim nombre As String = IO.Path.GetFileName(pathNew)
+                            ' Si no existe el fichero PNG. Lo buscamos
+                            Dim fi As String() = IO.Directory.GetFiles(IMPLACAD_DATA, nombre, SearchOption.AllDirectories)
+                            If fi IsNot Nothing AndAlso fi.Count > 0 Then
+                                pathNew = fi.First
+                            End If
                         End If
                     End If
                 Next
@@ -2198,6 +2220,13 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
                         imgDef.SourceFileName = pathNew
                         imgDef.Load()
                         mensaje &= vbTab & IO.Path.GetFileNameWithoutExtension(pathNew) & " = NEW(" & pathNew & ")" & vbCrLf
+                    Else
+                        Dim nombre As String = IO.Path.GetFileName(pathNew)
+                        ' Si no existe el fichero PNG. Lo buscamos
+                        Dim fi As String() = IO.Directory.GetFiles(IMPLACAD_DATA, nombre, SearchOption.AllDirectories)
+                        If fi IsNot Nothing AndAlso fi.Count > 0 Then
+                            pathNew = fi.First
+                        End If
                     End If
                 Next
                 tx.Commit()

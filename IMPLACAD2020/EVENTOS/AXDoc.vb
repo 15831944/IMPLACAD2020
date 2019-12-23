@@ -140,6 +140,7 @@ Partial Public Class Eventos
     Public Shared Sub AXDoc_EndDwgOpen(sender As Object, e As DrawingOpenEventArgs)
         'AXDoc.Editor.WriteMessage("AXDoc_EndDwgOpen")
         If logeventos Then PonLogEv("AXDoc_EndDwgOpen")
+        'Subscribe_AXDB()
     End Sub
 
     Public Shared Sub AXDoc_ImpliedSelectionChanged(sender As Object, e As EventArgs)

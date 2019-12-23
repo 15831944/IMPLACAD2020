@@ -71,6 +71,7 @@ Namespace IMPLACAD
                 ''oMg.Load(My.Application.Info.DirectoryPath & "\..\..\Resources\IMPLACAD.cuix")
                 Utilidades.PermisosTodoCarpeta(IMPLACAD_DATA)
                 Utilidades.PermisosTodoCarpeta(IMPLACAD_BUNDLE)
+                oEtis = New Etiquetas
             Catch ex As Autodesk.AutoCAD.Runtime.Exception
                 MsgBox(ex.ToString)
             End Try

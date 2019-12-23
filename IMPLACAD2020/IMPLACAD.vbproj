@@ -196,8 +196,8 @@
     <Compile Include="..\..\..\..\_MODULOS-CLASES\OFFICE\CLOSEDXML\modClosedXML.vb">
       <Link>modClosedXML.vb</Link>
     </Compile>
-    <Compile Include="clsINI.vb" />
-    <Compile Include="Etiqueta.vb" />
+    <Compile Include="CLASES\clsINI.vb" />
+    <Compile Include="CLASES\Etiquetas.vb" />
     <Compile Include="EVENTOS\AXApp.vb" />
     <Compile Include="EVENTOS\AXBlockTR.vb" />
     <Compile Include="EVENTOS\AXDb.vb" />
@@ -289,16 +289,6 @@
     <None Include="IMPLACAD.cuix" />
     <None Include="IMPLACAD.ini" />
     <None Include="IMPLACAD.xls" />
-    <None Include="IMPLACADDataSet.xsc">
-      <DependentUpon>IMPLACADDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="IMPLACADDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="IMPLACADDataSet.xss">
-      <DependentUpon>IMPLACADDataSet.xsd</DependentUpon>
-    </None>
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -308,6 +298,7 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <EmbeddedResource Include="RECURSOS\IMPLACAD.xlsx" />
     <None Include="rutasevacuacion.lin" />
   </ItemGroup>
   <ItemGroup>
@@ -379,6 +370,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Search_256x256.png" />
     <Resource Include="IMPLACAD.ico" />
     <Content Include="IMPLACADHelp.htm" />
   </ItemGroup>
@@ -397,7 +389,7 @@ xcopy "$(ProjectDir)*.dwg" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)$(TargetName).ico" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)$(TargetName).cuix" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)$(TargetName)Help.htm" "%25INSTALL_BUNDLE%25\" /Y
-xcopy "$(ProjectDir)$(TargetName).xls" "%25INSTALL_BUNDLE%25\" /Y
+xcopy "$(ProjectDir)$(TargetName).xlsx" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)$(TargetName).ini" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)evacuacionpri.shx" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)evacuacionsec.shx" "%25INSTALL_BUNDLE%25\" /Y
@@ -418,6 +410,7 @@ SET OUT_DATA="C:\ProgramData\$(ProjectName)"
 SET OUT_BUNDLE="C:\ProgramData\Autodesk\ApplicationPlugins\$(ProjectName)2020.bundle"
 REM SET OUT_BUNDLE="%25appdata%25\Autodesk\ApplicationPlugins\$(ProjectName)2020.bundle"
 
+if exist "%25OUT_DATA%25" rmdir /S / Q "%25OUT_DATA%25"
 if exist "%25OUT_BUNDLE%25" rmdir /S / Q "%25OUT_BUNDLE%25"
 
 if not exist "%25INSTALL_DATA%25" mkdir "%25INSTALL_DATA%25"
