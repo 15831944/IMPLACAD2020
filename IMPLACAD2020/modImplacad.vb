@@ -1040,19 +1040,38 @@ Module modImplacad
                     ''
                     If queArr Is Nothing Then
                         ''
-                        If colConjuntos.ContainsKey(oBloque.EffectiveName) = True Then
-                            SumaConjuntos(oBloque.EffectiveName, colBloquesCantidad, resultado)
+                        If oEtis.DConjuntos.ContainsKey(oBloque.EffectiveName) = True Then
+                            'SumaConjuntos(oBloque.EffectiveName, colBloquesCantidad, resultado)
                             Dim oSubs As Object = oBloque.Explode
-                            For Each oSubEnt As AcadEntity In oBloque.Explode
-                                If TypeOf oSubEnt Is AcadBlockReference = False Then Continue For
-                                Dim oBint As AcadBlockReference = oDoc.HandleToObject(oSubEnt.ObjectID)
-                                If colBloquesCantidad.ContainsKey(oBint.EffectiveName) Then
-                                    colBloquesCantidad(oBint.EffectiveName) += 1
-                                Else
-                                    colBloquesCantidad.Add(key:=oBint.EffectiveName, value:=1)
+                            For Each oSubEnt As AcadEntity In oSubs ' oBloque.Explode
+                                Dim t As String = ""
+                                If TypeOf oSubEnt Is AcadMText Then
+                                    t = CType(oSubEnt, AcadMText).TextString
+                                ElseIf TypeOf oSubEnt Is AcadText Then
+                                    t = CType(oSubEnt, AcadText).TextString
                                 End If
-                                resultado += 1
-
+                                If t.Contains(";") Then
+                                    t = t.Split(";")(1)
+                                End If
+                                t = t.Replace("}", "")
+                                Dim textovalido As Boolean = False
+                                For Each pre As String In arrpreEti
+                                    If t.StartsWith(pre) = True Then
+                                        textovalido = True
+                                        Exit For
+                                    End If
+                                Next
+                                If textovalido = False Then Continue For
+                                Dim etiquetas As String() = t.Split(" ")
+                                For Each eti As String In etiquetas
+                                    If colBloquesCantidad.ContainsKey(eti) Then
+                                        colBloquesCantidad(eti) += 1
+                                    Else
+                                        colBloquesCantidad.Add(key:=eti, value:=1)
+                                    End If
+                                    resultado += 1
+                                Next
+                                Exit For
                             Next
                             For Each oE As AcadEntity In oSubs
                                 oE.Delete()
@@ -1068,7 +1087,7 @@ Module modImplacad
                         'arrBloquesId.Add(oBloque.ObjectID)
                     ElseIf queArr IsNot Nothing AndAlso queArr.Contains(oEnt.ObjectID) Then
                         ''
-                        If colConjuntos.ContainsKey(oBloque.EffectiveName) = True Then
+                        If oEtis.DConjuntos.ContainsKey(oBloque.EffectiveName) = True Then
                             SumaConjuntos(oBloque.EffectiveName, colBloquesCantidadParcial, resultado)
                         Else
                             If colBloquesCantidadParcial.ContainsKey(oBloque.EffectiveName) Then
@@ -1097,17 +1116,17 @@ Module modImplacad
     Public Sub SumaConjuntos(nomBlo As String, ByRef colBl As SortedList, ByRef cont As Integer)
         ''
         '' Recorremos el conjunto de etiquetas para añadir las que contenga
-        If colConjuntos.ContainsKey(nomBlo) = False Then Exit Sub
+        If oEtis.DConjuntos.ContainsKey(nomBlo) = False Then Exit Sub
+        If oEtis.DConjuntos(nomBlo).COMPONENTES Is Nothing OrElse oEtis.DConjuntos(nomBlo).COMPONENTES = "" Then Exit Sub
         ''
-        Dim queEtis() As String = colConjuntos(nomBlo)
-        For Each queEti As String In queEtis
+        'Dim queEtis() As String = oEtis.DConjuntos(nomBlo).COMPONENTES
+        For Each queEti As String In oEtis.DConjuntos(nomBlo).COMPONENTES.Split(";"c)
             If colBl.ContainsKey(queEti) Then
                 colBl(queEti) += 1
             Else
                 colBl.Add(key:=queEti, value:=1)
             End If
             cont += 1
-            'arrBloquesId.Add(oBloque.ObjectID)
         Next
     End Sub
     Public Function DameTotalBaliza(queCapa As queCapa, Optional queArr As ArrayList = Nothing) As Double
@@ -1463,29 +1482,26 @@ Module modImplacad
             If Not (TypeOf oEnt Is AcadBlockReference) Then Continue For
             ''
             Dim oBl As AcadBlockReference = oApp.ActiveDocument.ObjectIdToObject(oEnt.ObjectID)
-            'Dim oBl As AcadBlockReference = oApp.ActiveDocument.ObjectIdToObject(oId)
-            ''
-            'Dim oImg As AcadRasterImage = Nothing
             Dim oImgFin As AcadRasterImage = Nothing
             ''
-            Dim bln As String = oBl.Name.ToUpper
+            Dim bln As String = oBl.EffectiveName.ToUpper
             ''
             '' Si lo encontramos en colSustituciones, definimos la imagen.
             '' Si no lo encontramos, recorremos colSustituciones para ver si empieza por StartsWith
             '' para definir la imagen.
             Dim encontrado As Boolean = False
-            If colSustituciones.ContainsKey(bln) Then
-                '' Lo encontramos en colSustitudiones. Definimos su imagen
-                imgPath = IO.Path.Combine(IMPLACAD_DATA, balizas, colSustituciones(bln) & ".png")
+            If oEtis.DSustituciones.ContainsKey(bln) Then
+                '' Lo encontramos en oEtis.DSustituciones. Definimos su imagen
+                imgPath = IO.Path.Combine(IMPLACAD_DATA, balizas, oEtis.DSustituciones(bln) & ".png")
                 encontrado = True
             Else
                 '' Buscaremos en colSustituciones para ver si nombre bloque empieza por (menos de 10)
-                For Each queRef As String In colSustituciones.Keys
+                For Each queRef As String In oEtis.DSustituciones.Keys
                     '' Si es >= 10 caracteres, saltamos al siguiente
                     If queRef.Length >= 10 Then Continue For
                     ''
                     If bln.ToUpper.StartsWith(queRef.ToUpper) Then
-                        imgPath = IO.Path.Combine(IMPLACAD_DATA, balizas, colSustituciones(queRef).ToString & ".png")
+                        imgPath = IO.Path.Combine(IMPLACAD_DATA, balizas, oEtis.DSustituciones(queRef) & ".png")
                         encontrado = True
                         Exit For
                     End If
@@ -1496,31 +1512,6 @@ Module modImplacad
                 oBl.Delete()
                 Continue For
             End If
-            ''
-            'If bln = "EX01LEX04L" Or bln = "EX01NEX04N" Then
-            '    imgPath = dirBase & balizas & "\EX201LEX204L.png"
-            'ElseIf bln = "EX01LEX04LEX09L" Or bln = "EX01NEX04NEX09N" Then
-            '    imgPath = dirBase & balizas & "\EX201LEX204LEX209L.png"
-            'ElseIf bln = "EX01LEX09L" Or bln = "EX01NEX09N" Then
-            '    imgPath = dirBase & balizas & "\EX201LEX209L.png"
-            'ElseIf bln = "EX04LEX09L" Or bln = "EX04NEX09N" Then
-            '    imgPath = dirBase & balizas & "\EX204LEX209L.png"
-            'ElseIf bln.StartsWith("EX01") Or bln.StartsWith("EX201") Then
-            '    imgPath = dirBase & balizas & "\EX201L.png"
-            'ElseIf bln.StartsWith("EX04") Or bln.StartsWith("EX204") Then
-            '    imgPath = dirBase & balizas & "\EX204L.png"
-            'ElseIf bln.StartsWith("EX09") Or bln.StartsWith("EX209") Then
-            '    imgPath = dirBase & balizas & "\EX209L.png"
-            'ElseIf bln.StartsWith("EV10") Or bln.StartsWith("EV210") Then
-            '    imgPath = dirBase & balizas & "\EV210L.png"
-            'ElseIf bln.StartsWith("EV69") Or bln.StartsWith("EV68") Or bln.StartsWith("EV93") Or bln.StartsWith("EV268") Or bln.StartsWith("EV269") Then
-            '    imgPath = dirBase & balizas & "\EV268L.png"
-            'Else
-            '    oBl.Delete()
-            '    Continue For
-            'End If
-
-
             imgPunto = oBl.InsertionPoint
             ''
             '' Insertamos la imagen que corresponda (desplazada XX unidades)

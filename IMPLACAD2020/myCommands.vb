@@ -1293,8 +1293,8 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             '' Descargar BD (Fichero .sdf que hay que actualizar)
             ''origenWeb = nApp & ".sdf"
             ''
-            '' Descargar XLS (Fichero .xls que hay que actualizar)
-            origenWeb = nApp & ".xls"
+            '' Descargar XLSX (Fichero .xlsx que hay que actualizar)
+            origenWeb = nApp & ".xlsx"
             destinoHD = IO.Path.Combine(dirApp, origenWeb)
             Try
                 mensaje &= DescargaFicheroZIPDescomprime(origenWeb, destinoHD, "Descargando " & origenWeb)

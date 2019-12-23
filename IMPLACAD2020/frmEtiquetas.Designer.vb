@@ -68,7 +68,7 @@ Partial Class frmEtiquetas
         Me.btnCerrar.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnCerrar.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnCerrar.Location = New System.Drawing.Point(728, 556)
-        Me.btnCerrar.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnCerrar.Margin = New System.Windows.Forms.Padding(4)
         Me.btnCerrar.Name = "btnCerrar"
         Me.btnCerrar.Size = New System.Drawing.Size(100, 28)
         Me.btnCerrar.TabIndex = 0
@@ -80,7 +80,7 @@ Partial Class frmEtiquetas
         Me.btnInsertar.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnInsertar.Enabled = False
         Me.btnInsertar.Location = New System.Drawing.Point(592, 556)
-        Me.btnInsertar.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnInsertar.Margin = New System.Windows.Forms.Padding(4)
         Me.btnInsertar.Name = "btnInsertar"
         Me.btnInsertar.Size = New System.Drawing.Size(100, 28)
         Me.btnInsertar.TabIndex = 1
@@ -90,7 +90,7 @@ Partial Class frmEtiquetas
         'txtREFERENCIA
         '
         Me.txtREFERENCIA.Location = New System.Drawing.Point(264, 37)
-        Me.txtREFERENCIA.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtREFERENCIA.Margin = New System.Windows.Forms.Padding(4)
         Me.txtREFERENCIA.MaxLength = 15
         Me.txtREFERENCIA.Name = "txtREFERENCIA"
         Me.txtREFERENCIA.Size = New System.Drawing.Size(233, 22)
@@ -99,7 +99,7 @@ Partial Class frmEtiquetas
         'txtDESCRIPCION
         '
         Me.txtDESCRIPCION.Location = New System.Drawing.Point(264, 394)
-        Me.txtDESCRIPCION.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtDESCRIPCION.Margin = New System.Windows.Forms.Padding(4)
         Me.txtDESCRIPCION.MaxLength = 500
         Me.txtDESCRIPCION.Multiline = True
         Me.txtDESCRIPCION.Name = "txtDESCRIPCION"
@@ -111,9 +111,9 @@ Partial Class frmEtiquetas
         Me.lbETIQUETAS.FormattingEnabled = True
         Me.lbETIQUETAS.ItemHeight = 16
         Me.lbETIQUETAS.Location = New System.Drawing.Point(16, 239)
-        Me.lbETIQUETAS.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.lbETIQUETAS.Margin = New System.Windows.Forms.Padding(4)
         Me.lbETIQUETAS.Name = "lbETIQUETAS"
-        Me.lbETIQUETAS.Size = New System.Drawing.Size(219, 292)
+        Me.lbETIQUETAS.Size = New System.Drawing.Size(219, 276)
         Me.lbETIQUETAS.TabIndex = 5
         '
         'GroupBox1
@@ -127,9 +127,9 @@ Partial Class frmEtiquetas
         Me.GroupBox1.Controls.Add(Me.cbTIPO1)
         Me.GroupBox1.Controls.Add(Me.cbTIPO)
         Me.GroupBox1.Location = New System.Drawing.Point(16, 12)
-        Me.GroupBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.GroupBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.GroupBox1.Padding = New System.Windows.Forms.Padding(4)
         Me.GroupBox1.Size = New System.Drawing.Size(220, 175)
         Me.GroupBox1.TabIndex = 9
         Me.GroupBox1.TabStop = False
@@ -179,7 +179,7 @@ Partial Class frmEtiquetas
         '
         Me.cbTIPO3.FormattingEnabled = True
         Me.cbTIPO3.Location = New System.Drawing.Point(65, 143)
-        Me.cbTIPO3.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.cbTIPO3.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTIPO3.Name = "cbTIPO3"
         Me.cbTIPO3.Size = New System.Drawing.Size(124, 24)
         Me.cbTIPO3.TabIndex = 12
@@ -188,7 +188,7 @@ Partial Class frmEtiquetas
         '
         Me.cbTIPO2.FormattingEnabled = True
         Me.cbTIPO2.Location = New System.Drawing.Point(65, 103)
-        Me.cbTIPO2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.cbTIPO2.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTIPO2.Name = "cbTIPO2"
         Me.cbTIPO2.Size = New System.Drawing.Size(124, 24)
         Me.cbTIPO2.TabIndex = 11
@@ -197,7 +197,7 @@ Partial Class frmEtiquetas
         '
         Me.cbTIPO1.FormattingEnabled = True
         Me.cbTIPO1.Location = New System.Drawing.Point(65, 63)
-        Me.cbTIPO1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.cbTIPO1.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTIPO1.Name = "cbTIPO1"
         Me.cbTIPO1.Size = New System.Drawing.Size(124, 24)
         Me.cbTIPO1.TabIndex = 10
@@ -206,7 +206,7 @@ Partial Class frmEtiquetas
         '
         Me.cbTIPO.FormattingEnabled = True
         Me.cbTIPO.Location = New System.Drawing.Point(65, 23)
-        Me.cbTIPO.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.cbTIPO.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTIPO.Name = "cbTIPO"
         Me.cbTIPO.Size = New System.Drawing.Size(124, 24)
         Me.cbTIPO.TabIndex = 9
@@ -234,7 +234,7 @@ Partial Class frmEtiquetas
         'txtTIPO
         '
         Me.txtTIPO.Location = New System.Drawing.Point(264, 103)
-        Me.txtTIPO.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtTIPO.Margin = New System.Windows.Forms.Padding(4)
         Me.txtTIPO.MaxLength = 15
         Me.txtTIPO.Name = "txtTIPO"
         Me.txtTIPO.Size = New System.Drawing.Size(233, 22)
@@ -253,7 +253,7 @@ Partial Class frmEtiquetas
         'txtTIPO1
         '
         Me.txtTIPO1.Location = New System.Drawing.Point(264, 162)
-        Me.txtTIPO1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtTIPO1.Margin = New System.Windows.Forms.Padding(4)
         Me.txtTIPO1.MaxLength = 15
         Me.txtTIPO1.Name = "txtTIPO1"
         Me.txtTIPO1.Size = New System.Drawing.Size(233, 22)
@@ -272,7 +272,7 @@ Partial Class frmEtiquetas
         'txtTIPO2
         '
         Me.txtTIPO2.Location = New System.Drawing.Point(264, 222)
-        Me.txtTIPO2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtTIPO2.Margin = New System.Windows.Forms.Padding(4)
         Me.txtTIPO2.MaxLength = 15
         Me.txtTIPO2.Name = "txtTIPO2"
         Me.txtTIPO2.Size = New System.Drawing.Size(233, 22)
@@ -301,7 +301,7 @@ Partial Class frmEtiquetas
         'txtTIPO3
         '
         Me.txtTIPO3.Location = New System.Drawing.Point(264, 279)
-        Me.txtTIPO3.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtTIPO3.Margin = New System.Windows.Forms.Padding(4)
         Me.txtTIPO3.MaxLength = 15
         Me.txtTIPO3.Name = "txtTIPO3"
         Me.txtTIPO3.Size = New System.Drawing.Size(233, 22)
@@ -312,7 +312,7 @@ Partial Class frmEtiquetas
         Me.cbStock.AutoSize = True
         Me.cbStock.Enabled = False
         Me.cbStock.Location = New System.Drawing.Point(264, 324)
-        Me.cbStock.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.cbStock.Margin = New System.Windows.Forms.Padding(4)
         Me.cbStock.Name = "cbStock"
         Me.cbStock.Size = New System.Drawing.Size(86, 21)
         Me.cbStock.TabIndex = 20
@@ -332,7 +332,7 @@ Partial Class frmEtiquetas
         '
         Me.lbCuantos.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lbCuantos.AutoSize = True
-        Me.lbCuantos.Location = New System.Drawing.Point(24, 567)
+        Me.lbCuantos.Location = New System.Drawing.Point(19, 520)
         Me.lbCuantos.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lbCuantos.Name = "lbCuantos"
         Me.lbCuantos.Size = New System.Drawing.Size(36, 17)
@@ -344,7 +344,7 @@ Partial Class frmEtiquetas
         Me.btnSel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnSel.BackColor = System.Drawing.SystemColors.ActiveCaption
         Me.btnSel.Location = New System.Drawing.Point(444, 556)
-        Me.btnSel.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnSel.Margin = New System.Windows.Forms.Padding(4)
         Me.btnSel.Name = "btnSel"
         Me.btnSel.Size = New System.Drawing.Size(100, 28)
         Me.btnSel.TabIndex = 23
@@ -356,7 +356,7 @@ Partial Class frmEtiquetas
         '
         Me.btnEditar.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnEditar.Location = New System.Drawing.Point(264, 542)
-        Me.btnEditar.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnEditar.Margin = New System.Windows.Forms.Padding(4)
         Me.btnEditar.Name = "btnEditar"
         Me.btnEditar.Size = New System.Drawing.Size(137, 46)
         Me.btnEditar.TabIndex = 24
@@ -367,7 +367,7 @@ Partial Class frmEtiquetas
         '
         Me.btnCambiar.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnCambiar.Location = New System.Drawing.Point(579, 555)
-        Me.btnCambiar.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnCambiar.Margin = New System.Windows.Forms.Padding(4)
         Me.btnCambiar.Name = "btnCambiar"
         Me.btnCambiar.Size = New System.Drawing.Size(100, 28)
         Me.btnCambiar.TabIndex = 25
@@ -388,7 +388,7 @@ Partial Class frmEtiquetas
         'txtBusca
         '
         Me.txtBusca.Location = New System.Drawing.Point(81, 202)
-        Me.txtBusca.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtBusca.Margin = New System.Windows.Forms.Padding(4)
         Me.txtBusca.Name = "txtBusca"
         Me.txtBusca.Size = New System.Drawing.Size(111, 22)
         Me.txtBusca.TabIndex = 27
@@ -472,7 +472,7 @@ Partial Class frmEtiquetas
         Me.Controls.Add(Me.btnInsertar)
         Me.Controls.Add(Me.btnCerrar)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "frmEtiquetas"

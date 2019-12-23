@@ -54,9 +54,9 @@ Module modVar
     Public colBotones As Hashtable          '' Hashtable de botones (Key=Nombre, Value=estado (true/false)
     Public arrBotones As ArrayList          '' ArrayList con el nombre de todos los botones.
     Public arrpreEti As ArrayList           '' ArrayList de los prefijos de etiquetas IMPLACAD (Solo estos se tendrán en cuenta) El resto se borrará XData
-    Public colConjuntos As Hashtable         '' Hashtable de conjuntos de etiquetas (Key=REFERENCIA, Value=Array de Referencias)
-    Public colSustituciones As Hashtable    '' Hashtable de sustituciones para plano EVA (Key=Referencia de bloque, Value=nombre de la imagen que la sustituye [Sin .png])
-    Public LConjuntos As List(Of String)    ' List de Conjuntos (TIPO3=SEÑAL_CONJUNTO o Largo/Ancho=0)
+    'Public colConjuntos As Hashtable         '' Hashtable de conjuntos de etiquetas (Key=REFERENCIA, Value=Array de Referencias)
+    'Public colSustituciones As Hashtable    '' Hashtable de sustituciones para plano EVA (Key=Referencia de bloque, Value=nombre de la imagen que la sustituye [Sin .png])
+    'Public LConjuntos As List(Of String)    ' List de Conjuntos (TIPO3=CONJUNTO o Largo/Ancho=0)
     '
     ' CONSTANTES
     Public IMPLACAD_DATA As String = "C:\ProgramData\IMPLACAD\"
@@ -83,8 +83,6 @@ Module modVar
     Public escalaTotal As Double = 0.02     '' Con esta variable escalaremos bloques y texto
     'Public dirApp As String
     'Public dirBase As String            '' Directorio Base de bloques C:\ProgramData\IMPLACAD  (Ponemos la barra al final)
-    Public actualizardatos As String    '' enlace para descargar actualización de datos
-    Public actualizarbd As String       '' enlace para descargar la actualización de bd
     Public webActualiza As String       '' Direccion Web del directorio de descarga.
     Public vermensajes As Boolean = True
     Public nombreviejo As String = ""
@@ -115,16 +113,14 @@ Module modVar
         Try
             If IO.Directory.Exists(IMPLACAD_DATA) = False Then
                 IO.Directory.CreateDirectory(IMPLACAD_DATA)
-                Call PermisosTodoCarpeta(IMPLACAD_DATA)
             End If
+            Call PermisosTodoCarpeta(IMPLACAD_DATA)
         Catch ex As System.Exception
             ''
         End Try
         ''
         arrPaths = New List(Of String)
         arrPaths.Add(IMPLACAD_DATA) : arrPaths.Add(IMPLACAD_BUNDLE)
-        actualizardatos = cIni.IniGet(nombreINI, "OPCIONES", "actualizardatos")        ' Enlace para actualziar datos
-        actualizarbd = cIni.IniGet(nombreINI, "OPCIONES", "actualizarbd")        ' Enlace para actualizar BD
         webActualiza = cIni.IniGet(nombreINI, "OPCIONES", "webActualiza")        ' Enlace para actualizar BD
         If webActualiza.EndsWith("/") = False Then webActualiza &= "/"
         log = IIf(cIni.IniGet(nombreINI, "OPCIONES", "log") = "1", True, False)         '' Fichero log para control errores (Si o No)
@@ -137,26 +133,19 @@ Module modVar
         For Each preEti As String In cIni.IniGet(nombreINI, "OPCIONES", "preEti").Split(",")
             If arrpreEti.Contains(preEti) = False Then arrpreEti.Add(preEti)
         Next
-        ''
-        ''
+        '
         My.Computer.FileSystem.CurrentDirectory = dirApp
-        ''
-
-        Dim btnTodos As String() = New String() { _
-            "IMPLACADMENU", "INSERTAREDITAR", "ADECUA", "BALIZARSUELO", "BALIZARPARED", _
-            "BALIZARESCALERA", "RUTAEVACUACION", "TABLADATOS", "TABLAESCALERAS", _
-            "CAPASCOBERTURA", "GROSORLINEAS", "ESCALAM", "IMPRIMIRINS", "IMPRIMIREVA", _
-            "EXPLOTAEVA", "TABLAPARCIAL", "_ETRANSMIT...", "ACTUALIZARIMPLACAD"}
+        '
+        Dim btnTodos As String() = New String() {
+            "IMPLACADMENU", "INSERTAREDITAR", "ADECUA", "BALIZARSUELO", "BALIZARPARED",
+            "BALIZARESCALERA", "RUTAEVACUACION", "TABLADATOS", "TABLAESCALERAS",
+            "CAPASCOBERTURA", "GROSORLINEAS", "ESCALAM", "IMPRIMIRINS", "IMPRIMIREVA",
+            "EXPLOTAEVA", "TABLAPARCIAL", "_ETRANSMIT...", "ACTUALIZARIMPLACAD", "RESOLVERREFX"}
         arrBotones = New ArrayList(btnTodos)
         colBotones = New Hashtable
         For Each nBoton As String In btnTodos
             colBotones.Add(nBoton, True)
         Next
-        ''
-        '' Llenar los conjuntos de etiquetas
-        LeeLlenaConjuntos(nombreINI)
-        LeeLlenaSustituciones(nombreINI)
-        'LlenaConjuntos()
         ' Por si no existe IMPLACAD.xlsx
         If IO.File.Exists(appXLSX) = False Then
             Dim ressourceName = My.Application.Info.AssemblyName & "." & IO.Path.GetFileName(appXLSX)   ' "Dwf3D2aCAD.AdskAssetViewer.dll"
@@ -172,85 +161,7 @@ Module modVar
         End If
         INICargar = mensaje
     End Function
-    ''
-    Public Sub LeeLlenaConjuntos(nombreIni As String)
-        colConjuntos = New Hashtable
-        Dim arrConjuntos As String() = New String() { _
-            "conjuntosEV1", "conjuntosEV2", "conjuntosEV3", "conjuntosEV4", "conjuntosEV5", "conjuntosEV6", "conjuntosEV7", "conjuntosEV8", "conjuntosEV9", _
-            "conjuntosEX1", "conjuntosEX2", "conjuntosEX3", "conjuntosEX4", "conjuntosEX5", "conjuntosEX6", "conjuntosEX7", "conjuntosEX8", "conjuntosEX9", _
-            "conjuntosOTROS1", "conjuntosOTROS2", "conjuntosOTROS3", "conjuntosOTROS4", "conjuntosOTROS5"}
-        ''
-        For Each queConjunto As String In arrConjuntos
-            '' Separados por , (Cada conjunto completo)
-            Dim valores As String = cIni.IniGet(nombreIni, "OPCIONES", queConjunto)
-            ''
-            '' Comprobar valores y continuar o procesar.
-            If valores = "" Then Continue For
-            ''
-            Dim conjuntos As String() = valores.Split(",")
-            '' Separados por | (El conjunto y separados por · las etiquetas que contiene)
-            For Each conjunto As String In conjuntos
-                Dim grupo As String() = conjunto.Split("|")
-                Dim etiquetapadre As String = grupo(0).Trim
-                Dim etiquetas As String() = grupo(1).Split("·")
-                If colConjuntos.ContainsKey(etiquetapadre) = False Then
-                    colConjuntos.Add(etiquetapadre, etiquetas)
-                End If
-            Next
-        Next
-    End Sub
-    ''
-    Public Sub LeeLlenaSustituciones(nombreIni As String)
-        colSustituciones = New Hashtable
-        Dim arrSustituciones As String() = New String() { _
-            "sustituciones1", "sustituciones2", "sustituciones3", "sustituciones4", "sustituciones5", _
-            "sustituciones6", "sustituciones7", "sustituciones8", "sustituciones9"}
-        ''
-        For Each queSusti As String In arrSustituciones
-            '' Separados por , (Cada conjunto completo)
-            Dim valores As String = cIni.IniGet(nombreIni, "OPCIONES", queSusti)
-            ''
-            '' Comprobar valores y continuar o procesar.
-            If valores = "" Then Continue For
-            ''
-            Dim conjuntos As String() = valores.Split(",")
-            '' Separados por | (RefBloque | Imagen png)
-            For Each conjunto As String In conjuntos
-                Dim grupo As String() = conjunto.Split("|")
-                Dim refBloque As String = grupo(0).Trim
-                Dim refPng As String = grupo(1).Trim
-                If colSustituciones.ContainsKey(refBloque) = False Then
-                    colSustituciones.Add(refBloque, refPng)
-                End If
-            Next
-        Next
-    End Sub
-    Public Sub LlenaConjuntos()
-        colConjuntos = New Hashtable
-        ''
-        colConjuntos.Add("EX01LEX04L", New String() {"EX01L", "EX04L"})
-        colConjuntos.Add("EX01LEX04LEX09L", New String() {"EX01L", "EX04L", "EX09L"})
-        colConjuntos.Add("EX01LEX09L", New String() {"EX01L", "EX09L"})
-        colConjuntos.Add("EX04LEX09L", New String() {"EX04L", "EX09L"})
-        colConjuntos.Add("EX01NEX04N", New String() {"EX01N", "EX04N"})
-        colConjuntos.Add("EX01NEX04NEX09N", New String() {"EX01N", "EX04N", "EX09N"})
-        colConjuntos.Add("EX01NEX09N", New String() {"EX01N", "EX09N"})
-        colConjuntos.Add("EX04NEX09N", New String() {"EX04N", "EX09N"})
-        colConjuntos.Add("EV94LEX25L", New String() {"EV94L", "EX25L"})
-        colConjuntos.Add("EV09LEV93LEV09L", New String() {"EV09L", "EV09L", "EV93L"})
-        colConjuntos.Add("EV09LEV94LEV09L", New String() {"EV09L", "EV09L", "EV94L"})
-        colConjuntos.Add("EV93LEV09L", New String() {"EV93L", "EV09L"})
-        colConjuntos.Add("EV93LEX25L", New String() {"EV93L", "EX25L"})
-        colConjuntos.Add("EV94LEV09L", New String() {"EV94L", "EV09L"})
-        colConjuntos.Add("EV94LEX25L", New String() {"EV94L", "EX25L"})
-        colConjuntos.Add("EV94NEX25N", New String() {"EV94N", "EX25N"})
-        colConjuntos.Add("EV09NEV93NEV09N", New String() {"EV09N", "EV09N", "EV93N"})
-        colConjuntos.Add("EV09NEV94NEV09N", New String() {"EV09N", "EV09N", "EV94N"})
-        colConjuntos.Add("EV93NEV09N", New String() {"EV93N", "EV09N"})
-        colConjuntos.Add("EV93NEX25N", New String() {"EV93N", "EX25N"})
-        colConjuntos.Add("EV94NEV09N", New String() {"EV94N", "EV09N"})
-        colConjuntos.Add("EV94NEX25N", New String() {"EV94N", "EX25N"})
-    End Sub
+
     Public Function Image2Bytes(ByVal img As Image) As Byte()
         Dim sTemp As String = Path.GetTempFileName()
         Dim fs As New FileStream(sTemp, FileMode.OpenOrCreate, FileAccess.ReadWrite)

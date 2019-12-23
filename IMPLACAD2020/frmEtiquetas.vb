@@ -22,6 +22,8 @@ Public Class frmEtiquetas
 
     Private Sub frmEtiquetas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'oEs = New Etiquetas
+        If oEtis Is Nothing Then oEtis = New Etiquetas()
+        inicio = True
         oTabla = UtilesAlberto.Utiles.Excel_DameDatatable(appXLSX)
         oTabla.TableName = "ETIQUETAS"
         Dim claves(0) As DataColumn
@@ -29,7 +31,7 @@ Public Class frmEtiquetas
         oTabla.PrimaryKey = claves
 
         'Dim t As System.Threading.Tasks = New System.Threading.Tasks(AddressOf RellenaListados(oTabla))
-        RellenaListados(oTabla)
+        RellenaListados()
         lblCambiar.Text = ""
         btnCambiar.Visible = False
         btnInsertar.Visible = True
@@ -39,6 +41,7 @@ Public Class frmEtiquetas
         Me.cbTIPO1.SelectedItem = Tipo1
         Me.cbTIPO2.SelectedItem = Tipo2
         Me.cbTIPO3.SelectedItem = Tipo3
+        inicio = False
     End Sub
 
     Private Sub btnCerrar_Click(sender As Object, e As EventArgs) Handles btnCerrar.Click
@@ -222,8 +225,56 @@ Public Class frmEtiquetas
     End Sub
     ''
 #Region "RELLENAR LISTADOS"
-    Public Sub RellenaListados(ByVal queTabla As DataTable)
-        If LConjuntos Is Nothing Then LConjuntos = New List(Of String)
+    Public Sub RellenaListados()
+        If oEtis.LReferencias Is Nothing OrElse oEtis.LReferencias.Count = 0 Then Exit Sub
+        inicio = True
+        '
+        ' Borrar los listados y añadir * en los combobox.
+        Me.lbETIQUETAS.Items.Clear()
+        cbTIPO.Items.Clear() : cbTIPO.Items.Add("*")
+        cbTIPO1.Items.Clear() : cbTIPO1.Items.Add("*")
+        cbTIPO2.Items.Clear() : cbTIPO2.Items.Add("*")
+        cbTIPO3.Items.Clear() : cbTIPO3.Items.Add("*")
+        ' TIPO
+        Dim query As IEnumerable(Of String) = From x In oEtis.LReferencias
+                                              Select x.TIPO
+                                              Distinct
+        cbTIPO.Items.AddRange(query.ToArray)
+        ' TIPO1
+        query = From x In oEtis.LReferencias
+                Select x.TIPO1
+                Distinct
+        cbTIPO1.Items.AddRange(query.ToArray)
+        ' TIPO2
+        query = From x In oEtis.LReferencias
+                Select x.TIPO2
+                Distinct
+        cbTIPO2.Items.AddRange(query.ToArray)
+        ' TIPO3
+        query = From x In oEtis.LReferencias
+                Select x.TIPO3
+                Distinct
+        cbTIPO3.Items.AddRange(query.ToArray)
+        '
+        ' REFERENCIAS
+        query = From x In oEtis.LReferencias
+                Select x.REFERENCIA
+                Distinct
+        Me.lbETIQUETAS.Items.AddRange(query.ToArray)
+        '
+        ' Ordenar listados y poner valores por defecto.
+        Me.lbETIQUETAS.Sorted = True
+        Me.lbETIQUETAS.SelectedIndex = -1
+        cbTIPO.Sorted = True : cbTIPO.SelectedItem = "*"
+        cbTIPO1.Sorted = True : cbTIPO1.SelectedItem = "*"
+        cbTIPO2.Sorted = True : cbTIPO2.SelectedItem = "*"
+        cbTIPO3.Sorted = True : cbTIPO3.SelectedItem = "*"
+        lbCuantos.Text = lbETIQUETAS.Items.Count & " Etiquetas"
+        VaciaFicha()
+        inicio = False
+    End Sub
+    Public Sub RellenaListados_Tabla(ByVal queTabla As DataTable)
+        'If LConjuntos Is Nothing Then LConjuntos = New List(Of String)
         If queTabla.Rows.Count = 0 Then Exit Sub
         ''
         '' Borrar los listados y añadir * en los combobox.
@@ -247,10 +298,10 @@ Public Class frmEtiquetas
             Dim DESCRIPCION As String = quefila("DESCRIPCION").ToString
             Dim oEti As New Etiqueta(Referencia, Tipo, Tipo1, Tipo2, Tipo3, Largo, Ancho, STOCK, DESCRIPCION)
             'oEti = Nothing
-            If (Tipo3.ToUpper = "CONJUNTO" OrElse Largo = "0" OrElse Ancho = "0") AndAlso
-                LConjuntos.Contains(Referencia) = False Then
-                LConjuntos.Add(Referencia)
-            End If
+            'If (Tipo3.ToUpper = "CONJUNTO" OrElse Largo = "0" OrElse Ancho = "0") AndAlso
+            '    'LConjuntos.Contains(Referencia) = False Then
+            '    'LConjuntos.Add(Referencia)
+            'End If
             '
             If Me.lbETIQUETAS.Items.Contains(Referencia) = False Then _
                 Me.lbETIQUETAS.Items.Add(Referencia)

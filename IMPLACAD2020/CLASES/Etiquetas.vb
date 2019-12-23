@@ -8,6 +8,7 @@ Public Class Etiquetas
     Public Property DReferencias As New Dictionary(Of String, Etiqueta)
     Public Property LConjuntos As New List(Of String)
     Public Property DConjuntos As New Dictionary(Of String, Etiqueta)
+    Public Property DSustituciones As New Dictionary(Of String, String)
     Public Property LRows As New List(Of IXLRow)
     Public Sub New()
         LRows = modClosedXML.Excel_LeeFilas(appXLSX)
@@ -26,6 +27,11 @@ Public Class Etiquetas
                     If LConjuntos.Contains(ref) = False Then
                         LConjuntos.Add(ref)
                         DConjuntos.Add(ref, oEti)
+                    End If
+                End If
+                If oEti.SUSTITUCION IsNot Nothing AndAlso oEti.SUSTITUCION.Trim <> "" Then
+                    If DSustituciones.ContainsKey(oEti.REFERENCIA) = False Then
+                        DSustituciones.Add(oEti.REFERENCIA, oEti.SUSTITUCION)
                     End If
                 End If
                 oEti = Nothing
@@ -47,8 +53,10 @@ Public Class Etiqueta
     Public Property ANCHO As String = ""
     Public Property STOCK As Boolean = True
     Public Property DESCRIPCION As String = ""
-    Public Property PNG As String = ""
+    Public Property COMPONENTES As String
+    Public Property SUSTITUCION As String
     Public Property DWG As String = ""
+    Public Property PNG As String = ""
 
     Public Sub New()
     End Sub
@@ -58,7 +66,7 @@ Public Class Etiqueta
         Dim TempStock As String = ""
         For Each oCell As IXLCell In fila.Cells.AsParallel
             Dim cabecera As String = oCell.WorksheetColumn.FirstCell.Value.ToString.Trim
-            Dim valor As String = oCell.Value
+            Dim valor As String = IIf(oCell.Value Is Nothing, "", oCell.Value.ToString.Trim)
             Select Case cabecera.ToUpper
                 Case "REFERENCIA" : Me.REFERENCIA = Convert.ToString(valor).Trim
                 Case "TIPO" : Me.TIPO = Convert.ToString(valor).Trim
@@ -69,6 +77,8 @@ Public Class Etiqueta
                 Case "ANCHO" : Me.ANCHO = Convert.ToString(valor).Trim
                 Case "STOCK" : TempStock = Convert.ToString(valor).Trim
                 Case "DESCRIPCION" : Me.DESCRIPCION = Convert.ToString(valor).Trim
+                Case "COMPONENTES" : Me.COMPONENTES = Convert.ToString(valor).Trim.Replace(" ", "")
+                Case "SUSTITUCION" : Me.SUSTITUCION = Convert.ToString(valor).Trim
             End Select
         Next
         If TempStock.ToUpper = "FALSE" Then Me.STOCK = False
