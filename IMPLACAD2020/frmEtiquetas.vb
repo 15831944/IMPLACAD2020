@@ -93,7 +93,6 @@ Public Class frmEtiquetas
                     inserta = oApp.ActiveDocument.ObjectIdToObject(ultimoBlo.ObjectID)
                     '' Ponerle XData al bloque
                     XData.XNuevo(inserta, "Clase=etiqueta") ';Tipo=" & txtTIPO.Text & ";Tipo1=" & txtTIPO1.Text & ";Tipo2=" & txtTIPO2.Text & ";Tipo3=" & txtTIPO3.Text)
-
                 End If
                 ''
                 Me.Visible = True
@@ -105,6 +104,7 @@ Public Class frmEtiquetas
                 MsgBox("Error insertando " & ultimoCaminoDWG)
             Finally
                 'Me.Visible = True
+                XRef_IMGListar(False)
             End Try
         Else
             MsgBox("No hay DWG asociado...")
@@ -145,6 +145,7 @@ Public Class frmEtiquetas
                 ''
                 inserta = oApp.ActiveDocument.ActiveLayout.Block.InsertBlock(puntoInserta, ultimoCaminoDWG, escalaInserta, escalaInserta, escalaInserta, giroInserta)
                 ''
+                XRef_IMGListar(False)
                 '' Configurar las capas de cobertura desactivada e inutilizada.
                 Dim oLayer As AcadLayer = Nothing
                 Try

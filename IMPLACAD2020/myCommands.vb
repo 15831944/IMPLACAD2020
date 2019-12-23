@@ -1465,8 +1465,8 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             End If
             If oApp Is Nothing Then _
        oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication)
-            XRef_DWGListar(True)
-            XRef_IMGListar(True)
+            XRef_DWGListar(False)
+            XRef_IMGListar(False)
         End Sub
 
         ' Application Session Command with localized name
