@@ -20,13 +20,16 @@ Public Class Etiquetas
             Else
                 Dim oEti As New Etiqueta(fila)
                 Dim ref As String = oEti.REFERENCIA
-                LReferencias.Add(oEti)
-                If LReferenciasString.Contains(ref) = False Then LReferenciasString.Add(ref)
-                If DReferencias.ContainsKey(ref) = False Then DReferencias.Add(ref, oEti)
-                If oEti.TIPO3.ToUpper.Contains("CONJUNTO") OrElse oEti.LARGO = "0" OrElse oEti.ANCHO = "0" Then
-                    If LConjuntos.Contains(ref) = False Then
-                        LConjuntos.Add(ref)
-                        DConjuntos.Add(ref, oEti)
+                ' Para que no incluya las que son sólo SUSTITUCIONES (No tienen TIPO)
+                If oEti.TIPO <> "" Then
+                    LReferencias.Add(oEti)
+                    If LReferenciasString.Contains(ref) = False Then LReferenciasString.Add(ref)
+                    If DReferencias.ContainsKey(ref) = False Then DReferencias.Add(ref, oEti)
+                    If oEti.TIPO3.ToUpper.Contains("CONJUNTO") OrElse oEti.LARGO = "0" OrElse oEti.ANCHO = "0" Then
+                        If LConjuntos.Contains(ref) = False Then
+                            LConjuntos.Add(ref)
+                            DConjuntos.Add(ref, oEti)
+                        End If
                     End If
                 End If
                 If oEti.SUSTITUCION IsNot Nothing AndAlso oEti.SUSTITUCION.Trim <> "" Then
@@ -82,7 +85,9 @@ Public Class Etiqueta
             End Select
         Next
         If TempStock.ToUpper = "FALSE" Then Me.STOCK = False
-        PonFullPath_DWGPNG()
+        If Me.TIPO <> "" Then
+            PonFullPath_DWGPNG()
+        End If
     End Sub
     Public Sub New(ref As String, t As String, t1 As String, t2 As String, t3 As String, l As String, a As String, s As String, d As String)
         'REFERENCIA	TIPO	TIPO1	TIPO2	TIPO3	LARGO	ANCHO	STOCK	DESCRIPCION	PNG	DWG

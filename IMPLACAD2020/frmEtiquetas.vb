@@ -9,7 +9,7 @@ Imports Autodesk.AutoCAD.Interop.Common
 Imports System.Linq
 
 Public Class frmEtiquetas
-    Dim oTabla As DataTable
+    'Dim oTabla As DataTable
     Dim ultimoCaminoDWG As String
     Dim oEti As Etiqueta = Nothing
     Dim inicio As Boolean = True
@@ -24,11 +24,11 @@ Public Class frmEtiquetas
         'oEs = New Etiquetas
         If oEtis Is Nothing Then oEtis = New Etiquetas()
         inicio = True
-        oTabla = UtilesAlberto.Utiles.Excel_DameDatatable(appXLSX)
-        oTabla.TableName = "ETIQUETAS"
-        Dim claves(0) As DataColumn
-        claves(0) = oTabla.Columns("REFERENCIA")
-        oTabla.PrimaryKey = claves
+        'oTabla = UtilesAlberto.Utiles.Excel_DameDatatable(appXLSX)
+        'oTabla.TableName = "ETIQUETAS"
+        'Dim claves(0) As DataColumn
+        'claves(0) = oTabla.Columns("REFERENCIA")
+        'oTabla.PrimaryKey = claves
 
         'Dim t As System.Threading.Tasks = New System.Threading.Tasks(AddressOf RellenaListados(oTabla))
         RellenaListados()
@@ -370,53 +370,53 @@ Public Class frmEtiquetas
     End Sub
     ''
 
-    Public Sub FiltraListado_Tabla()
-        If oTabla.Rows.Count = 0 Then Exit Sub
-        ''
-        '' Borrar listado etiquetas solo.
-        Me.lbETIQUETAS.Items.Clear()
-        Dim filtro As String = ""
-        Dim fTipo As String = ""
-        Dim fTipo1 As String = ""
-        Dim fTipo2 As String = ""
-        Dim fTipo3 As String = ""
-        ''
-        If cbTIPO.Text = "*" Then
-            fTipo &= "TIPO like '%' AND "
-        Else
-            fTipo &= "TIPO = '" & cbTIPO.Text & "' AND "
-        End If
-        If cbTIPO1.Text = "*" Then
-            fTipo1 &= "TIPO1 like '%' AND "
-        Else
-            fTipo1 &= "TIPO1 = '" & cbTIPO1.Text & "' AND "
-        End If
-        If cbTIPO2.Text = "*" Then
-            fTipo2 &= "TIPO2 like '%' AND "
-        Else
-            fTipo2 &= "TIPO2 = '" & cbTIPO2.Text & "' AND "
-        End If
-        If cbTIPO3.Text = "*" Then
-            fTipo3 &= "TIPO3 like '%'"
-        Else
-            fTipo3 &= "TIPO3 = '" & cbTIPO3.Text & "'"
-        End If
-        filtro = fTipo & fTipo1 & fTipo2 & fTipo3
-        Dim filas() As DataRow = oTabla.Select(filtro)
-        ''
-        '' Recorrer cada fila para sacar Referencia, Tipo, Tipo1, Tipo2 y Tipo3
-        For Each quefila As DataRow In filas
-            Dim Referencia As String = quefila("REFERENCIA").ToString
-            If Me.lbETIQUETAS.Items.Contains(Referencia) = False Then _
-                Me.lbETIQUETAS.Items.Add(Referencia)
-        Next
-        ''
-        '' Ordenar listados y poner valores por defecto.
-        Me.lbETIQUETAS.Sorted = True
-        Me.lbETIQUETAS.SelectedIndex = -1
-        lbCuantos.Text = lbETIQUETAS.Items.Count & " Etiquetas"
-        VaciaFicha()
-    End Sub
+    'Public Sub FiltraListado_Tabla()
+    '    If oTabla.Rows.Count = 0 Then Exit Sub
+    '    ''
+    '    '' Borrar listado etiquetas solo.
+    '    Me.lbETIQUETAS.Items.Clear()
+    '    Dim filtro As String = ""
+    '    Dim fTipo As String = ""
+    '    Dim fTipo1 As String = ""
+    '    Dim fTipo2 As String = ""
+    '    Dim fTipo3 As String = ""
+    '    ''
+    '    If cbTIPO.Text = "*" Then
+    '        fTipo &= "TIPO like '%' AND "
+    '    Else
+    '        fTipo &= "TIPO = '" & cbTIPO.Text & "' AND "
+    '    End If
+    '    If cbTIPO1.Text = "*" Then
+    '        fTipo1 &= "TIPO1 like '%' AND "
+    '    Else
+    '        fTipo1 &= "TIPO1 = '" & cbTIPO1.Text & "' AND "
+    '    End If
+    '    If cbTIPO2.Text = "*" Then
+    '        fTipo2 &= "TIPO2 like '%' AND "
+    '    Else
+    '        fTipo2 &= "TIPO2 = '" & cbTIPO2.Text & "' AND "
+    '    End If
+    '    If cbTIPO3.Text = "*" Then
+    '        fTipo3 &= "TIPO3 like '%'"
+    '    Else
+    '        fTipo3 &= "TIPO3 = '" & cbTIPO3.Text & "'"
+    '    End If
+    '    filtro = fTipo & fTipo1 & fTipo2 & fTipo3
+    '    Dim filas() As DataRow = oTabla.Select(filtro)
+    '    ''
+    '    '' Recorrer cada fila para sacar Referencia, Tipo, Tipo1, Tipo2 y Tipo3
+    '    For Each quefila As DataRow In filas
+    '        Dim Referencia As String = quefila("REFERENCIA").ToString
+    '        If Me.lbETIQUETAS.Items.Contains(Referencia) = False Then _
+    '            Me.lbETIQUETAS.Items.Add(Referencia)
+    '    Next
+    '    ''
+    '    '' Ordenar listados y poner valores por defecto.
+    '    Me.lbETIQUETAS.Sorted = True
+    '    Me.lbETIQUETAS.SelectedIndex = -1
+    '    lbCuantos.Text = lbETIQUETAS.Items.Count & " Etiquetas"
+    '    VaciaFicha()
+    'End Sub
     ''
     Private Sub cbTIPO_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbTIPO.SelectedIndexChanged, cbTIPO1.SelectedIndexChanged, cbTIPO2.SelectedIndexChanged, cbTIPO3.SelectedIndexChanged
         If inicio = True Then Exit Sub
@@ -508,7 +508,7 @@ Public Class frmEtiquetas
         ' Borrar listado etiquetas solo.
         Me.lbETIQUETAS.Items.Clear()
         ' Todos los objetos Etiqueta
-        Dim oFiltro As List(Of Etiqueta) = oEtis.LReferencias.Where(Function(p) p.REFERENCIA.Contains(txtBusca.Text)).ToList
+        Dim oFiltro As List(Of Etiqueta) = oEtis.LReferencias.Where(Function(p) p.REFERENCIA.Contains(txtBusca.Text.ToUpper)).ToList
         '
         If oFiltro IsNot Nothing AndAlso oFiltro.Count > 0 Then
             Me.lbETIQUETAS.Items.AddRange((From x In oFiltro.ToList Select x.REFERENCIA).ToArray)

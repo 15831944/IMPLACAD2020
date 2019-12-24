@@ -1088,7 +1088,41 @@ Module modImplacad
                     ElseIf queArr IsNot Nothing AndAlso queArr.Contains(oEnt.ObjectID) Then
                         ''
                         If oEtis.DConjuntos.ContainsKey(oBloque.EffectiveName) = True Then
-                            SumaConjuntos(oBloque.EffectiveName, colBloquesCantidadParcial, resultado)
+                            'SumaConjuntos(oBloque.EffectiveName, colBloquesCantidadParcial, resultado)
+                            Dim oSubs As Object = oBloque.Explode
+                            For Each oSubEnt As AcadEntity In oSubs ' oBloque.Explode
+                                Dim t As String = ""
+                                If TypeOf oSubEnt Is AcadMText Then
+                                    t = CType(oSubEnt, AcadMText).TextString
+                                ElseIf TypeOf oSubEnt Is AcadText Then
+                                    t = CType(oSubEnt, AcadText).TextString
+                                End If
+                                If t.Contains(";") Then
+                                    t = t.Split(";")(1)
+                                End If
+                                t = t.Replace("}", "")
+                                Dim textovalido As Boolean = False
+                                For Each pre As String In arrpreEti
+                                    If t.StartsWith(pre) = True Then
+                                        textovalido = True
+                                        Exit For
+                                    End If
+                                Next
+                                If textovalido = False Then Continue For
+                                Dim etiquetas As String() = t.Split(" ")
+                                For Each eti As String In etiquetas
+                                    If colBloquesCantidadParcial.ContainsKey(eti) Then
+                                        colBloquesCantidadParcial(eti) += 1
+                                    Else
+                                        colBloquesCantidadParcial.Add(key:=eti, value:=1)
+                                    End If
+                                    resultado += 1
+                                Next
+                                Exit For
+                            Next
+                            For Each oE As AcadEntity In oSubs
+                                oE.Delete()
+                            Next
                         Else
                             If colBloquesCantidadParcial.ContainsKey(oBloque.EffectiveName) Then
                                 colBloquesCantidadParcial(oBloque.EffectiveName) += 1
@@ -1113,22 +1147,22 @@ Module modImplacad
         Exit Function
     End Function
     ''
-    Public Sub SumaConjuntos(nomBlo As String, ByRef colBl As SortedList, ByRef cont As Integer)
-        ''
-        '' Recorremos el conjunto de etiquetas para añadir las que contenga
-        If oEtis.DConjuntos.ContainsKey(nomBlo) = False Then Exit Sub
-        If oEtis.DConjuntos(nomBlo).COMPONENTES Is Nothing OrElse oEtis.DConjuntos(nomBlo).COMPONENTES = "" Then Exit Sub
-        ''
-        'Dim queEtis() As String = oEtis.DConjuntos(nomBlo).COMPONENTES
-        For Each queEti As String In oEtis.DConjuntos(nomBlo).COMPONENTES.Split(";"c)
-            If colBl.ContainsKey(queEti) Then
-                colBl(queEti) += 1
-            Else
-                colBl.Add(key:=queEti, value:=1)
-            End If
-            cont += 1
-        Next
-    End Sub
+    'Public Sub SumaConjuntos(nomBlo As String, ByRef colBl As SortedList, ByRef cont As Integer)
+    '    ''
+    '    '' Recorremos el conjunto de etiquetas para añadir las que contenga
+    '    If oEtis.DConjuntos.ContainsKey(nomBlo) = False Then Exit Sub
+    '    If oEtis.DConjuntos(nomBlo).COMPONENTES Is Nothing OrElse oEtis.DConjuntos(nomBlo).COMPONENTES = "" Then Exit Sub
+    '    ''
+    '    'Dim queEtis() As String = oEtis.DConjuntos(nomBlo).COMPONENTES
+    '    For Each queEti As String In oEtis.DConjuntos(nomBlo).COMPONENTES.Split(";"c)
+    '        If colBl.ContainsKey(queEti) Then
+    '            colBl(queEti) += 1
+    '        Else
+    '            colBl.Add(key:=queEti, value:=1)
+    '        End If
+    '        cont += 1
+    '    Next
+    'End Sub
     Public Function DameTotalBaliza(queCapa As queCapa, Optional queArr As ArrayList = Nothing) As Double
         'AcDbLayerTableRecord
         Dim resultado As Double = 0
