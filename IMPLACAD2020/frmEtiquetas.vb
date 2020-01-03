@@ -237,27 +237,32 @@ Public Class frmEtiquetas
         cbTIPO3.Items.Clear() : cbTIPO3.Items.Add("*")
         ' TIPO
         Dim query As IEnumerable(Of String) = From x In oEtis.LReferencias
+                                              Where x.STOCK <> False AndAlso x.TIPO <> ""
                                               Select x.TIPO
                                               Distinct
         cbTIPO.Items.AddRange(query.ToArray)
         ' TIPO1
         query = From x In oEtis.LReferencias
+                Where x.STOCK <> False AndAlso x.TIPO <> ""
                 Select x.TIPO1
                 Distinct
         cbTIPO1.Items.AddRange(query.ToArray)
-        ' TIPO2
-        query = From x In oEtis.LReferencias
-                Select x.TIPO2
-                Distinct
-        cbTIPO2.Items.AddRange(query.ToArray)
+            ' TIPO2
+            query = From x In oEtis.LReferencias
+                    Where x.STOCK <> False AndAlso x.TIPO <> ""
+                    Select x.TIPO2
+                    Distinct
+            cbTIPO2.Items.AddRange(query.ToArray)
         ' TIPO3
         query = From x In oEtis.LReferencias
+                Where x.STOCK <> False AndAlso x.TIPO <> ""
                 Select x.TIPO3
                 Distinct
         cbTIPO3.Items.AddRange(query.ToArray)
         '
         ' REFERENCIAS
         query = From x In oEtis.LReferencias
+                Where x.STOCK <> False AndAlso x.TIPO <> ""
                 Select x.REFERENCIA
                 Distinct
         Me.lbETIQUETAS.Items.AddRange(query.ToArray)
@@ -482,7 +487,7 @@ Public Class frmEtiquetas
         '    lbETIQUETAS.SetSelected(indice, True)
         '    lbETIQUETAS.SelectedIndex = indice
         'End If
-        txtBusca.Text = txtBusca.Text.ToUpper
+        'txtBusca.Text = txtBusca.Text.ToUpper
     End Sub
 
     Private Sub BtnBuscar_Click(sender As Object, e As EventArgs) Handles BtnBuscar.Click
@@ -511,7 +516,11 @@ Public Class frmEtiquetas
         Dim oFiltro As List(Of Etiqueta) = oEtis.LReferencias.Where(Function(p) p.REFERENCIA.Contains(txtBusca.Text.ToUpper)).ToList
         '
         If oFiltro IsNot Nothing AndAlso oFiltro.Count > 0 Then
-            Me.lbETIQUETAS.Items.AddRange((From x In oFiltro.ToList Select x.REFERENCIA).ToArray)
+            Me.lbETIQUETAS.Items.AddRange(
+                (From x In oFiltro.ToList
+                 Where x.STOCK <> False AndAlso x.TIPO <> ""
+                 Select x.REFERENCIA).ToArray
+                 )
         End If
         '
         ' Ordenar listados y poner valores por defecto.
