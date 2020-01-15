@@ -9,7 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
-*.exe
+IMPLACAD2020*.exe
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
