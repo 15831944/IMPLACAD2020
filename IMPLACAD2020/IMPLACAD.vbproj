@@ -136,6 +136,9 @@
       <HintPath>H:\DESARROLLO\DLL\AutoCAD\2020\inc\AdWindows.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="AutoCAD2acad">
+      <HintPath>..\..\..\..\_MODULOS-CLASES\AUTOCAD\2020\AutoCAD2acad\bin\AutoCAD2acad.dll</HintPath>
+    </Reference>
     <Reference Include="Autodesk.AutoCAD.Interop, Version=23.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -152,6 +155,9 @@
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
+    <Reference Include="UtilesAlberto">
+      <HintPath>..\..\..\..\_MODULOS-CLASES\WINDOWS\UtilesAlberto\bin\UtilesAlberto.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -288,7 +294,6 @@
     <None Include="HK_R22.0_INSTALL.reg" />
     <None Include="IMPLACAD.cuix" />
     <None Include="IMPLACAD.ini" />
-    <None Include="IMPLACAD.xls" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -340,16 +345,6 @@
     <Resource Include="PackageContents.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\_MODULOS-CLASES\AUTOCAD\2020\AutoCAD2acad\AutoCAD2acad.vbproj">
-      <Project>{c45fea81-2a3c-47a8-baea-35ae18db94a2}</Project>
-      <Name>AutoCAD2acad</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\_MODULOS-CLASES\WINDOWS\UtilesAlberto\UtilesAlberto.vbproj">
-      <Project>{7e7b7fd9-7145-4607-b2b8-bb292871b260}</Project>
-      <Name>UtilesAlberto</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="ClosedXML">
       <Version>0.94.2</Version>
     </PackageReference>
@@ -370,6 +365,8 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="INSTALADOR_Inno\IMPLACAD_InstaladorInno_x64.iss" />
+    <Content Include="INSTALADOR_Inno\IMPLACAD_InstaladorInno_x64_CONLIBRERIAS.iss" />
     <None Include="Resources\Search_256x256.png" />
     <Resource Include="IMPLACAD.ico" />
     <Content Include="IMPLACADHelp.htm" />

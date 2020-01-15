@@ -724,12 +724,6 @@ Namespace IMPLACAD
                     texto = ""
                     ''
                     Dim oBloque As AcadBlockReference = oApp.ActiveDocument.ObjectIdToObject(oEnt.ObjectID)
-                    'oBloque.XScaleFactor = escalaTotal
-                    'oBloque.YScaleFactor = escalaTotal
-                    'oBloque.ZScaleFactor = escalaTotal
-                    '' 2*7*X=20
-                    '' X=20/((2*7)
-                    '' X=20/14
                     'If valorescala > 15 Then
                     '    oBloque.ScaleEntity(oBloque.InsertionPoint, 0.25)
                     'ElseIf valorescala > 10 Then
@@ -741,11 +735,8 @@ Namespace IMPLACAD
                     'Else
                     '    oBloque.ScaleEntity(oBloque.InsertionPoint, 10)
                     'End If
-                    oBloque.ScaleEntity(oBloque.InsertionPoint, (60 / (2 * valorescala)))
-                    'oBloque.XEffectiveScaleFactor = 0.05
-                    'oBloque.YEffectiveScaleFactor = 0.05
-                    'oBloque.ZEffectiveScaleFactor = 0.05
-                    'oBloque.ScaleEntity(oBloque.InsertionPoint, (0.25 * valorescala))
+                    'oBloque.ScaleEntity(oBloque.InsertionPoint, (60 / (2 * valorescala)))
+                    oBloque.ScaleEntity(oBloque.InsertionPoint, valorescala)
                     oBloque.Update()
                     oBloque = Nothing
                 Next

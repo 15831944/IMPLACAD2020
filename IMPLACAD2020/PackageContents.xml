@@ -20,8 +20,8 @@
 		Url="http://www.2acad.es/"
 		Email="comercial@2acad.com"/>
 	<RuntimeRequirements
-		SeriesMin="R23.1"
-		SeriesMax="R24.1"
+		SeriesMin="R19.1"
+		SeriesMax="R23.1"
 		Platform="LDT|AIP|AIPRS|AIPSIM|Civil|AOEM|AIS|ECSCAD|ACADM|ACADE|ADT|AutoCAD*|AutoCAD"
 		OS="Win32|Win64" />
 	<Components>
@@ -37,8 +37,8 @@
 				SupportPath="./"
 				OS="Win32|Win64"
 				Platform="LDT|AIP|AIPRS|AIPSIM|Civil|AOEM|AIS|ECSCAD|ACADM|ACADE|ADT|AutoCAD*|AutoCAD"
-				SeriesMin="R23.1"
-				SeriesMax="R24.1"/>
+				SeriesMin="R19.1"
+				SeriesMax="R23.1"/>
 			<Commands GroupName="IMPLACAD">
 				<Command Local="INSERTAREDITAR" Global="ETIQUETAS" Description="Insertar o Editar etiquetas" />
 			</Commands>
@@ -46,9 +46,13 @@
 			AppName="IMPLACAD"
 			Version="1.0.0"
 			ModuleName="IMPLACAD.cuix" />
-    <!--<ComponentEntry
-      AppName="AutoCAD2acad"
-      Version="2020.0.0.2"
-      ModuleName="AutoCAD2acad.dll" />-->
+		<!--<ComponentEntry
+			AppName="AutoCAD2acad"
+			Version="2020.0.0.1"
+			ModuleName="AutoCAD2acad.dll" />
+		<ComponentEntry
+			AppName="UtilesAlberto"
+			Version="2020.0.0.12"
+			ModuleName="UtilesAlberto.dll" />-->
 	</Components>
 </ApplicationPackage>

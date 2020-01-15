@@ -20,8 +20,6 @@ Imports Autodesk.AutoCAD.Geometry
 Imports AcadApplication = Autodesk.AutoCAD.ApplicationServices.Application
 Imports AcadDocument = Autodesk.AutoCAD.ApplicationServices.Document
 Imports AcadWindows = Autodesk.AutoCAD.Windows
-Imports uau = UtilesAlberto.Utiles
-Imports a2 = AutoCAD2acad.A2acad
 '
 Partial Public Class Eventos
     Public Shared Sub Subscribe_AXDB() 'docDb As Autodesk.AutoCAD.DatabaseServices.Database)

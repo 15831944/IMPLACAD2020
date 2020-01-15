@@ -21,8 +21,6 @@ Imports Autodesk.AutoCAD.Geometry
 Imports AXApp = Autodesk.AutoCAD.ApplicationServices.Application
 Imports AXDoc = Autodesk.AutoCAD.ApplicationServices.Document
 Imports AXWin = Autodesk.AutoCAD.Windows
-Imports uau = UtilesAlberto.Utiles
-Imports a2 = AutoCAD2acad.A2acad
 
 Partial Public Class Eventos
     Public Shared Sub Subscribe_AXApp()

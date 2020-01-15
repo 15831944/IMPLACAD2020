@@ -21,7 +21,7 @@ Imports Autodesk.AutoCAD.Geometry
 Imports AXApp = Autodesk.AutoCAD.ApplicationServices.Application
 Imports AXDoc = Autodesk.AutoCAD.ApplicationServices.Document
 Imports AXWin = Autodesk.AutoCAD.Windows
-Imports a2 = AutoCAD2acad.A2acad
+
 Partial Public Class Eventos
     Public Shared Sub Subscribe_AXDocM()
         AddHandler AXDocM.DocumentActivated, AddressOf AXDocM_DocumentActivated
@@ -53,7 +53,7 @@ Partial Public Class Eventos
             'RemoveHandler AXDocM.DocumentToBeActivated, AddressOf AXDocM_DocumentToBeActivated
             'RemoveHandler AXDocM.DocumentToBeDeactivated, AddressOf AXDocM_DocumentToBeDeactivated
             'RemoveHandler AXDocM.DocumentToBeDestroyed, AddressOf AXDocM_DocumentToBeDestroyed
-        Catch ex As system.Exception
+        Catch ex As System.Exception
             Debug.Print(ex.ToString)
         End Try
     End Sub

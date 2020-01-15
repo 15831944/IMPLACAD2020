@@ -44,10 +44,10 @@ Namespace IMPLACAD
                 Eventos.Eventos_Inicializa()
                 ' **************************
                 '
-                Dim key As String = "aiiao2K19_2aCAD"
-                cfg = New UtilesAlberto.Conf(key, System.Reflection.Assembly.GetExecutingAssembly)
-                clsA = New AutoCAD2acad.A2acad.A2acad(Eventos.COMApp, cfg._appFullPath, regAPP, key)
-                ua = New UtilesAlberto.Utiles(key)
+                Dim k As String = "aiiao2K20_2aCAD"
+                cfg = New UtilesAlberto.Conf(k, System.Reflection.Assembly.GetExecutingAssembly)
+                'clsA = New AutoCAD2acad.A2acad.A2acad(k, Eventos.COMApp, System.Reflection.Assembly.GetExecutingAssembly.Location, regAPP) '** DA ERROR AL CARGAR
+                ua = New UtilesAlberto.Utiles(k)
             Catch ex As [System].Exception
                 MsgBox(ex.ToString)
                 Eventos.Eventos_Vacia()

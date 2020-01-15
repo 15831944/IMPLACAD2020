@@ -13,8 +13,6 @@ Imports Autodesk.AutoCAD.EditorInput
 Imports Autodesk.AutoCAD.ApplicationServices
 Imports Autodesk.AutoCAD.Interop
 Imports Autodesk.AutoCAD.Interop.Common
-Imports ua = UtilesAlberto.Utiles
-Imports a2 = AutoCAD2acad.A2acad
 Imports System.Runtime.InteropServices
 
 Module modVar
@@ -36,7 +34,7 @@ Module modVar
     ''
     '' CLASSES
     Public cIni As clsINI = Nothing
-    Public clsA As a2.A2acad = Nothing
+    Public clsA As AutoCAD2acad.A2acad.A2acad = Nothing
     Public cfg As UtilesAlberto.Conf = Nothing
     Public ua As UtilesAlberto.Utiles = Nothing
     Public oEtis As Etiquetas = Nothing
