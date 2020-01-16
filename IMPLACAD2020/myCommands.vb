@@ -1456,6 +1456,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             End If
             If oApp Is Nothing Then _
        oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication)
+            CambiaBloqueViejoPorNuevo(oApp.ActiveDocument)
             XRef_DWGListar(False)
             XRef_IMGListar(False)
         End Sub

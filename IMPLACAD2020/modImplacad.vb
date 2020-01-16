@@ -1525,27 +1525,39 @@ Module modImplacad
             '' para definir la imagen.
             Dim encontrado As Boolean = False
             If oEtis.DSustituciones.ContainsKey(bln) Then
-                '' Lo encontramos en oEtis.DSustituciones. Definimos su imagen
-                imgPath = IO.Path.Combine(IMPLACAD_DATA, balizas, oEtis.DSustituciones(bln) & ".png")
+                Dim ImgNewName As String = ""
+                Dim SUSTITUCION As String = oEtis.DSustituciones(bln).Trim.Replace(" ", "")
+                If SUSTITUCION.Contains(";") Then
+                    ImgNewName = SUSTITUCION.Split(";")(1) & ".png"
+                Else
+                    ImgNewName = SUSTITUCION & ".png"
+                End If
+                ' encontramos en oEtis.DSustituciones. Definimos su imagen
+                imgPath = IO.Path.Combine(IMPLACAD_DATA, balizas, ImgNewName)
                 encontrado = True
-            Else
-                '' Buscaremos en colSustituciones para ver si nombre bloque empieza por (menos de 10)
-                For Each queRef As String In oEtis.DSustituciones.Keys
-                    '' Si es >= 10 caracteres, saltamos al siguiente
-                    If queRef.Length >= 10 Then Continue For
-                    ''
-                    If bln.ToUpper.StartsWith(queRef.ToUpper) Then
-                        imgPath = IO.Path.Combine(IMPLACAD_DATA, balizas, oEtis.DSustituciones(queRef) & ".png")
-                        encontrado = True
-                        Exit For
-                    End If
-                Next
+                'Else
+                '    '' Buscaremos en colSustituciones para ver si nombre bloque empieza por (menos de 10)
+                '    For Each queRef As String In oEtis.DSustituciones.Keys
+                '        '' Si es >= 10 caracteres, saltamos al siguiente
+                '        If queRef.Length >= 10 Then Continue For
+                '        ''
+                '        If bln.ToUpper.StartsWith(queRef.ToUpper) Then
+                '            imgPath = IO.Path.Combine(IMPLACAD_DATA, balizas, oEtis.DSustituciones(queRef) & ".png")
+                '            encontrado = True
+                '            Exit For
+                '        End If
+                '    Next
             End If
-            ''
+            ' No es un bloque para sustituir. Lo borramos
             If encontrado = False Then
                 oBl.Delete()
                 Continue For
             End If
+            ' No existe la imagen en IMPLACAD_DATA\balizas
+            If imgPath = "" OrElse IO.File.Exists(imgPath) = False Then
+                Continue For
+            End If
+            '
             imgPunto = oBl.InsertionPoint
             ''
             '' Insertamos la imagen que corresponda (desplazada XX unidades)
@@ -1635,6 +1647,68 @@ Module modImplacad
         oDoc.Save()
     End Sub
     ''
+    Public Sub CambiaBloqueViejoPorNuevo(ByRef oDoc As AcadDocument)
+        ''
+        If oApp Is Nothing Then _
+            oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication)
+        '' Activar Capa 0 primero.
+        'oDoc.ActiveLayer = oDoc.Layers.Item("0")
+        CapaCeroActiva()
+
+        ''
+        '' Variables de imagenes
+        Dim imgPath As String = ""
+        Dim imgPunto As Object = Nothing
+        Dim imgEscala As Double = 1
+        Dim imgRotacion As Double = oDoc.Utility.AngleToReal("0", AcAngleUnits.acRadians)
+        Dim rot0 As Double = oDoc.Utility.AngleToReal("0", AcAngleUnits.acRadians)
+        Dim rot90 As Double = oDoc.Utility.AngleToReal("90", AcAngleUnits.acRadians)
+        Dim rot180 As Double = oDoc.Utility.AngleToReal("180", AcAngleUnits.acRadians)
+        Dim rot270 As Double = oDoc.Utility.AngleToReal("270", AcAngleUnits.acRadians)
+        '
+        ' 1.- Cogemos todos los bloques de IMPLACAD insertados
+        Dim arrBlo As ArrayList = DameTodoImplacad()
+        '
+        ' Recorrer cada bloque y cambiarlo por la imagen que le corresponda.
+        For Each oEnt As AcadEntity In arrBlo
+            If Not (TypeOf oEnt Is AcadBlockReference) Then Continue For
+            ''
+            Dim oBl As AcadBlockReference = oApp.ActiveDocument.ObjectIdToObject(oEnt.ObjectID)
+            Dim oBlName As String = oBl.EffectiveName.ToUpper
+            Dim oBlNew As AcadBlockReference = Nothing
+            ''
+            ''
+            '' Si lo encontramos en colSustituciones, cambiarlo.
+            Dim encontrado As Boolean = False
+            If oEtis.DSustituciones.ContainsKey(oBlName) Then
+                Dim oBlNewName As String = ""
+                Dim SUSTITUCION As String = oEtis.DSustituciones(oBlName).Trim.Replace(" ", "")
+                If SUSTITUCION.Contains(";") Then
+                    oBlNewName = SUSTITUCION.Split(";")(0) & ".dwg"
+                Else
+                    oBlNewName = SUSTITUCION & ".dwg"
+                End If
+                Dim busco As String() = IO.Directory.GetFiles(IMPLACAD_DATA, oBlNewName, SearchOption.AllDirectories)
+                ' Si no lo hemos encontrado, continuar
+                If busco Is Nothing OrElse busco.Count = 0 Then Continue For
+                ' Encontrado
+                Dim oBlNewPath As String = busco.First
+                ' Lo insertamos y ponemos las misma propiedades que oBl
+                oBlNew = oDoc.ModelSpace.InsertBlock(oBl.InsertionPoint, oBlNewPath, oBl.XScaleFactor, oBl.YScaleFactor, oBl.ZScaleFactor, oBl.Rotation)
+                If oBlNew IsNot Nothing Then
+                    'poner datos al bloque nuevo
+                    XData.XNuevo(oBlNew, "Clase=etiqueta")
+                    oBlNew = Nothing
+                    'borramos el bloque viejo.
+                    oBl.Delete()
+                    oBl = Nothing
+                End If
+            End If
+        Next
+        ''
+        oApp.ActiveDocument.Regen(AcRegenType.acAllViewports)
+        oDoc.Save()
+    End Sub
     Public Sub CapaCreaActivaBalizamientoSuelo()
         ''
         '' Crear una capa y poner sus características.

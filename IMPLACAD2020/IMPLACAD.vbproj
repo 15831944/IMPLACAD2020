@@ -155,9 +155,6 @@
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
-    <Reference Include="UtilesAlberto">
-      <HintPath>..\..\..\..\_MODULOS-CLASES\WINDOWS\UtilesAlberto\bin\UtilesAlberto.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -370,6 +367,12 @@
     <None Include="Resources\Search_256x256.png" />
     <Resource Include="IMPLACAD.ico" />
     <Content Include="IMPLACADHelp.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\_MODULOS-CLASES\WINDOWS\UtilesAlberto\UtilesAlberto.vbproj">
+      <Project>{7e7b7fd9-7145-4607-b2b8-bb292871b260}</Project>
+      <Name>UtilesAlberto</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
