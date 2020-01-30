@@ -1229,7 +1229,8 @@ Module modImplacad
         'Return Format((resultado / 1000), "0.000")
         '' Devolvemos los m con formato de 2 decimales.
         If resultado > 0 Then
-            Return Format(Math.Truncate(resultado + 1), "##0.#")
+            'Return Format(Math.Truncate(resultado + 1), "##0.#")
+            Return Format(Math.Truncate(resultado), "##0.#")
         Else
             Return Format(0, "##0.#")
         End If

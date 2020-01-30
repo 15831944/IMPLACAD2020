@@ -1046,7 +1046,8 @@ Namespace IMPLACAD
                     texto = ""
                     ''
                     Dim oBloque As AcadBlockReference = oDocEva.ObjectIdToObject(oEnt.ObjectID)
-                    oBloque.ScaleEntity(oBloque.InsertionPoint, (50 / (2 * valorescala)))
+                    'oBloque.ScaleEntity(oBloque.InsertionPoint, (50 / (2 * valorescala)))
+                    oBloque.ScaleEntity(oBloque.InsertionPoint, valorescala)
                     'oBloque.ScaleEntity(oBloque.InsertionPoint, (60 / (2 * valorescala)))
                     'oBloque.XEffectiveScaleFactor = 0.05
                     'oBloque.YEffectiveScaleFactor = 0.05

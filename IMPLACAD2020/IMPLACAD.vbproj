@@ -271,7 +271,9 @@
   <ItemGroup>
     <None Include="2aCAD.snk" />
     <None Include="app.config" />
+    <None Include="bin\AutoCAD2acad.key" />
     <None Include="bin\IMPLACAD.ini" />
+    <None Include="bin\UtilesAlberto.key" />
     <None Include="etiquetaescalera.dwg" />
     <None Include="evacuacionpri.shp" />
     <None Include="evacuacionpri.shx" />
@@ -395,6 +397,7 @@ xcopy "$(ProjectDir)evacuacionpri.shx" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)evacuacionsec.shx" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(ProjectDir)rutasevacuacion.lin" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(TargetDir)*.dll" "%25INSTALL_BUNDLE%25\" /Y
+xcopy "$(TargetDir)*.key" "%25INSTALL_BUNDLE%25\" /Y
 
 REM "COPIAR BIBLIOTECA A C:\IMPLASER\IMPLASER"
 xcopy "$(SolutionDir)..\$(ProjectName)2020_DOCUMENTOS\$(ProjectName)" "%25INSTALL_DATA%25" /E /Y
