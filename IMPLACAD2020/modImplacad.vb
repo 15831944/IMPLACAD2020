@@ -1670,7 +1670,8 @@ Module modImplacad
         ' 1.- Cogemos todos los bloques de IMPLACAD insertados
         Dim arrBlo As ArrayList = DameTodoImplacad()
         '
-        ' Recorrer cada bloque y cambiarlo por la imagen que le corresponda.
+        ' 2.- Sacar el total de bloques viejos a sustituir y preguntar.
+        Dim LBlo As New Dictionary(Of String, String)     ' Bloque viejo, path nuevo
         For Each oEnt As AcadEntity In arrBlo
             If Not (TypeOf oEnt Is AcadBlockReference) Then Continue For
             ''
@@ -1680,7 +1681,6 @@ Module modImplacad
             ''
             ''
             '' Si lo encontramos en colSustituciones, cambiarlo.
-            Dim encontrado As Boolean = False
             If oEtis.DSustituciones.ContainsKey(oBlName) Then
                 Dim oBlNewName As String = ""
                 Dim SUSTITUCION As String = oEtis.DSustituciones(oBlName).Trim.Replace(" ", "")
@@ -1694,16 +1694,36 @@ Module modImplacad
                 If busco Is Nothing OrElse busco.Count = 0 Then Continue For
                 ' Encontrado
                 Dim oBlNewPath As String = busco.First
-                ' Lo insertamos y ponemos las misma propiedades que oBl
-                oBlNew = oDoc.ModelSpace.InsertBlock(oBl.InsertionPoint, oBlNewPath, oBl.XScaleFactor, oBl.YScaleFactor, oBl.ZScaleFactor, oBl.Rotation)
-                If oBlNew IsNot Nothing Then
-                    'poner datos al bloque nuevo
-                    XData.XNuevo(oBlNew, "Clase=etiqueta")
-                    oBlNew = Nothing
-                    'borramos el bloque viejo.
-                    oBl.Delete()
-                    oBl = Nothing
-                End If
+                '
+                If LBlo.ContainsKey(oBl.Handle) = False Then LBlo.Add(oBl.Handle, oBlNewPath)
+            End If
+        Next
+        '
+        If LBlo.Count > 0 Then
+            If MsgBox(
+                "Se han encontrado (" & LBlo.Count & ") etiquetas antiguas que se pueden sustituir por nuevas." & vbCrLf &
+                "¿Desea sustituirlas?",
+                MsgBoxStyle.Information Or MsgBoxStyle.YesNo,
+                "SUSTITUIR ETIQUETAS ANTIGUAS") = MsgBoxResult.No Then
+                Exit Sub
+            End If
+        Else
+            Exit Sub
+        End If
+        '
+        ' Recorrer cada etiqueta de bloque y cambiarla por la nueva etiqueta.
+        For Each oEnt As String In LBlo.Keys
+            Dim oBl As AcadBlockReference = oApp.ActiveDocument.HandleToObject(oEnt)
+            Dim oBlNew As AcadBlockReference = Nothing
+            ' Lo insertamos y ponemos las misma propiedades que oBl
+            oBlNew = oDoc.ModelSpace.InsertBlock(oBl.InsertionPoint, LBlo(oEnt), oBl.XScaleFactor, oBl.YScaleFactor, oBl.ZScaleFactor, oBl.Rotation)
+            If oBlNew IsNot Nothing Then
+                'poner datos al bloque nuevo
+                XData.XNuevo(oBlNew, "Clase=etiqueta")
+                oBlNew = Nothing
+                'borramos el bloque viejo.
+                oBl.Delete()
+                oBl = Nothing
             End If
         Next
         ''
