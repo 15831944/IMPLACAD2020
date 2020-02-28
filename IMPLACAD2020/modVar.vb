@@ -34,7 +34,6 @@ Module modVar
     ''
     '' CLASSES
     Public cIni As clsINI = Nothing
-    Public clsA As AutoCAD2acad.A2acad.A2acad = Nothing
     Public cfg As UtilesAlberto.Conf = Nothing
     Public ua As UtilesAlberto.Utiles = Nothing
     Public oEtis As Etiquetas = Nothing

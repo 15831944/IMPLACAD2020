@@ -129,8 +129,44 @@ Partial Public Class Eventos
     Public Shared Function AXEditor() As Autodesk.AutoCAD.EditorInput.Editor
         Return AXDoc.Editor
     End Function
-    Public Shared Function COMApp() As Autodesk.AutoCAD.Interop.AcadApplication
-        Return CType(AXApp.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication).Application
+    Public Shared Function COMApp() As Autodesk.AutoCAD.Interop.AcadApplication  ' Object ' Autodesk.AutoCAD.Interop.AcadApplication
+        ' 22 (2018), 23(2019), 23.1(2020), 24(2021)
+        Dim resultado As Autodesk.AutoCAD.Interop.AcadApplication = Nothing
+        Try
+            resultado = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication)
+        Catch ex As System.Exception
+        End Try
+        '
+        If resultado Is Nothing Then
+            Dim pr As Process = Process.GetCurrentProcess
+            Dim pm As ProcessModule = pr.MainModule
+            Dim Fvi As FileVersionInfo = pm.FileVersionInfo
+            Dim file As String = pm.FileName
+            Dim folder As String = IO.Path.GetDirectoryName(file)
+            Try
+                If folder.EndsWith("2018") Then
+                    resultado = GetObject(, "AutoCAD.Application.22")
+                ElseIf folder.EndsWith("2019") Then
+                    resultado = GetObject(, "AutoCAD.Application.23")
+                ElseIf folder.EndsWith("2020") Then
+                    resultado = GetObject(, "AutoCAD.Application.23.1")
+                ElseIf folder.EndsWith("2021") Then
+                    resultado = GetObject(, "AutoCAD.Application.24")
+                Else
+                    resultado = GetObject(, "AutoCAD.Application")
+                End If
+            Catch ex As System.Exception
+
+            End Try
+        End If
+        If resultado Is Nothing Then
+            Try
+                resultado = GetObject(, "AutoCAD.Application")
+            Catch ex As System.Exception
+
+            End Try
+        End If
+        Return resultado
     End Function
     Public Shared Function COMDoc() As Autodesk.AutoCAD.Interop.AcadDocument
         'Return COMApp.ActiveDocument

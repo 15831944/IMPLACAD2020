@@ -368,10 +368,6 @@
     <Content Include="IMPLACADHelp.htm" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AutoCAD2acad\AutoCAD2acad.vbproj">
-      <Project>{c45fea81-2a3c-47a8-baea-35ae18db94a2}</Project>
-      <Name>AutoCAD2acad</Name>
-    </ProjectReference>
     <ProjectReference Include="..\UtilesAlberto\UtilesAlberto.vbproj">
       <Project>{7e7b7fd9-7145-4607-b2b8-bb292871b260}</Project>
       <Name>UtilesAlberto</Name>
@@ -401,7 +397,7 @@ xcopy "$(TargetDir)*.dll" "%25INSTALL_BUNDLE%25\" /Y
 xcopy "$(TargetDir)*.key" "%25INSTALL_BUNDLE%25\" /Y
 
 REM "COPIAR BIBLIOTECA A C:\IMPLASER\IMPLASER"
-xcopy "$(SolutionDir)..\$(ProjectName)2020_DOCUMENTOS\$(ProjectName)" "%25INSTALL_DATA%25" /E /Y
+rem xcopy "$(SolutionDir)..\$(ProjectName)2020_DOCUMENTOS\$(ProjectName)" "%25INSTALL_DATA%25" /E /Y
 
 REM "COPIA FINAL A SUS CARPETAS CORRESPONDIENTES"
 xcopy "%25INSTALL_DATA%25" "%25OUT_DATA%25" /E /Y
@@ -414,7 +410,7 @@ SET OUT_DATA="C:\ProgramData\$(ProjectName)"
 SET OUT_BUNDLE="C:\ProgramData\Autodesk\ApplicationPlugins\$(ProjectName)2020.bundle"
 REM SET OUT_BUNDLE="%25appdata%25\Autodesk\ApplicationPlugins\$(ProjectName)2020.bundle"
 
-if exist "%25OUT_DATA%25" rmdir /S / Q "%25OUT_DATA%25"
+rem if exist "%25OUT_DATA%25" rmdir /S / Q "%25OUT_DATA%25"
 if exist "%25OUT_BUNDLE%25" rmdir /S / Q "%25OUT_BUNDLE%25"
 
 if not exist "%25INSTALL_DATA%25" mkdir "%25INSTALL_DATA%25"

@@ -20,7 +20,7 @@
 		Url="http://www.2acad.es/"
 		Email="comercial@2acad.com"/>
 	<RuntimeRequirements
-		SeriesMin="R19.1"
+		SeriesMin="R23.0"
 		SeriesMax="R23.1"
 		Platform="LDT|AIP|AIPRS|AIPSIM|Civil|AOEM|AIS|ECSCAD|ACADM|ACADE|ADT|AutoCAD*|AutoCAD"
 		OS="Win32|Win64" />
@@ -37,7 +37,7 @@
 				SupportPath="./"
 				OS="Win32|Win64"
 				Platform="LDT|AIP|AIPRS|AIPSIM|Civil|AOEM|AIS|ECSCAD|ACADM|ACADE|ADT|AutoCAD*|AutoCAD"
-				SeriesMin="R19.1"
+				SeriesMin="R23.0"
 				SeriesMax="R23.1"/>
 			<Commands GroupName="IMPLACAD">
 				<Command Local="INSERTAREDITAR" Global="ETIQUETAS" Description="Insertar o Editar etiquetas" />

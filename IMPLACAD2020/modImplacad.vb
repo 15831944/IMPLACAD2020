@@ -1708,6 +1708,10 @@ Module modImplacad
                 Exit Sub
             End If
         Else
+            MsgBox(
+                "No se han encontrado referencias que se pueden sustituir.",
+                MsgBoxStyle.Information Or MsgBoxStyle.OkOnly,
+                "SUSTITUIR ETIQUETAS ANTIGUAS")
             Exit Sub
         End If
         '

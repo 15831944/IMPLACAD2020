@@ -46,13 +46,12 @@ Namespace IMPLACAD
                 '
                 Dim k As String = "aiiao2K20_2aCAD"
                 cfg = New UtilesAlberto.Conf(k, System.Reflection.Assembly.GetExecutingAssembly)
-                clsA = New AutoCAD2acad.A2acad.A2acad(k, Eventos.COMApp, System.Reflection.Assembly.GetExecutingAssembly.Location, regAPP) '** DA ERROR AL CARGAR
                 ua = New UtilesAlberto.Utiles(k, System.Reflection.Assembly.GetExecutingAssembly)
             Catch ex As [System].Exception
                 MsgBox(ex.ToString)
                 Eventos.Eventos_Vacia()
                 cfg = Nothing
-                clsA = Nothing
+                'clsA = Nothing
                 ua = Nothing
                 Me.Terminate()
                 Exit Sub
