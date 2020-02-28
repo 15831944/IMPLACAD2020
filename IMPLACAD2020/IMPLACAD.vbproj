@@ -136,9 +136,6 @@
       <HintPath>H:\DESARROLLO\DLL\AutoCAD\2020\inc\AdWindows.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="AutoCAD2acad">
-      <HintPath>..\..\..\..\_MODULOS-CLASES\AUTOCAD\2020\AutoCAD2acad\bin\AutoCAD2acad.dll</HintPath>
-    </Reference>
     <Reference Include="Autodesk.AutoCAD.Interop, Version=23.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -371,7 +368,11 @@
     <Content Include="IMPLACADHelp.htm" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\_MODULOS-CLASES\WINDOWS\UtilesAlberto\UtilesAlberto.vbproj">
+    <ProjectReference Include="..\AutoCAD2acad\AutoCAD2acad.vbproj">
+      <Project>{c45fea81-2a3c-47a8-baea-35ae18db94a2}</Project>
+      <Name>AutoCAD2acad</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UtilesAlberto\UtilesAlberto.vbproj">
       <Project>{7e7b7fd9-7145-4607-b2b8-bb292871b260}</Project>
       <Name>UtilesAlberto</Name>
     </ProjectReference>

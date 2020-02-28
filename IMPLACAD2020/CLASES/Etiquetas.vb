@@ -106,7 +106,7 @@ Public Class Etiqueta
     '
     Private Sub PonFullPath_DWGPNG()
         DWG = IMPLACAD_DATA & IIf(IMPLACAD_DATA.EndsWith("\") = False, sep, "") & TIPO
-        DWG &= sep & TIPO1
+        DWG &= IIf(TIPO1 <> "", sep & TIPO1, "")
         DWG &= IIf(TIPO2 <> "", sep & TIPO2, "")
         DWG &= IIf(TIPO3 <> "", sep & TIPO3, "")
         DWG &= sep & REFERENCIA & ".dwg"
