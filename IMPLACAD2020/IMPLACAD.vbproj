@@ -222,6 +222,12 @@
     <Compile Include="frmEtiquetas.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmZonas.Designer.vb">
+      <DependentUpon>frmZonas.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmZonas.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="modImplacad.vb" />
     <Compile Include="modVar.vb" />
     <Compile Include="modWeb.vb" />
@@ -257,6 +263,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmEtiquetas.resx">
       <DependentUpon>frmEtiquetas.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmZonas.resx">
+      <DependentUpon>frmZonas.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

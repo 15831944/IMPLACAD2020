@@ -18,55 +18,63 @@ Module modImplacad
     Public Sub ConfiguraDibujo()
         If oApp Is Nothing Then _
         oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication)
-        'oDoc = oApp.ActiveDocument
-        ''
-        Dim oPrefApp As AcadPreferences = oApp.Preferences
-        ''
-        '' Poner las unidades de contenido origen y de dibujo destino (Opciones-Preferencias de usuario)
-        oPrefApp.User.ADCInsertUnitsDefaultSource = AcInsertUnits.acInsertUnitsUnitless
-        'oPrefApp.User.ADCInsertUnitsDefaultSource = AcInsertUnits.acInsertUnitsMillimeters
-        'oPrefApp.User.ADCInsertUnitsDefaultSource = AcInsertUnits.acInsertUnitsMeters
-        oPrefApp.User.ADCInsertUnitsDefaultTarget = AcInsertUnits.acInsertUnitsMeters
-        oPrefApp = Nothing
-        ''
-        'Dim oPrefDoc As AcadDatabasePreferences = oDoc.Preferences
-        'oPrefDoc = Nothing
-        '' Configurar unidades del dibujo y escala de inserción Sin unidad
-        '' 0= Sin unidad, 4 = milimetros, 5 = centimetros, 6 = metros
-        'Application.DocumentManager.MdiActiveDocument.Database.Insunits = UnitsValue.Meters
-        Application.DocumentManager.MdiActiveDocument.Database.Insunits = UnitsValue.Undefined
-        'oDoc.SendCommand("INSUNITS" & vbCr & "4" & vbCr)
-        ''
-        '' Crear estilo RRC_ARIAL
-        'Dim estilotexto As String = "RRC_arial"
-        ''
-        'If textoEstilo Is Nothing Then
-        Try
-            textoEstilo = oApp.ActiveDocument.TextStyles.Add(estilotexto)
-        Catch ex As System.Exception
-            textoEstilo = oApp.ActiveDocument.TextStyles.Item(estilotexto)
-        End Try
-        ''
-        Try
-            textoEstilo.SetFont("ARIAL", False, False, 0, 34)
-        Catch ex As System.Exception
-            MsgBox(ex.Message)
-        End Try
-        'End If
-        ''
-        '' Para que no se muestren los marcos de las imágenes.
-        Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("IMAGEFRAME", 1)
-        oApp.ActiveDocument.Regen(AcRegenType.acActiveViewport)
-        Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("IMAGEFRAME", 0)
-        '' Poner la escala de anotación 1:1
-        Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("CANNOSCALE", "1:1")
-        '' Poner la escala de los tipos de linea a 1
-        Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("LTSCALE", 1)
-        oApp.ActiveDocument.Regen(AcRegenType.acActiveViewport)
-        'CANNOSCALE
-        'Call DameDependencias()
-        'XrefComprueba()
-        'XrefImagenDame()
+        Using lock As DocumentLock = Eventos.AXDoc.LockDocument
+            'oDoc = oApp.ActiveDocument
+            ''
+            Dim oPrefApp As AcadPreferences = oApp.Preferences
+            ''
+            '' Poner las unidades de contenido origen y de dibujo destino (Opciones-Preferencias de usuario)
+            oPrefApp.User.ADCInsertUnitsDefaultSource = AcInsertUnits.acInsertUnitsUnitless
+            'oPrefApp.User.ADCInsertUnitsDefaultSource = AcInsertUnits.acInsertUnitsMillimeters
+            'oPrefApp.User.ADCInsertUnitsDefaultSource = AcInsertUnits.acInsertUnitsMeters
+            oPrefApp.User.ADCInsertUnitsDefaultTarget = AcInsertUnits.acInsertUnitsMeters
+            oPrefApp = Nothing
+            ''
+            'Dim oPrefDoc As AcadDatabasePreferences = oDoc.Preferences
+            'oPrefDoc = Nothing
+            '' Configurar unidades del dibujo y escala de inserción Sin unidad
+            '' 0= Sin unidad, 4 = milimetros, 5 = centimetros, 6 = metros
+            'Application.DocumentManager.MdiActiveDocument.Database.Insunits = UnitsValue.Meters
+            Try
+                If Application.DocumentManager.MdiActiveDocument.Database.Insunits <> UnitsValue.Undefined Then
+                    Application.DocumentManager.MdiActiveDocument.Database.Insunits = UnitsValue.Undefined
+                End If
+            Catch ex As System.Exception
+            End Try
+
+            'oDoc.SendCommand("INSUNITS" & vbCr & "4" & vbCr)
+            ''
+            '' Crear estilo RRC_ARIAL
+            'Dim estilotexto As String = "RRC_arial"
+            ''
+            'If textoEstilo Is Nothing Then
+            Try
+                textoEstilo = oApp.ActiveDocument.TextStyles.Add(estilotexto)
+            Catch ex As System.Exception
+                textoEstilo = oApp.ActiveDocument.TextStyles.Item(estilotexto)
+            End Try
+            ''
+            Try
+                textoEstilo.SetFont("ARIAL", False, False, 0, 34)
+            Catch ex As System.Exception
+                MsgBox(ex.Message)
+            End Try
+            'End If
+            ''
+            '' Para que no se muestren los marcos de las imágenes.
+            Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("IMAGEFRAME", 1)
+            'oApp.ActiveDocument.Regen(AcRegenType.acActiveViewport)
+            Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("IMAGEFRAME", 0)
+            '' Poner la escala de anotación 1:1
+            Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("CANNOSCALE", "1:1")
+            '' Poner la escala de los tipos de linea a 1
+            Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("LTSCALE", 1)
+            'oApp.ActiveDocument.Regen(AcRegenType.acActiveViewport)
+            'CANNOSCALE
+            'Call DameDependencias()
+            'XrefComprueba()
+            'XrefImagenDame()
+        End Using
     End Sub
     ''
     Public Function GetAcadPath() As String

@@ -66,7 +66,7 @@ Namespace IMPLACAD
             End Try
         End Sub
 
-        <CommandMethod(regAPP, "INSERTAREDITAR", "INSERTAREDITAR", CommandFlags.Modal)> _
+        <CommandMethod(regAPP, "INSERTAREDITAR", "INSERTAREDITAR", CommandFlags.Modal)>
         Public Sub INSERTAREDITAR() ' This method can have any name
             ' Put your command code here
             ''
@@ -75,7 +75,7 @@ Namespace IMPLACAD
             If ImplacadActualizado() = False Then Exit Sub
             ''
             If EsParaTrabajar() = False Then
-                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
                        "Debe abrir el DWG original de trabajo")
                 Exit Sub
             End If
@@ -85,21 +85,21 @@ Namespace IMPLACAD
             '' 0.- Anular cualquier comando
             ''oApp.ActiveDocument.PostCommand(Chr(27) & Chr(27))
             'MsgBox("Comando ejecutado")
-            If frmE IsNot Nothing Then frmE.Close()
+            If FrmE IsNot Nothing Then FrmE.Close()
             ''
-            frmE = New frmEtiquetas
+            FrmE = New frmEtiquetas
             'If Application.ShowModalDialog(frmE) = Windows.Forms.DialogResult.OK Then
             'MsgBox("Insertamos el bloque...")
             'End If
             ConfiguraDibujo()
-            Application.ShowModelessDialog(Application.MainWindow.Handle, frmE, True)
+            Application.ShowModelessDialog(Application.MainWindow.Handle, FrmE, True)
         End Sub
 
-        <CommandMethod(regAPP, "ADECUA", "ADECUA", CommandFlags.Modal)> _
+        <CommandMethod(regAPP, "ADECUA", "ADECUA", CommandFlags.Modal)>
         Public Sub ADECUA() ' This method can have any name
             ' Put your command code here
             If EsParaTrabajar() = False Then
-                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
                        "Debe abrir el DWG original de trabajo")
                 Exit Sub
             End If
@@ -147,11 +147,11 @@ Namespace IMPLACAD
             End Try
         End Sub
         ''
-        <CommandMethod(regAPP, "BALIZARSUELO", "BALIZARSUELO", CommandFlags.Modal)> _
+        <CommandMethod(regAPP, "BALIZARSUELO", "BALIZARSUELO", CommandFlags.Modal)>
         Public Sub BALIZARSUELO() ' This method can have any name
             ' Put your command code here
             If EsParaTrabajar() = False Then
-                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
                        "Debe abrir el DWG original de trabajo")
                 Exit Sub
             End If
@@ -214,11 +214,11 @@ Namespace IMPLACAD
             CapaCeroActiva()
         End Sub
         ''
-        <CommandMethod(regAPP, "BALIZARPARED", "BALIZARPARED", CommandFlags.Modal)> _
+        <CommandMethod(regAPP, "BALIZARPARED", "BALIZARPARED", CommandFlags.Modal)>
         Public Sub BALIZARPARED() ' This method can have any name
             ' Put your command code here
             If EsParaTrabajar() = False Then
-                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
                        "Debe abrir el DWG original de trabajo")
                 Exit Sub
             End If
@@ -235,34 +235,34 @@ Namespace IMPLACAD
             ConfiguraDibujo()
             ''
             Try
-            '' Activamos las Capas de Zona de cobertura
-            CapaCreaActivaBalizamientoPared()
-            Dim pt1 As Object = Nothing
-            Dim pt2 As Object = Nothing
-            Application.DocumentManager.CurrentDocument.Editor.WriteMessage(vbLf)
-            pt1 = oApp.ActiveDocument.Utility.GetPoint(, vbLf & "Primer Punto Baliza PARED :")
-            pt2 = oApp.ActiveDocument.Utility.GetPoint(pt1, vbLf & "Siguiente Punto Baliza PARED :")
-            While pt2 IsNot Nothing
-                If pt1 IsNot Nothing Then
-                    oApp.ActiveDocument.ModelSpace.AddLine(pt1, pt2)
-                Else
-                    Exit While
-                End If
-                pt1 = pt2
-                Try
-                    pt2 = oApp.ActiveDocument.Utility.GetPoint(pt1, vbLf & "Siguiente Punto Baliza PARED :")
-                Catch ex As System.Exception
-                    Exit While
-                End Try
-            End While
-            ''
-            'Dim comando As String = "(command ""_line"")" & vbCr & "(while(>(getvar ""cmdactive"")0)(command pause))"
-            'oApp.ActiveDocument.SendCommand(comando & vbCr)
-            'oApp.ActiveDocument.SendCommand("_line \")
-            'oApp.ActiveDocument.SendCommand( _
-            '"(Command ""_line"" pause)" & vbCr)
-            ''CommandString = "(Command ""-Insert"" """ & Selection & """ pause ""1"" ""1"" ""0"")"
-            ''ThisDrawing.SendCommand(CommandString & vbCr)
+                '' Activamos las Capas de Zona de cobertura
+                CapaCreaActivaBalizamientoPared()
+                Dim pt1 As Object = Nothing
+                Dim pt2 As Object = Nothing
+                Application.DocumentManager.CurrentDocument.Editor.WriteMessage(vbLf)
+                pt1 = oApp.ActiveDocument.Utility.GetPoint(, vbLf & "Primer Punto Baliza PARED :")
+                pt2 = oApp.ActiveDocument.Utility.GetPoint(pt1, vbLf & "Siguiente Punto Baliza PARED :")
+                While pt2 IsNot Nothing
+                    If pt1 IsNot Nothing Then
+                        oApp.ActiveDocument.ModelSpace.AddLine(pt1, pt2)
+                    Else
+                        Exit While
+                    End If
+                    pt1 = pt2
+                    Try
+                        pt2 = oApp.ActiveDocument.Utility.GetPoint(pt1, vbLf & "Siguiente Punto Baliza PARED :")
+                    Catch ex As System.Exception
+                        Exit While
+                    End Try
+                End While
+                ''
+                'Dim comando As String = "(command ""_line"")" & vbCr & "(while(>(getvar ""cmdactive"")0)(command pause))"
+                'oApp.ActiveDocument.SendCommand(comando & vbCr)
+                'oApp.ActiveDocument.SendCommand("_line \")
+                'oApp.ActiveDocument.SendCommand( _
+                '"(Command ""_line"" pause)" & vbCr)
+                ''CommandString = "(Command ""-Insert"" """ & Selection & """ pause ""1"" ""1"" ""0"")"
+                ''ThisDrawing.SendCommand(CommandString & vbCr)
                 '' Ponemos la capa 0 como activa al terminar.
             Catch ex As System.Exception
                 Exit Try
@@ -270,11 +270,11 @@ Namespace IMPLACAD
             CapaCeroActiva()
         End Sub
         ''
-        <CommandMethod(regAPP, "BALIZARESCALERA", "BALIZARESCALERA", CommandFlags.Modal)> _
+        <CommandMethod(regAPP, "BALIZARESCALERA", "BALIZARESCALERA", CommandFlags.Modal)>
         Public Sub BALIZARESCALERA() ' This method can have any name
             ' Put your command code here
             If EsParaTrabajar() = False Then
-                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
                        "Debe abrir el DWG original de trabajo")
                 Exit Sub
             End If
@@ -371,7 +371,7 @@ Namespace IMPLACAD
             CapaCeroActiva()
         End Sub
         ''
-        <CommandMethod(regAPP, "RUTAEVACUACION", "RUTAEVACUACION", CommandFlags.Modal)> _
+        <CommandMethod(regAPP, "RUTAEVACUACION", "RUTAEVACUACION", CommandFlags.Modal)>
         Public Sub RUTAEVACUACION() ' This method can have any name
             ' Put your command code here
             ''
@@ -379,7 +379,7 @@ Namespace IMPLACAD
             If ImplacadEscalaM() = False Then Exit Sub
             ''
             If EsParaTrabajar() = False Then
-                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
                        "Debe abrir el DWG original de trabajo")
                 Exit Sub
             End If
@@ -437,14 +437,14 @@ Namespace IMPLACAD
             CapaCeroActiva()
         End Sub
         ''
-        <CommandMethod(regAPP, "TABLADATOS", "TABLADATOS", CommandFlags.Modal)> _
+        <CommandMethod(regAPP, "TABLADATOS", "TABLADATOS", CommandFlags.Modal)>
         Public Sub TABLADATOS() ' This method can have any name
             ''
             If ImplacadActivado() = False Then Exit Sub
             If ImplacadEscalaM() = False Then Exit Sub
             ''
             If EsParaTrabajar() = False Then
-                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
                        "Debe abrir el DWG original de trabajo")
                 Exit Sub
             End If
@@ -461,14 +461,14 @@ Namespace IMPLACAD
             TablaDatosInserta()
         End Sub
         ''
-        <CommandMethod(regAPP, "TABLABAESCALERAS", "TABLAESCALERAS", CommandFlags.Modal)> _
+        <CommandMethod(regAPP, "TABLABAESCALERAS", "TABLAESCALERAS", CommandFlags.Modal)>
         Public Sub TABLAESCALERAS() ' This method can have any name
             ''
             If ImplacadActivado() = False Then Exit Sub
             If ImplacadEscalaM() = False Then Exit Sub
             ''
             If EsParaTrabajar() = False Then
-                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
                        "Debe abrir el DWG original de trabajo")
                 Exit Sub
             End If
@@ -485,11 +485,11 @@ Namespace IMPLACAD
             TablaEscalerasInserta()
         End Sub
         ''
-        <CommandMethod(regAPP, "CAPASCOBERTURA", "CAPASCOBERTURA", CommandFlags.Modal)> _
+        <CommandMethod(regAPP, "CAPASCOBERTURA", "CAPASCOBERTURA", CommandFlags.Modal)>
         Public Sub CAPASCOBERTURA() ' This method can have any name
             ' Put your command code here
             If EsParaTrabajar() = False Then
-                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
                        "Debe abrir el DWG original de trabajo")
                 Exit Sub
             End If
@@ -510,7 +510,7 @@ Namespace IMPLACAD
             CapaZonaCoberturaACTDES(CapaEstado.Inverso)
         End Sub
 
-        <CommandMethod(regAPP, "GROSORLINEAS", "GROSORLINEAS", CommandFlags.Modal)> _
+        <CommandMethod(regAPP, "GROSORLINEAS", "GROSORLINEAS", CommandFlags.Modal)>
         Public Sub GROSORLINEAS() ' This method can have any name
             ' Put your command code here
             ''
@@ -518,7 +518,7 @@ Namespace IMPLACAD
             If ImplacadEscalaM() = False Then Exit Sub
             ''
             If EsParaTrabajar() = False Then
-                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
                        "Debe abrir el DWG original de trabajo")
                 Exit Sub
             End If
@@ -535,10 +535,10 @@ Namespace IMPLACAD
             GrosorLineasACTDES(CapaEstado.Inverso)
         End Sub
         ''
-        <CommandMethod(regAPP, "ESCALAM", "ESCALAM", CommandFlags.Modal)> _
+        <CommandMethod(regAPP, "ESCALAM", "ESCALAM", CommandFlags.Modal)>
         Public Sub ESCALAM() ' This method can have any name
             If EsParaTrabajar() = False Then
-                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
                        "Debe abrir el DWG original de trabajo")
                 Exit Sub
             End If
@@ -590,7 +590,7 @@ Namespace IMPLACAD
             oApp.ActiveDocument.SendCommand("_zoom" & vbCr & "e" & vbCr)
         End Sub
         ''
-        <CommandMethod(regAPP, "IMPRIMIRINS", "IMPRIMIRINS", CommandFlags.Modal)> _
+        <CommandMethod(regAPP, "IMPRIMIRINS", "IMPRIMIRINS", CommandFlags.Modal)>
         Public Sub IMPRIMIRINS() ' This method can have any name
             ' Put your command code here
             ''
@@ -598,7 +598,7 @@ Namespace IMPLACAD
             If ImplacadEscalaM() = False Then Exit Sub
             ''
             If EsParaTrabajar() = False Then
-                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
                        "Debe abrir el DWG original de trabajo")
                 Exit Sub
             End If
@@ -756,12 +756,12 @@ Namespace IMPLACAD
             oApp.ActiveDocument.Regen(AcRegenType.acAllViewports)
             ''
             '' Aviso al usuario
-            MsgBox("Recuerde realizar las siguientes acciones:" & vbCrLf & vbCrLf & _
-                   vbTab & "- Reposicionar las etiquetas escaladas..." & vbCrLf & _
-                   vbTab & "- Al imprimir: Tamaño de papel (" & resultado.ToUpper & ")" & vbCrLf & _
-                   vbTab & "- Al imprimir: Area de trazado (Seleccione Ventana)" & vbCrLf & _
-                   vbTab & "- Al imprimir: Desfase de trazado (Centrado)" & vbCrLf & _
-                   vbTab & "- Al imprimir: Escala de trazado (1:1)" & vbCrLf & _
+            MsgBox("Recuerde realizar las siguientes acciones:" & vbCrLf & vbCrLf &
+                   vbTab & "- Reposicionar las etiquetas escaladas..." & vbCrLf &
+                   vbTab & "- Al imprimir: Tamaño de papel (" & resultado.ToUpper & ")" & vbCrLf &
+                   vbTab & "- Al imprimir: Area de trazado (Seleccione Ventana)" & vbCrLf &
+                   vbTab & "- Al imprimir: Desfase de trazado (Centrado)" & vbCrLf &
+                   vbTab & "- Al imprimir: Escala de trazado (1:1)" & vbCrLf &
                    "** Anote las opciones de impresión")
             ''
             ''
@@ -781,7 +781,7 @@ Namespace IMPLACAD
         End Sub
         ''
         ''<CommandMethod(regAPP, "IMPRIMIREVA", "IMPRIMIREVA", CommandFlags.DocExclusiveLock)>
-        <CommandMethod(regAPP, "IMPRIMIREVA", "IMPRIMIREVA", CommandFlags.Session)> _
+        <CommandMethod(regAPP, "IMPRIMIREVA", "IMPRIMIREVA", CommandFlags.Session)>
         Public Sub IMPRIMIREVA() ' This method can have any name
             ' Put your command code here
             If oApp Is Nothing Then _
@@ -795,7 +795,7 @@ Namespace IMPLACAD
             If ImplacadActualizado() = False Then Exit Sub
             ''
             If EsParaTrabajar() = False Then
-                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
                        "Debe abrir el DWG original de trabajo")
                 Exit Sub
             End If
@@ -1014,9 +1014,9 @@ Namespace IMPLACAD
             For Each oEnt As AcadEntity In oDocEva.ModelSpace
                 ''
                 '' Borramos todo lo que tengamos puesto en las siguientes capas
-                If oEnt.Layer = "capacuadro" Or _
-                    oEnt.Layer = "BALIZAMIENTO ESCALERA" Or _
-                    oEnt.Layer = "BALIZAMIENTO PARED" Or _
+                If oEnt.Layer = "capacuadro" Or
+                    oEnt.Layer = "BALIZAMIENTO ESCALERA" Or
+                    oEnt.Layer = "BALIZAMIENTO PARED" Or
                     oEnt.Layer = "BALIZAMIENTO SUELO" Then
                     oEnt.Delete()
                     'Continue For
@@ -1070,9 +1070,9 @@ Namespace IMPLACAD
             'ptplantilla(0) + (IIf(tipo = "H", IIf(resultado = "A4", 43, 65), IIf(resultado = "A4", 53, 57))) & "," & _
             'ptplantilla(1) + (IIf(tipo = "H", IIf(resultado = "A4", 35, 30), IIf(resultado = "A4", 50, 100))) & vbCr & _
             '"1" & vbCr & "1" & vbCr & "0" & vbCr
-            Dim cadenainserta As String = "-insert" & vbCr & plantilla & vbCr & _
-                    ptplantilla(0) & "," & _
-                    ptplantilla(1) & vbCr & _
+            Dim cadenainserta As String = "-insert" & vbCr & plantilla & vbCr &
+                    ptplantilla(0) & "," &
+                    ptplantilla(1) & vbCr &
                     "1" & vbCr & "1" & vbCr & "0" & vbCr
             oDocEva.SendCommand(cadenainserta)
             ''
@@ -1165,19 +1165,19 @@ Namespace IMPLACAD
             GC.Collect()
 
             '' Aviso al usuario
-            MsgBox("Recuerde realizar las siguientes acciones:" & vbCrLf & vbCrLf & _
-                   vbTab & "- Reposicionar las etiquetas escaladas..." & vbCrLf & _
-                   vbTab & "- Mover bloque marco para centrar plano..." & vbCrLf & _
-                   vbTab & "- Insertar bloque USTEDAQUI en 'posición actual' en plano" & vbCrLf & _
-                   vbTab & "- Al imprimir: Tamaño de papel (" & resultado.ToUpper & ")" & vbCrLf & _
-                   vbTab & "- Al imprimir: Area de trazado (Seleccione Ventana)" & vbCrLf & _
-                   vbTab & "- Al imprimir: Desfase de trazado (Centrado)" & vbCrLf & _
-                   vbTab & "- Al imprimir: Escala de trazado (1:1)" & vbCrLf & vbCrLf & _
+            MsgBox("Recuerde realizar las siguientes acciones:" & vbCrLf & vbCrLf &
+                   vbTab & "- Reposicionar las etiquetas escaladas..." & vbCrLf &
+                   vbTab & "- Mover bloque marco para centrar plano..." & vbCrLf &
+                   vbTab & "- Insertar bloque USTEDAQUI en 'posición actual' en plano" & vbCrLf &
+                   vbTab & "- Al imprimir: Tamaño de papel (" & resultado.ToUpper & ")" & vbCrLf &
+                   vbTab & "- Al imprimir: Area de trazado (Seleccione Ventana)" & vbCrLf &
+                   vbTab & "- Al imprimir: Desfase de trazado (Centrado)" & vbCrLf &
+                   vbTab & "- Al imprimir: Escala de trazado (1:1)" & vbCrLf & vbCrLf &
                    "** Anote las opciones de impresión")
             ''
         End Sub
         ''
-        <CommandMethod(regAPP, "EXPLOTAEVA", "EXPLOTAEVA", CommandFlags.DocExclusiveLock)> _
+        <CommandMethod(regAPP, "EXPLOTAEVA", "EXPLOTAEVA", CommandFlags.DocExclusiveLock)>
         Public Sub EXPLOTAEVA() ' This method can have any name
             ' Put your command code here
             ''
@@ -1219,11 +1219,11 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             End If
         End Sub
         ''
-        <CommandMethod(regAPP, "ACTUALIZARIMPLACAD", "ACTUALIZARIMPLACAD", CommandFlags.Session)> _
+        <CommandMethod(regAPP, "ACTUALIZARIMPLACAD", "ACTUALIZARIMPLACAD", CommandFlags.Session)>
         Public Sub ACTUALIZARIMPLACAD() ' This method can have any name
             '' Documento sin guardar
             If oApp.ActiveDocument.FullName = "" Or (oApp.ActiveDocument.FullName <> "" And oApp.ActiveDocument.Saved = False) Then
-                MsgBox("Este documento aún no se ha guardado" & vbCrLf & vbCrLf & _
+                MsgBox("Este documento aún no se ha guardado" & vbCrLf & vbCrLf &
                        "Guarde antes el documento y vuelva a probar...")
                 Exit Sub
             End If
@@ -1236,7 +1236,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
                 Dim resultado As String = InputBox("Codigo VIP de activación --> ", "ACTIVAR " & nApp & " · " & My.Application.Info.Version.ToString)
                 If resultado.ToUpper = codigoactivacion.ToUpper Then
                     IO.File.WriteAllText(nImp, codigoactivacion)
-                    MsgBox(nApp & " · " & My.Application.Info.Version.ToString & _
+                    MsgBox(nApp & " · " & My.Application.Info.Version.ToString &
                            " ha sido activada. Ahora podrá elegir si quiere comprobar actualizaciones", MsgBoxStyle.Exclamation)
                 Else
                     MsgBox("Código VIP incorrecto. Contacte con IMPLASER para solicitarlo...", MsgBoxStyle.Exclamation, "AVISOS AL USUARIO")
@@ -1245,8 +1245,8 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             End If
             ''
             Dim respuesta As Microsoft.VisualBasic.MsgBoxResult
-            respuesta = MsgBox("¿Desea ahora comprobar si existen actualizaciones?" & vbCrLf & vbCrLf & _
-                               "Se guardarán y cerrarán todos los ficheros abiertos.", _
+            respuesta = MsgBox("¿Desea ahora comprobar si existen actualizaciones?" & vbCrLf & vbCrLf &
+                               "Se guardarán y cerrarán todos los ficheros abiertos.",
                                MsgBoxStyle.YesNo)
             If respuesta = MsgBoxResult.No Then
                 respuesta = Nothing
@@ -1273,7 +1273,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
                 MsgBox("No se puede crear el directorio " & IMPLACAD_DATA & vbCrLf & vbCrLf &
                        "Verifique si dispone de permisos para crearlo en C:\ProgramData" & vbCrLf &
                        "O creelo a mano y vuelva a probar...")
-                Exit sub
+                Exit Sub
             End Try
             ''
             Try
@@ -1298,7 +1298,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
         End Sub
         ''
         Public Function DescargaFicheroZIPDescomprime(queFiWeb As String,
-                                                      queFiLocal As String, _
+                                                      queFiLocal As String,
                                                       Optional quePrefijo As String = "Descargando ") As String
             If quePrefijo.EndsWith(" ") = False Then quePrefijo &= " "
             ''
@@ -1306,9 +1306,9 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
         oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication)
             ''
             '' 1.- Cerrar los formularios abiertos.
-            If frmE IsNot Nothing Then
-                frmE.Close()
-                frmE = Nothing
+            If FrmE IsNot Nothing Then
+                FrmE.Close()
+                FrmE = Nothing
             End If
             ''
             If My.Computer.Network.IsAvailable = False Then
@@ -1460,6 +1460,32 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             CambiaBloqueViejoPorNuevo(oApp.ActiveDocument)
             XRef_DWGListar(False)
             XRef_IMGListar(False)
+        End Sub
+
+        ' Modal Command with pickfirst selection
+        <CommandMethod(regAPP, "ADMINISTRARZONAS", "ADMINISTRARZONAS", CommandFlags.Modal + CommandFlags.Session)>
+        Public Sub ADMINISTRARZONAS() ' This method can have any name
+            ''
+            If ImplacadActivado() = False Then Exit Sub
+            If ImplacadEscalaM() = False Then Exit Sub
+            ''
+            ''
+            If EsParaTrabajar() = False Then
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
+                       "Debe abrir el DWG original de trabajo")
+                Exit Sub
+            End If
+            If oApp Is Nothing Then _
+       oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication)
+
+            If FrmZ IsNot Nothing Then FrmZ.Close()
+            ''
+            FrmZ = New frmZonas
+            'If Application.ShowModalDialog(FrmZ) = Windows.Forms.DialogResult.OK Then
+            'MsgBox("Insertamos el bloque...")
+            'End If
+            ConfiguraDibujo()
+            Application.ShowModelessDialog(Application.MainWindow.Handle, FrmZ, True)
         End Sub
 
         ' Application Session Command with localized name

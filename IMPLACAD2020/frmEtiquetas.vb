@@ -17,7 +17,7 @@ Public Class frmEtiquetas
 
     Private Sub frmEtiquetas_FormClosed(sender As Object, e As Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
         Me.Dispose()
-        frmE = Nothing
+        FrmE = Nothing
     End Sub
 
     Private Sub frmEtiquetas_Load(sender As Object, e As EventArgs) Handles MyBase.Load

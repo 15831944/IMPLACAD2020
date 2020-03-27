@@ -18,7 +18,8 @@ Imports System.Runtime.InteropServices
 Module modVar
     ''
     '' ***** FORMULARIOS
-    Public frmE As frmEtiquetas
+    Public FrmE As frmEtiquetas
+    Public FrmZ As frmZonas
     '' OBJETOS AUTOCAD
     Public WithEvents oApp As Autodesk.AutoCAD.Interop.AcadApplication = Nothing
     Public WithEvents oDoc As Autodesk.AutoCAD.Interop.AcadDocument = Nothing
