@@ -717,8 +717,8 @@ Namespace IMPLACAD
                         Continue For
                     End If
                     ''
-                    Dim texto As String = XData.XLeeDato(oEnt, xT.TEXTOS)
-                    If texto <> "Clase=etiqueta" Then
+                    Dim texto As String = XData.XLeeDato(oEnt, "Clase")
+                    If texto <> "etiqueta" Then       '"Clase=etiqueta"
                         Continue For
                     End If
                     texto = ""
@@ -1039,8 +1039,8 @@ Namespace IMPLACAD
                         Continue For
                     End If
                     ''
-                    Dim texto As String = XData.XLeeDato(oEnt, xT.TEXTOS)
-                    If texto <> "Clase=etiqueta" Then
+                    Dim texto As String = XData.XLeeDato(oEnt, "Clase")
+                    If texto <> "etiqueta" Then       '"Clase=etiqueta"
                         Continue For
                     End If
                     texto = ""

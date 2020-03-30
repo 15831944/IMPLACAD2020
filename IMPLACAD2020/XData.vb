@@ -12,8 +12,8 @@ Module XData
     ' 1001=regApp
     ' 1003 = Capa
     ' 1000=Clase;Tipo;Tipo1;Tipo2;Tipo3
-    Public xTTodo As Short() = New Short() {1001, 1040, 1003, 1000}
-    Public xDTodo As Object() = New Object() {regAPP, 0, "0", "vacio"}
+    Public xTTodo As Short() = New Short() {1001, 1000}
+    Public xDTodo As Object() = New Object() {regAPP, ""}
     'Public xDPol As Object() = New Object() {regAPP, 0, "0", "Clase=polilinea"}
     'Public xTBlo As Short() = New Short() {1001, 1040, 1003, 1000}
     'Public xDBlo As Object() = New Object() {regAPP, 0, "0", "Clase=etiqueta"}
@@ -29,37 +29,10 @@ Module XData
     ''
     Public Sub XNuevo(ByRef objA As AcadObject, Optional queTipos As String = "")
         If queTipos <> "" Then
-            xDTodo(3) = queTipos
-            'xDPol(3) = queTipos
-            'xDBlo(3) = queTipos
-            'xDTabesc(3) = queTipos
-            'xDTab(3) = queTipos
-            'xDBSue(3) = queTipos
-            'xDBPar(3) = queTipos
-            'xDBEsc(3) = queTipos
+            xDTodo(1) = queTipos
         End If
         '' Pone los XData para IMPLACAD. Solo si un objeto no tiene XData.
         XPonTodo(objA, xTTodo, xDTodo)
-        '' Tipo de objeto al que vamos a poner los datos
-        'If TypeOf objA Is AcadLWPolyline Then
-        '    If queTipos = "Clase=balizasuelo" Then
-        '        XPonTodo(objA, xTTodo, xDBSue)
-        '    ElseIf queTipos = "Clase=balizapared" Then
-        '        XPonTodo(objA, xTTodo, xDBPar)
-        '    ElseIf queTipos = "Clase=balizaescalera" Then
-        '        XPonTodo(objA, xTTodo, xDBEsc)
-        '    Else
-        '        XPonTodo(objA, xTTodo, xDPol)
-        '    End If
-        'ElseIf TypeOf objA Is AcadBlockReference Then
-        '    XPonTodo(objA, xTTodo, xDBlo)
-        'ElseIf TypeOf objA Is AcadTable Then
-        '    If queTipos = "Clase=tabla" Then
-        '        XPonTodo(objA, xTTodo, xDTab)
-        '    ElseIf queTipos = "Clase=tablaescaleras" Then
-        '        XPonTodo(objA, xTTodo, xDTabesc)
-        '    End If
-        'End If
     End Sub
 
     Public Sub XBorrar(ByVal objA As AcadObject)
@@ -107,7 +80,7 @@ Module XData
             objA.GetXData(app, xtipos, xdatos)
         End If
         resul(0) = xtipos : resul(1) = xdatos
-        XLeeTiposDatos = resul
+        Return resul
     End Function
 
     Public Function XLeeDatos(ByVal objA As AcadObject, Optional ByVal app As String = "") As Object         'Devuelve todos los datos de SERICAD 0-SERICAD, 1-CAPA
@@ -121,75 +94,79 @@ Module XData
             XNuevo(objA)
             objA.GetXData(app, xtipos, xdatos)
         End If
-        XLeeDatos = xdatos
+        Return xdatos
+    End Function
+    Public Function XLeeDatos(ByVal oId As Long, Optional ByVal app As String = "") As Object         'Devuelve todos los datos de SERICAD 0-SERICAD, 1-CAPA
+        Return XLeeDatos(CType(oApp.ActiveDocument.ObjectIdToObject(oId), AcadObject), app)
     End Function
 
-    Public Function XLeeDato(ByVal objA As AcadObject, ByVal queDato As xT, Optional ByVal app As String = "") As Object
-        Dim resul As Object = Nothing
-        If app = "" Then app = regAPP
-        Dim xtipos() As Short = Nothing
-        Dim xdatos() As Object = Nothing
-        objA.GetXData(regAPP, xtipos, xdatos)
-        '' Si el objeto no tiene XData
-        If xdatos Is Nothing Then
-            XNuevo(objA)
-            objA.GetXData(app, xtipos, xdatos)
-        End If
+    Public Function XLeeDatos(ByVal oHandle As String, Optional ByVal app As String = "") As Object         'Devuelve todos los datos de SERICAD 0-SERICAD, 1-CAPA
+        Return XLeeDatos(CType(oApp.ActiveDocument.HandleToObject(oHandle), AcadObject), app)
+    End Function
+    Public Function XLeeDatos(ByVal objA As AcadEntity, Optional ByVal app As String = "") As Object         'Devuelve todos los datos de SERICAD 0-SERICAD, 1-CAPA
+        Return XLeeDatos(CType(objA, AcadObject), app)
+    End Function
+    Public Function XLeeDato(ByVal objA As AcadObject, ByVal queNombre As String,
+                              Optional SoloValor As Boolean = True) As String
+        Dim resultado As String = ""
+        Try
+            Dim xtipos() As Short = Nothing
+            Dim xdatos() As Object = Nothing
+            '
+            objA.GetXData(regAPP, xtipos, xdatos)
+            '' Si el objeto no tiene XData
+            If xdatos Is Nothing Then
+                XNuevo(objA)
+                objA.GetXData(regAPP, xtipos, xdatos)
+            End If
+            '
+            'Dim App As String = xdatos(0)   ' Nombre de la App registrada
+            Dim todo As String = ""  ' xdatos(1)  '' Cadena de texto con todas los datos de texto, concatenados con |.
+            Dim indice As Integer = -1
+            For x As Integer = 0 To xtipos.Length - 1
+                Dim oTipo As Short = xtipos(x)
+                If oTipo = 1000 Then
+                    todo = xdatos(x)
+                    indice = x
+                    Exit For
+                End If
+            Next
+            '
+            If queNombre = "" Then
+                resultado = todo
+            ElseIf queNombre = regAPP Then
+                resultado = xdatos(0)
+            ElseIf todo.Contains(queNombre) Then
+                Dim valoresdatos() As String = todo.Split("|"c)      '' cada elemento nombre=valor|nombre1=valor1
+                For x As Integer = 0 To UBound(valoresdatos)
+                    Dim nombre As String = valoresdatos(x).Split("="c)(0)
+                    Dim valor As String = valoresdatos(x).Split("="c)(1)
+                    If nombre.Equals(queNombre) Then
+                        resultado = valor
+                        Exit For
+                    End If
+                Next
+            Else
+                resultado = ""
+            End If
+        Catch ex As Exception
 
-        If queDato > UBound(xdatos) Then
-            resul = ""
-        Else
-            resul = xdatos(queDato)
+        End Try
+        If resultado <> "" AndAlso SoloValor = True AndAlso resultado.Contains("=") Then
+            resultado = resultado.Split("=")(1)
         End If
-        'XLeeDato = resul
-        Return resul
+        Return resultado
     End Function
 
-    Public Function XLeeDatoValores(ByVal objA As AcadObject, ByVal tipo As xValor, Optional ByVal app As String = "") As String
-        Dim resul As String = ""
-        'XDataBorrar(objA)
-        If app = "" Then app = regAPP
-        Dim xtipos() As Short = Nothing
-        Dim xdatos() As Object = Nothing
-        objA.GetXData(app, xtipos, xdatos)
-        '' Si el objeto no tiene XData
-        If xdatos Is Nothing Then
-            XNuevo(objA)
-            objA.GetXData(app, xtipos, xdatos)
-        End If
+    Public Function XLeeDato(ByVal oId As Long, ByVal queNombre As String) As String
+        Return XLeeDato(oApp.ActiveDocument.ObjectIdToObject(oId), queNombre)
+    End Function
 
-        '' Por si no tuviese el dato de xdatos(5) que corresponde
-        '' a cadenas (Tipo=valor;Tipo1=valor1)
-        If UBound(xdatos) < 5 Then
-            XLeeDatoValores = resul
-            Exit Function
-        End If
-        '' Por si los valores no son cadenas con formato predefinido.
-        Dim Valores As String = xdatos(4).ToString
-        If Valores.Contains("=") = False Or Valores.Contains(";") = False Then
-            XLeeDatoValores = resul
-            Exit Function
-        End If
-        '' Todas las cadenas entre ;
-        Dim cadenas() As String = Valores.Split(";")
-        '' Por si no tenemos la cadena nº que indica tipo
-        If UBound(cadenas) < tipo Then
-            XLeeDatoValores = resul
-            Exit Function
-        End If
-        '' Cadena simple que indica tipo (nombre=valor)
-        Dim cadenaDato As String = cadenas(tipo)
-        '' Si no tiene =
-        If cadenaDato.Contains("=") = False Then
-            XLeeDatoValores = resul
-            Exit Function
-        End If
-        '' Dato final (0) nombre / (1) dato
-        Dim final() As String = cadenaDato.Split("=")
-        resul = final(1).ToString
-
-        XLeeDatoValores = resul
-        Exit Function
+    Public Function XLeeDato(ByVal oHandle As String, ByVal queNombre As String) As String
+        Return XLeeDato(oApp.ActiveDocument.HandleToObject(oHandle), queNombre)
+    End Function
+    Public Function XLeeDato(ByVal oEnt As AcadEntity, ByVal queNombre As String) As String
+        Return XLeeDato(CType(oEnt, AcadObject), queNombre)
     End Function
 
     Public Sub XPonTodo(ByVal objA As AcadObject, ByVal tipo As Short(), ByVal dato As Object())
@@ -204,40 +181,79 @@ Module XData
         objA.Update()
     End Sub
 
-    Public Sub XPonDato(ByVal objA As AcadObject, ByVal tipo As xT, ByVal dato As Object, Optional ByVal app As String = "")
-        'XDataBorrar(objA)
-        If app = "" Then app = regAPP
-        '' Si es la altura lo que vamos a cambiar. Lo ponemos en formato 3,00
-        'If tipo = 3 Then dato = FormatNumber(dato, 2, TriState.True)
+    Public Sub XPonDato(objA As AcadObject, queNombre As String, queValor As String,
+                        Optional crear As Boolean = True)
         Dim xtipos() As Short = Nothing
         Dim xdatos() As Object = Nothing
-        objA.GetXData(app, xtipos, xdatos)
+        Try
+            objA.GetXData(regAPP, xtipos, xdatos)
+            '' Si el objeto no tiene XData
+            If xdatos Is Nothing Then
+                XNuevo(objA)
+                objA.GetXData(regAPP, xtipos, xdatos)
+            End If
+            '
+            Dim encontrado As Boolean = False
+            Dim todo As String = ""  ' xdatos(1)  '' Cadena de texto con todas los datos de texto, concatenados con |.
+            Dim indice As Integer = -1
+            For x As Integer = 0 To xtipos.Length - 1
+                Dim oTipo As Short = xtipos(x)
+                If oTipo = 1000 Then
+                    todo = xdatos(x)
+                    todo.Replace("vacio|", "")
+                    todo.Replace("vacio;", "")
+                    todo.Replace("vacio", "")
+                    indice = x
+                    Exit For
+                End If
+            Next
+            '
+            If queNombre = "" Then
+                ' No hacemos nada
+            ElseIf queNombre = regAPP And xdatos(0) <> regAPP Then
+                xdatos(0) = regAPP
+            ElseIf todo.Contains(queNombre) Then
+                Dim valoresdatos() As String = todo.Split("|"c)      '' cada elemento nombre=valor|nombre1=valor1
+                For x As Integer = 0 To UBound(valoresdatos)
+                    Dim nombrevalor As String = valoresdatos(x)
+                    Dim nombre As String = nombrevalor.Split("="c)(0)
+                    Dim valor As String = nombrevalor.Split("="c)(1)
+                    If nombre.Equals(queNombre) Then
+                        Dim nombrevalornuevo = nombre & "=" & queValor
+                        todo = todo.Replace(nombrevalor, nombrevalornuevo)
+                        xdatos(indice) = todo
 
-        '' Si el objeto no tiene XData
-        If xdatos Is Nothing Then
-            XNuevo(objA)
-            objA.GetXData(app, xtipos, xdatos)
-        End If
-
-        If tipo > UBound(xdatos) Then
-            Exit Sub
-        Else
-            xdatos(tipo) = dato
-        End If
-
-        '' Poner xdata al objeto
-        Call objA.SetXData(xtipos, xdatos)
-        '' Tipo de objeto al que vamos a poner los datos
-        If TypeOf objA Is AcadLWPolyline Then
-            objA = CType(objA, AcadLWPolyline)
-            'XPonTodo(objA, xTPol, xDPol)
-        ElseIf TypeOf objA Is AcadBlockReference Then
-            objA = CType(objA, AcadBlockReference)
-            'XPonTodo(objA, xTBlo, xDBlo)
-        End If
-        objA.Update()
+                        Using Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument()
+                            objA.SetXData(xtipos, xdatos)
+                        End Using
+                        encontrado = True
+                        Exit For
+                    End If
+                Next
+            End If
+            '
+            If encontrado = False And crear = True AndAlso indice > -1 Then
+                If xdatos(indice).ToString = "" OrElse xdatos(indice).ToString = "vacio" Then
+                    xdatos(indice) = queNombre & "=" & queValor
+                Else
+                    xdatos(indice) &= "|" & queNombre & "=" & queValor
+                End If
+                objA.SetXData(xtipos, xdatos)
+            End If
+            objA.Update()
+        Catch ex As Exception
+        End Try
     End Sub
 
+    Public Sub XPonDato(oHandle As String, queNombre As String, queValor As String,
+                        Optional crear As Boolean = True)
+        XPonDato(oApp.ActiveDocument.HandleToObject(oHandle), queNombre, queValor, crear)
+    End Sub
+
+    Public Sub XPonDato(oId As Long, queNombre As String, queValor As String,
+                        Optional crear As Boolean = True)
+        XPonDato(oApp.ActiveDocument.ObjectIdToObject(oId), queNombre, queValor, crear)
+    End Sub
 
     Public Sub XPonValoresArr(ByVal objA As AcadObject, ByVal datos() As Object, Optional ByVal app As String = "")
         'XDataBorrar(objA)
@@ -276,77 +292,6 @@ Module XData
         objA.Update()
     End Sub
 
-    Public Sub XPonDatoValores(ByVal objA As AcadObject, ByVal tipo As xValor, ByVal dato As Object, Optional ByVal app As String = "")
-        'XDataBorrar(objA)
-        If app = "" Then app = regAPP
-        Dim xtipos() As Short = Nothing
-        Dim xdatos() As Object = Nothing
-        objA.GetXData(app, xtipos, xdatos)
-        '' Si el objeto no tiene XData
-        If xdatos Is Nothing Then
-            XNuevo(objA)
-            objA.GetXData(app, xtipos, xdatos)
-        End If
-        '' Por si no tuviese el dato de xdatos(4) que corresponde
-        '' a cadenas (dato1=valor1;dato2=valor2)
-        If UBound(xdatos) < 5 Then Exit Sub 'ReDim Preserve xdatos(4)
-        '' Por si los valores no son cadenas con formato predefinido.
-        Dim Valores As String = xdatos(4).ToString
-        If Valores.Contains("=") = False Or Valores.Contains(";") = False Then Exit Sub
-        '' Todas las cadenas entre ;
-        Dim cadenas() As String = Valores.Split(";")
-        '' Por si no tenemos la cadena nº que indica tipo
-        If UBound(cadenas) < tipo Then Exit Sub
-        '' Cadena simple que indica tipo (nombre=valor)
-        Dim cadenaDato As String = cadenas(tipo)
-        '' Si no tiene =
-        If cadenaDato.Contains("=") = False Then Exit Sub
-        '' Dato final (0) nombre / (1) dato
-        Dim final() As String = cadenaDato.Split("=")
-        Dim resultado As String = final(0) & "=" & dato.ToString
-
-        Valores = Valores.Replace(cadenaDato, resultado)
-        xdatos(5) = Valores
-
-        '' Poner xdata al objeto
-        Call objA.SetXData(xtipos, xdatos)
-        '' Tipo de objeto al que vamos a poner los datos
-        If TypeOf objA Is AcadLWPolyline Then
-            objA = CType(objA, AcadLWPolyline)
-        ElseIf TypeOf objA Is AcadBlockReference Then
-            objA = CType(objA, AcadBlockReference)
-        End If
-        objA.Update()
-    End Sub
-
-    Public Sub XPonTodoValoresCadena(ByVal objA As AcadObject, ByVal dato As Object, Optional ByVal app As String = "")
-        'XDataBorrar(objA)
-        If app = "" Then app = regAPP
-        Dim xtipos() As Short = Nothing
-        Dim xdatos() As Object = Nothing
-        objA.GetXData(app, xtipos, xdatos)
-        '' Si el objeto no tiene XData
-        If xdatos Is Nothing Then
-            XNuevo(objA)
-            objA.GetXData(app, xtipos, xdatos)
-        End If
-        '' Por si no tuviese el dato de xdatos(4) que corresponde
-        '' a cadenas (dato1=valor1;dato2=valor2)
-        If UBound(xdatos) < 5 Then Exit Sub 'ReDim Preserve xdatos(4)
-        '' Por si los valores no son cadenas con formato predefinido.
-        xdatos(5) = dato
-
-        '' Poner xdata al objeto
-        Call objA.SetXData(xtipos, xdatos)
-        '' Tipo de objeto al que vamos a poner los datos
-        If TypeOf objA Is AcadLWPolyline Then
-            objA = CType(objA, AcadLWPolyline)
-        ElseIf TypeOf objA Is AcadBlockReference Then
-            objA = CType(objA, AcadBlockReference)
-        End If
-        objA.Update()
-    End Sub
-
     Public Function XEsApp(ByVal objA As AcadObject, Optional ByVal app As String = "") As Boolean
         Dim resultado As Boolean = False
         If app = "" Then app = regAPP
@@ -356,38 +301,12 @@ Module XData
 
         If xdatos Is Nothing Then
             resultado = False
-            XEsApp = resultado
-            Exit Function
-        End If
-
-        If xdatos(xT.APLICACION) = regAPP Then
+        ElseIf xdatos(0) = app Then
             resultado = True
-            XEsApp = resultado
-            Exit Function
         End If
+        Return resultado
     End Function
 End Module
-
-
-Public Enum xT As Integer
-    '    Public xTPol As Short() = New Short() {1001, 1040, 1003, 1000}
-    'Public xDPol As Object() = New Object() {regAPP, 0, "0", "Clase=polilinea"}
-    APLICACION = 0
-    NUMERO = 1
-    CAPA = 2
-    TEXTOS = 3   '' Poner varios separados con ;   Tipo;Tipo1;Tipo2;Tipo3
-End Enum
-
-Public Enum xValor As Integer
-    nZona = 0
-    muros = 1
-    codPom = 0
-    nombre = 1
-    area = 0
-    dato1 = 1
-    dato2 = 2
-    dato3 = 3
-End Enum
 
 '' EJEMPLOS XData....
 'DataType(0) = 1001 : Data(0) = "Aplicacion Reg."       ' Aplicacion Registrada

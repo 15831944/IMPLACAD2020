@@ -197,7 +197,9 @@
       <Link>modClosedXML.vb</Link>
     </Compile>
     <Compile Include="CLASES\clsINI.vb" />
+    <Compile Include="CLASES\Etiqueta.vb" />
     <Compile Include="CLASES\Etiquetas.vb" />
+    <Compile Include="CLASES\Zona.vb" />
     <Compile Include="EVENTOS\AXApp.vb" />
     <Compile Include="EVENTOS\AXBlockTR.vb" />
     <Compile Include="EVENTOS\AXDb.vb" />

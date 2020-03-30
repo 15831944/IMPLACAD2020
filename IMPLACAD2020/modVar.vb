@@ -55,6 +55,8 @@ Module modVar
     'Public colConjuntos As Hashtable         '' Hashtable de conjuntos de etiquetas (Key=REFERENCIA, Value=Array de Referencias)
     'Public colSustituciones As Hashtable    '' Hashtable de sustituciones para plano EVA (Key=Referencia de bloque, Value=nombre de la imagen que la sustituye [Sin .png])
     'Public LConjuntos As List(Of String)    ' List de Conjuntos (TIPO3=CONJUNTO o Largo/Ancho=0)
+    Public LLwPolyline As List(Of AcadLWPolyline) = Nothing
+    Public LZona As List(Of Zona) = Nothing
     '
     ' CONSTANTES
     Public IMPLACAD_DATA As String = "C:\ProgramData\IMPLACAD\"
@@ -65,6 +67,7 @@ Module modVar
     Public Const codigoactivacion As String = "VIP2796"
     Public Const balizas As String = "PLANOS_Y_BALIZAMIENTOS"
     Public sep As String = IO.Path.DirectorySeparatorChar
+    Public nSel As String = "Temporal"          ' Nombre fijo de el SelectionSet.
     '
     ' CAMINOS
     Public appPath As String = System.Reflection.Assembly.GetExecutingAssembly.Location

@@ -361,9 +361,9 @@ Module modImplacad
         ''
         ''
         Try
-            oSelTemp = oApp.ActiveDocument.SelectionSets.Add("TEMPORAL")
+            oSelTemp = oApp.ActiveDocument.SelectionSets.Add(nSel)
         Catch ex As System.Exception
-            oSelTemp = oApp.ActiveDocument.SelectionSets.Item("TEMPORAL")
+            oSelTemp = oApp.ActiveDocument.SelectionSets.Item(nSel)
         End Try
         ''
         ''
@@ -376,8 +376,8 @@ Module modImplacad
         If oSelTemp IsNot Nothing And oSelTemp.Count > 0 Then
             Try
                 For Each oEnt As AcadEntity In oSelTemp
-                    Dim texto As String = XData.XLeeDato(oEnt, xT.TEXTOS)
-                    If TypeOf oEnt Is AcadTable And texto = "Clase=tabla" Then
+                    Dim texto As String = XData.XLeeDato(CType(oEnt, AcadObject), "Clase")
+                    If TypeOf oEnt Is AcadTable And texto = "tabla" Then  '"Clase=tabla"
                         resultado = CType(oApp.ActiveDocument.ObjectIdToObject(oEnt.ObjectID), AcadTable)
                         Exit For
                     End If
@@ -722,9 +722,9 @@ Module modImplacad
         ''
         ''
         Try
-            oSelTemp = oApp.ActiveDocument.SelectionSets.Add("TEMPORAL")
+            oSelTemp = oApp.ActiveDocument.SelectionSets.Add(nSel)
         Catch ex As System.Exception
-            oSelTemp = oApp.ActiveDocument.SelectionSets.Item("TEMPORAL")
+            oSelTemp = oApp.ActiveDocument.SelectionSets.Item(nSel)
         End Try
         ''
         ''
@@ -737,8 +737,8 @@ Module modImplacad
         If oSelTemp IsNot Nothing And oSelTemp.Count > 0 Then
             Try
                 For Each oEnt As AcadEntity In oSelTemp
-                    Dim texto As String = XData.XLeeDato(oEnt, xT.TEXTOS)
-                    If TypeOf oEnt Is AcadTable And texto = "Clase=tablaescaleras" Then
+                    Dim texto As String = XData.XLeeDato(CType(oEnt, AcadObject), "Clase")
+                    If TypeOf oEnt Is AcadTable And texto = "tablaescaleras" Then     ' "Clase=tablaescaleras"
                         resultado = CType(oApp.ActiveDocument.ObjectIdToObject(oEnt.ObjectID), AcadTable)
                         Exit For
                     End If
@@ -779,9 +779,9 @@ Module modImplacad
         ''
         ''
         Try
-            oSelTemp = oApp.ActiveDocument.SelectionSets.Add("TEMPORAL")
+            oSelTemp = oApp.ActiveDocument.SelectionSets.Add(nSel)
         Catch ex As System.Exception
-            oSelTemp = oApp.ActiveDocument.SelectionSets.Item("TEMPORAL")
+            oSelTemp = oApp.ActiveDocument.SelectionSets.Item(nSel)
         End Try
         ''
         ''
@@ -793,8 +793,8 @@ Module modImplacad
         End Try
         If oSelTemp IsNot Nothing And oSelTemp.Count > 0 Then
             For Each oEnt As AcadEntity In oSelTemp
-                Dim texto As String = XData.XLeeDato(oEnt, xT.TEXTOS)
-                If TypeOf oEnt Is AcadBlockReference And texto = "Clase=balizaescalera" Then
+                Dim texto As String = XData.XLeeDato(oEnt, "Clase")
+                If TypeOf oEnt Is AcadBlockReference And texto = "balizaescalera" Then        '"Clase=balizaescalera"
                     Dim oBlo As AcadBlockReference = oEnt
                     Dim noEs As String = oBlo.GetAttributes(0).TextString    ' NOMBREESCALERA
                     Dim nuEs As String = oBlo.GetAttributes(1).TextString    ' NUMEROESCALONES
@@ -870,7 +870,73 @@ Module modImplacad
 #End Region
     ''
 #Region "DAMETOTALES"
-    ''
+    '
+    ' Nos dará todas las Polilineas en capa "Zonas"
+    Public Function DamePolilineasZonasImplacad(Optional capa As String = "Zonas") As List(Of AcadLWPolyline)
+        Dim resultado As New List(Of AcadLWPolyline)
+        'Dim cSeleccion As AcadSelectionSets
+        Dim F1(1) As Short
+        Dim F2(1) As Object
+        Dim vF1 As Object = Nothing
+        Dim vF2 As Object = Nothing
+        '
+        'F1(0) = 1001 : F2(0) = regAPP
+        F1(0) = 100 : F2(0) = "AcDbPolyline"   ',AcDbPolyline" '"*Polyline"
+        F1(1) = 8 : F2(1) = capa
+        'F1(3) = 1000 : F2(3) = "Clase=etiqueta"
+        ''
+        vF1 = F1
+        vF2 = F2
+        ''
+        If oApp Is Nothing Then _
+        oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication)
+        ''
+        ''
+        ''
+        Try
+            oSelTemp = oApp.ActiveDocument.SelectionSets.Item(nSel)
+        Catch ex As System.Exception
+            oSelTemp = oApp.ActiveDocument.SelectionSets.Add(nSel)
+        End Try
+        ''
+        ''
+        oSelTemp.Clear()
+        Try
+            oSelTemp.Select(AcSelect.acSelectionSetAll, , , vF1, vF2)
+        Catch ex As System.Exception
+            Debug.Print(ex.Message)
+        End Try
+        ''
+        If oSelTemp IsNot Nothing And oSelTemp.Count > 0 Then
+            For Each oEnt As AcadEntity In oSelTemp
+                '' Si no es un bloque, continuamos
+                If oEnt.EntityName <> "AcDbPolyline" Then Continue For
+                'If Not (TypeOf oEnt Is AcadLWPolyline) Then Continue For
+                Dim oPol As AcadLWPolyline = DirectCast(oApp.ActiveDocument.ObjectIdToObject(oEnt.ObjectID), AcadLWPolyline)
+                If oPol Is Nothing Then Continue For
+                resultado.Add(oPol)
+                '' Si el nombre no empieza con EX, EV, SIA o KIT (arrpreEti) Borramos Xdata de regApp y Continuamos
+                'Dim borraXdata As Boolean = True
+                'For Each preEti As String In arrpreEti
+                '    If oBl.Name.ToUpper.StartsWith(preEti) Then
+                '        borraXdata = False
+                '        Exit For
+                '    End If
+                'Next
+                '
+                'If borraXdata = True Then
+                '    XData.XBorrar(oBl)
+                '    Continue For
+                'Else
+                '    arrEnt.Add(oEnt)
+                'End If
+            Next
+            oSelTemp.Clear()
+        End If
+        ''
+        oSelTemp = Nothing
+        Return resultado
+    End Function
     Public Function DameTodoImplacad() As ArrayList
         Dim arrEnt As ArrayList = Nothing
         'Dim cSeleccion As AcadSelectionSets
@@ -897,9 +963,9 @@ Module modImplacad
         ''
         ''
         Try
-            oSelTemp = oApp.ActiveDocument.SelectionSets.Add("TEMPORAL")
+            oSelTemp = oApp.ActiveDocument.SelectionSets.Add(nSel)
         Catch ex As System.Exception
-            oSelTemp = oApp.ActiveDocument.SelectionSets.Item("TEMPORAL")
+            oSelTemp = oApp.ActiveDocument.SelectionSets.Item(nSel)
         End Try
         ''
         ''
@@ -951,8 +1017,8 @@ Module modImplacad
             arrBloquesIdParcial = New ArrayList
             ''
             For Each oEnt As AcadEntity In queSel
-                Dim texto As String = XData.XLeeDato(oEnt, xT.TEXTOS)
-                If TypeOf oEnt Is AcadBlockReference And texto = "Clase=etiqueta" Then
+                Dim texto As String = XData.XLeeDato(oEnt, "Clase")
+                If TypeOf oEnt Is AcadBlockReference And texto = "etiqueta" Then      '"Clase=etiqueta"
                     ''
                     If oEnt.Layer <> "0" Then Continue For
                     ''
@@ -1001,9 +1067,9 @@ Module modImplacad
         ''
         ''
         Try
-            oSelTemp = oApp.ActiveDocument.SelectionSets.Add("TEMPORAL")
+            oSelTemp = oApp.ActiveDocument.SelectionSets.Add(nSel)
         Catch ex As System.Exception
-            oSelTemp = oApp.ActiveDocument.SelectionSets.Item("TEMPORAL")
+            oSelTemp = oApp.ActiveDocument.SelectionSets.Item(nSel)
         End Try
         ''
         ''
@@ -1028,8 +1094,8 @@ Module modImplacad
                     Continue For
                 End If
                 ''
-                Dim texto As String = XData.XLeeDato(oEnt, xT.TEXTOS)
-                If TypeOf oEnt Is AcadBlockReference And texto = "Clase=etiqueta" Then
+                Dim texto As String = XData.XLeeDato(oEnt, "Clase")
+                If TypeOf oEnt Is AcadBlockReference And texto = "etiqueta" Then      '"Clase=etiqueta"
                     Dim oBloque As AcadBlockReference = oApp.ActiveDocument.ObjectIdToObject(oEnt.ObjectID)
                     '' Si el nombre no empieza con EX, EV, SIA o KIT (arrpreEti) Borramos Xdata de regApp y Continuamos
                     Dim borraXdata As Boolean = True
@@ -1203,9 +1269,9 @@ Module modImplacad
         ''
         ''
         Try
-            oSelTemp = oApp.ActiveDocument.SelectionSets.Add("TEMPORAL")
+            oSelTemp = oApp.ActiveDocument.SelectionSets.Add(nSel)
         Catch ex As System.Exception
-            oSelTemp = oApp.ActiveDocument.SelectionSets.Item("TEMPORAL")
+            oSelTemp = oApp.ActiveDocument.SelectionSets.Item(nSel)
         End Try
         ''
         ''
@@ -1289,9 +1355,9 @@ Module modImplacad
         End Try
         ''
         Try
-            oSelTemp = oApp.ActiveDocument.SelectionSets.Add("TEMPORAL")
+            oSelTemp = oApp.ActiveDocument.SelectionSets.Add(nSel)
         Catch ex As System.Exception
-            oSelTemp = oApp.ActiveDocument.SelectionSets.Item("TEMPORAL")
+            oSelTemp = oApp.ActiveDocument.SelectionSets.Item(nSel)
         End Try
         ''
         ''
@@ -1359,9 +1425,9 @@ Module modImplacad
         End Try
         ''
         Try
-            oSelTemp = oApp.ActiveDocument.SelectionSets.Add("TEMPORAL")
+            oSelTemp = oApp.ActiveDocument.SelectionSets.Add(nSel)
         Catch ex As System.Exception
-            oSelTemp = oApp.ActiveDocument.SelectionSets.Item("TEMPORAL")
+            oSelTemp = oApp.ActiveDocument.SelectionSets.Item(nSel)
         End Try
         ''
         ''
@@ -1741,6 +1807,37 @@ Module modImplacad
         ''
         oApp.ActiveDocument.Regen(AcRegenType.acAllViewports)
         oDoc.Save()
+    End Sub
+
+    Public Sub CapaCreaActivaZonas()
+        If oApp Is Nothing Then _
+            oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication)
+        '' Activar Capa 0 primero.
+        oApp.ActiveDocument.ActiveLayer = oApp.ActiveDocument.Layers.Item("0")
+        ''
+        '' Coger la capa BALIZAMIENTO SUELO o crearla
+        Dim oLayer As AcadLayer = Nothing
+        Try
+            oLayer = oApp.ActiveDocument.Layers.Item("Zonas")
+        Catch ex As System.Exception
+            oLayer = oApp.ActiveDocument.Layers.Add("Zonas")
+        End Try
+        ''
+        '' Poner la capa como visible (LayerOn=True) y Reutilizada (Freeze=False)
+        oLayer.LayerOn = True
+        oLayer.Freeze = False
+        ''
+        '' Poner alguna de sus características
+        Dim oColor As New AcadAcCmColor
+        oColor.ColorIndex = 7
+        oLayer.TrueColor = oColor
+        oLayer.Lineweight = ACAD_LWEIGHT.acLnWt025
+        ''
+        oApp.ActiveDocument.ActiveLayer = oLayer    ' oApp.ActiveDocument.Layers.Item("BALIZAMIENTO SUELO")
+        oLayer = Nothing
+        oColor = Nothing
+        '
+        'oApp.ActiveDocument.Regen(AcRegenType.acAllViewports)
     End Sub
     Public Sub CapaCreaActivaBalizamientoSuelo()
         ''
@@ -2421,6 +2518,582 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
         Next
         acad_pref.Files.SupportPath = String.Join(";", Old_Path_Ary.ToArray())
     End Sub
+
+    Public Sub HazZoomObjeto(ByVal obj As AcadObject, Optional reduce As Double = 1, Optional selecciona As Boolean = True)
+        Dim pt1 As Object = Nothing
+        Dim pt2 As Object = Nothing
+        obj.GetBoundingBox(pt1, pt2)
+        Dim distX As Double = Math.Abs(pt2(0) - pt1(0))
+        Dim distY As Double = Math.Abs(pt2(1) - pt1(1))
+        '
+        pt1(0) -= (distX) * reduce : pt1(1) -= (distY) * reduce
+        pt2(0) += (distX) * reduce : pt2(1) += (distY) * reduce
+        oApp.ZoomWindow(pt1, pt2)
+        If selecciona = True Then
+            'Dim oIPrt As New IntPtr(obj.ObjectID)
+            'Dim oId As New ObjectId(oIPrt)
+            'Dim arrIds() As ObjectId = {oId}
+            'Autodesk.AutoCAD.Internal.Utils.SelectObjects(arrIds)
+            Selecciona_AcadObject(obj)
+        End If
+    End Sub
+    Public Sub SeleccionaPorHandle(ThisDrawing As AcadDocument, objEnt As AcadEntity, Optional comando As String = "")
+        Dim queHandle As String = objEnt.Handle
+        Dim lisp As String = "(handent " & Chr(34) & queHandle & Chr(34) & ") "
+        ThisDrawing.SendCommand("_SELECT ")
+        ThisDrawing.SendCommand(lisp)
+        ' Si hay un comando se ejecutará sobre la selección
+        If comando = " " Or comando = "  " Or comando = "" Then
+            ThisDrawing.SendCommand(comando)
+        ElseIf comando <> "" Then
+            If comando.Contains("[handle]") Then comando = comando.Replace("[handle]", lisp)
+            If comando.Contains("[Handle]") Then comando = comando.Replace("[Hhandle]", lisp)
+            If comando.Contains("[HANDLE]") Then comando = comando.Replace("[HANDLE]", lisp)
+            ThisDrawing.SendCommand(comando & " ")
+        End If
+        ' Volver a seleccionar el objecto. Dara error si se ha borrado
+        Try
+            ThisDrawing.SendCommand("_SELECT ")
+            ThisDrawing.SendCommand(lisp & vbCrLf)
+            '(ssget "x" '((5 . "157")))
+            'ThisDrawing.SendCommand("(ssget " & Chr(34) & "X" & Chr(34) & " '((5 . " & Chr(34) & objEnt.Handle & Chr(34) & "))) ")
+            ' ThisDrawing.SendCommand("_SELECT (handent " & Chr(34) & queHandle & Chr(34) & ")  ")
+            'ThisDrawing.SendCommand("(setq sel1 (ssget '((0 . " & Chr(34) & "INSERT" & Chr(34) & ")(5 . " & Chr(34) & objEnt.Handle & Chr(34) & "))))")
+            'ThisDrawing.SendCommand("(ssget '((5 . " & Chr(34) & objEnt.Handle & Chr(34) & ")))")
+            '(setq sel1 (ssget '((0 . "CIRCLE"))))
+        Catch ex As System.Exception
+            '
+        End Try
+    End Sub
+
+    Public Sub Selecciona_AcadObject(objEnt As AcadObject)
+        oApp.ActiveDocument.SetVariable("pickadd", 0)   ' Quitar la seleccion que hubiera.
+        Dim queHandle As String = objEnt.Handle
+        Dim obj As AcadObject = oApp.ActiveDocument.HandleToObject(queHandle)
+        ' Volver a seleccionar el objecto. Dara error si se ha borrado
+        Try
+            Dim oIPrt As New IntPtr(obj.ObjectID)
+            Dim oId As New ObjectId(oIPrt)
+            Dim arrIds() As ObjectId = {oId}
+            Autodesk.AutoCAD.Internal.Utils.SelectObjects(arrIds)
+        Catch ex As System.Exception
+            '
+        End Try
+        oApp.ActiveDocument.SetVariable("pickadd", 2)   ' Quitar la seleccion que hubiera.
+    End Sub
+    Public Sub Selecciona_AcadID(IdEnt As Long)
+        oApp.ActiveDocument.SetVariable("pickadd", 0)   ' Quitar la seleccion que hubiera.
+        Try
+            Dim oIPrt As New IntPtr(IdEnt)
+            Dim oId As New ObjectId(oIPrt)
+            Dim arrIds() As ObjectId = {oId}
+            Autodesk.AutoCAD.Internal.Utils.SelectObjects(arrIds)
+        Catch ex As System.Exception
+            '
+        End Try
+        oApp.ActiveDocument.SetVariable("pickadd", 2)   '' La seleccion actual se suma a la que hubiera.
+    End Sub
+    Public Sub Selecciona_AcadID(IdEnt As Long())
+        oApp.ActiveDocument.SetVariable("pickadd", 0)   ' Quitar la seleccion que hubiera.
+        Dim colIds As New List(Of ObjectId)
+        For Each LongId As Long In IdEnt
+            Dim oId As New ObjectId(New IntPtr(LongId))
+            colIds.Add(oId)
+        Next
+        Try
+            Autodesk.AutoCAD.Internal.Utils.SelectObjects(colIds.ToArray)
+        Catch ex As System.Exception
+            '
+        End Try
+        oApp.ActiveDocument.SetVariable("pickadd", 2)   '' La seleccion actual se suma a la que hubiera.
+    End Sub
+    Public Sub Selecciona_AcadID(IdEnt As ObjectId())
+        oApp.ActiveDocument.SetVariable("pickadd", 0)   ' Quitar la seleccion que hubiera.
+        Try
+            Autodesk.AutoCAD.Internal.Utils.SelectObjects(IdEnt)
+        Catch ex As System.Exception
+            '
+        End Try
+        oApp.ActiveDocument.SetVariable("pickadd", 2)   '' La seleccion actual se suma a la que hubiera.
+    End Sub
+
+
+    ''' <summary>
+    ''' Seleccionamos objetos indicando su tipo, capa, Xdata y
+    ''' acadselectionset a utilizar "oSel" u "oSelTemp" (true o false)
+    ''' </summary>
+    ''' <param name="tipo">Tipo de opbjeto Autocad: POLYLINE, LWPOLILINE, AEC_WALL, INSERT</param>
+    ''' <param name="capa">Nombre de la capa o modvariables.precapa + ultZona</param>
+    ''' <param name="DatosX">True tendrá en cuenta los XData o False no los tendrá en cuenta</param>
+    ''' <remarks></remarks>
+    Public Function SeleccionaTodosObjetos_IDs(Optional ByVal tipo As Object = Nothing, Optional ByVal capa As Object = "", Optional ByVal DatosX As Boolean = False) As List(Of Long)
+        Dim resultado As New List(Of Long)
+        'Dim cSeleccion As AcadSelectionSets
+        Dim F1(-1) As Short   'Dim F1(0 To 5) As Integer
+        Dim F2(-1) As Object    'Dim F2(0 To 5) As Object
+        Dim vF1 As Object
+        Dim vF2 As Object
+        ' 0 para tipo / 2 para nombre / 8 para capa
+        ' tipo objeto o TODOS si no ponemos nadaDatosX.
+        ' Siempre tiene que estar despues de entidad. Si no no funciona.
+        ' "AEC_WALL" "LWPOLYLINE" "POLYLINE" "INSERT"
+        If Not (tipo Is Nothing) Then
+            ReDim Preserve F1(F1.Length)
+            ReDim Preserve F2(F2.Length)
+            F1(F1.Length - 1) = 0 : F2(F2.Length - 1) = tipo
+        End If
+        'F1(0) = 0 : F2(0) = tipo
+
+        'DatosX Siempre tiene que estar despues de entidad. Si no no funciona
+        If DatosX = True Then
+            ReDim Preserve F1(F1.Length)
+            ReDim Preserve F2(F2.Length)
+            F1(F1.Length - 1) = 1001 : F2(F2.Length - 1) = regAPP   ' CType(regAPP, Object)
+        End If
+
+        If capa <> "" Then
+            ReDim Preserve F1(F1.Length)
+            ReDim Preserve F2(F2.Length)
+            F1(F1.Length - 1) = 8 : F2(F2.Length - 1) = capa
+        End If
+        vF1 = F1
+        vF2 = F2
+        '
+        Try
+            oSel = oApp.ActiveDocument.SelectionSets.Add(nSel)
+        Catch ex As System.Exception
+            oSel = oApp.ActiveDocument.SelectionSets.Item(nSel)
+        End Try
+        '
+        oSel.Clear()
+        oSel.Select(AcSelect.acSelectionSetAll, , , vF1, vF2)
+        '
+        If oSel IsNot Nothing AndAlso oSel.Count > 0 Then
+            For Each oEnt As AcadEntity In oSel
+                If resultado.Contains(oEnt.ObjectID) = False Then resultado.Add(oEnt.ObjectID)
+            Next
+        End If
+        '
+        oSel.Clear()
+        oSel.Delete()
+        oSel = Nothing
+        '
+        Return resultado
+    End Function
+
+    ''' <summary>
+    ''' Seleccionamos objetos indicando su tipo, capa, Xdata y
+    ''' acadselectionset a utilizar "oSel" u "oSelTemp" (true o false)
+    ''' </summary>
+    ''' <param name="tipo">Tipo de opbjeto Autocad: POLYLINE, LWPOLILINE, AEC_WALL, INSERT</param>
+    ''' <param name="capa">Nombre de la capa o modvariables.precapa + ultZona</param>
+    ''' <param name="DatosX">True tendrá en cuenta los XData o False no los tendrá en cuenta</param>
+    ''' <remarks></remarks>
+    Public Function SeleccionaTodosObjetos_Handle(Optional ByVal tipo As Object = Nothing, Optional ByVal capa As Object = "", Optional ByVal DatosX As Boolean = False) As List(Of String)
+        Dim resultado As New List(Of String)
+        'Dim cSeleccion As AcadSelectionSets
+        Dim F1(-1) As Short   'Dim F1(0 To 5) As Integer
+        Dim F2(-1) As Object    'Dim F2(0 To 5) As Object
+        Dim vF1 As Object
+        Dim vF2 As Object
+        ' 0 para tipo / 2 para nombre / 8 para capa
+        ' tipo objeto o TODOS si no ponemos nadaDatosX.
+        ' Siempre tiene que estar despues de entidad. Si no no funciona.
+        ' "AEC_WALL" "LWPOLYLINE" "POLYLINE" "INSERT"
+        If Not (tipo Is Nothing) Then
+            ReDim Preserve F1(F1.Length)
+            ReDim Preserve F2(F2.Length)
+            F1(F1.Length - 1) = 0 : F2(F2.Length - 1) = tipo
+        End If
+        'F1(0) = 0 : F2(0) = tipo
+
+        'DatosX Siempre tiene que estar despues de entidad. Si no no funciona
+        If DatosX = True Then
+            ReDim Preserve F1(F1.Length)
+            ReDim Preserve F2(F2.Length)
+            F1(F1.Length - 1) = 1001 : F2(F2.Length - 1) = regAPP   ' CType(regAPP, Object)
+        End If
+
+        If capa <> "" Then
+            ReDim Preserve F1(F1.Length)
+            ReDim Preserve F2(F2.Length)
+            F1(F1.Length - 1) = 8 : F2(F2.Length - 1) = capa
+        End If
+        vF1 = F1
+        vF2 = F2
+        '
+        Try
+            oSel = oApp.ActiveDocument.SelectionSets.Add(nSel)
+        Catch ex As System.Exception
+            oSel = oApp.ActiveDocument.SelectionSets.Item(nSel)
+        End Try
+        '
+        oSel.Clear()
+        oSel.Select(AcSelect.acSelectionSetAll, , , vF1, vF2)
+        '
+        If oSel IsNot Nothing AndAlso oSel.Count > 0 Then
+            For Each oEnt As AcadEntity In oSel
+                If resultado.Contains(oEnt.Handle) = False Then resultado.Add(oEnt.Handle)
+            Next
+        End If
+        '
+        oSel.Clear()
+        oSel.Delete()
+        oSel = Nothing
+        '
+        Return resultado
+    End Function
+    Public Function SeleccionaTodosObjetosXData(nombreXData As String, valueXData As String, Optional igual As Boolean = False) As List(Of Long)
+        Dim resultado As New List(Of Long)
+        'Dim cSeleccion As AcadSelectionSets
+        Dim F1(1) As Short   'Dim F1(0 To 5) As Integer
+        Dim F2(1) As Object    'Dim F2(0 To 5) As Object
+        Dim vF1 As Object
+        Dim vF2 As Object
+        ' Todos los tipos de objetos
+        F1(0) = 0 : F2(0) = "*"
+        ' DatosX Siempre tiene que estar despues de entidad. Si no no funciona
+        F1(1) = 1001 : F2(1) = regAPP   ' CType(regAPP, Object)
+        vF1 = F1
+        vF2 = F2
+        '
+        Try
+            oSel = oApp.ActiveDocument.SelectionSets.Add(nSel)
+        Catch ex As System.Exception
+            oSel = oApp.ActiveDocument.SelectionSets.Item(nSel)
+        End Try
+        '
+        oSel.Clear()
+        oSel.Select(AcSelect.acSelectionSetAll, , , vF1, vF2)
+        '
+        If oSel IsNot Nothing AndAlso oSel.Count > 0 Then
+            For Each oEnt As AcadEntity In oSel
+                Dim queGrupo As String = XLeeDato(oEnt.Handle, nombreXData)
+                If queGrupo = "" Then Continue For
+                If igual = True AndAlso queGrupo.ToUpper <> valueXData.ToUpper Then
+                    Continue For
+                ElseIf igual = False AndAlso queGrupo.ToUpper.Contains(valueXData.ToUpper) = False Then
+                    Continue For
+                End If
+                '
+                If resultado.Contains(oEnt.ObjectID) = False Then resultado.Add(oEnt.ObjectID)
+            Next
+        End If
+        '
+        oSel.Clear()
+        oSel.Delete()
+        oSel = Nothing
+        '
+        Return resultado
+    End Function
+
+    Public Function SeleccionaDameEntitiesEnCapa(queCapa As String) As ArrayList
+        Dim resultado As New ArrayList
+        ''
+        'Add bit about counting text on layer
+        Dim myEd As Editor = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor
+        Dim myTVs(0) As TypedValue
+        myTVs.SetValue(New TypedValue(DxfCode.LayerName, queCapa), 0)
+        Dim myFilter As New SelectionFilter(myTVs)
+        Dim myPSR As PromptSelectionResult = myEd.SelectAll(myFilter)
+        Dim oSel As SelectionSet = Nothing
+        If myPSR.Status = PromptStatus.OK Then
+            oSel = myPSR.Value
+        End If
+        '    Dim myTVs(3) As TypedValue
+        'myTVs.SetValue(New TypedValue(DxfCode.Operator, "<AND"), 0)
+        'myTVs.SetValue(New TypedValue(DxfCode.Start, "TEXT"), 1)
+        'myTVs.SetValue(New TypedValue(DxfCode.LayerName, "0"), 2)
+        'myTVs.SetValue(New TypedValue(DxfCode.Operator, "AND>"), 3)
+        ''myTVs(0) = New TypedValue(DxfCode.l .Start, "MTEXT")
+        'Dim myFilter As New SelectionFilter(myTVs)
+        '    Dim myPSR As PromptSelectionResult = myEd.SelectAll(myFilter)
+        '    If myPSR.Status = PromptStatus.OK Then
+        '    Dim mySS As SelectionSet = myPSR.Value
+        'myForm.Label2.Text = mySS.Count
+        'End If
+        ''
+        If oApp Is Nothing Then _
+    oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication)
+        '
+        oApp.ActiveDocument.SetVariable("pickadd", 0)   '' Solo una selección. Se quita lo que hubiera
+        oApp.ActiveDocument.ActiveSelectionSet.Clear()
+        '
+        If oSel IsNot Nothing AndAlso oSel.Count > 0 Then
+            For x As Integer = 0 To oSel.Count - 1
+                resultado.Add(oApp.ActiveDocument.ObjectIdToObject(oSel.Item(x).ObjectId.OldIdPtr))
+            Next
+        Else
+            resultado = Nothing
+        End If
+        ''
+        oApp.ActiveDocument.SetVariable("pickadd", 2)   '' La seleccion actual se suma a la que hubiera.
+        '
+        oSel = Nothing
+        Return resultado
+        Exit Function
+    End Function
+    '
+    ''' <summary>
+    ''' Devuelve arrayList con todas las polilineas que cumplan el criterio
+    ''' nombreApp = '*' por defecto. Le podemos indicar un nombre de APP registrada (1001=nombreApp)
+    ''' nombrecapa = '*' por defecto. Le podemos indicar un nombre de capa
+    ''' ** Le podemos indicar carácterés comodin (Ej.: nombrecapa=planta*) Utilizar * o ?
+    ''' </summary>
+    ''' <param name="nombreApp">Nombre de la app que registro el XData. O filtro con carácteres comodín</param>
+    ''' <param name="nombrecapa">Nombre de la capa o filtro con carácteres comodin</param>
+    ''' <returns></returns>
+    Public Function SeleccionaDamePolilineasTODAS(Optional nombreApp As String = "*", Optional nombrecapa As String = "*") As ArrayList
+        Dim resultado As New ArrayList
+        'Dim cSeleccion As AcadSelectionSets
+        Dim F1(3) As Short
+        Dim F2(3) As Object
+        Dim vF1 As Object = Nothing
+        Dim vF2 As Object = Nothing
+
+        '' Las 2 maneras valen igual. AcDbBlckReference es mejor (Solo coge bloques) INSERT coge sombreados también.
+        F1(0) = 100 : F2(0) = "AcDbBlockReference"
+        F1(1) = 0 : F2(1) = "LWPOLYLINE"
+        F1(2) = 1001 : F2(2) = nombreApp
+        F1(4) = 8 : F2(4) = nombrecapa
+        ''
+        vF1 = F1
+        vF2 = F2
+        '
+        Try
+            oSel = oApp.ActiveDocument.SelectionSets.Add(regAPP)
+        Catch ex As System.Exception
+            oSel = oApp.ActiveDocument.SelectionSets.Item(regAPP)
+        End Try
+        ''
+        oSel.Clear()
+        Try
+            oSel.Select(AcSelect.acSelectionSetAll, , , vF1, vF2)
+        Catch ex As System.Exception
+            Debug.Print(ex.Message)
+        End Try
+        ''
+        If oSel.Count > 0 Then
+            For Each oEnt As AcadEntity In oSel
+                If Not (TypeOf oEnt Is AcadBlockReference) Then Continue For
+                resultado.Add(oApp.ActiveDocument.ObjectIdToObject(oEnt.ObjectID))
+            Next
+            oSel.Clear()
+            oSel.Delete()
+            oSel = Nothing
+        End If
+        ''
+        Return resultado
+    End Function
+    ''
+    '' Seleccionamos una polilinea cerrada o no y la usamos
+    '' para hacer una seleccion PV (Poligono Ventana) y obtener todos
+    '' los objetos AutoCAD que hay dentro.
+    Public Function SeleccionaDameEntitiesDentroPolilinea(Optional conMensaje As Boolean = False) As ArrayList
+        Dim resultado As New ArrayList
+        ''
+repetir:
+        Dim objCadEnt As AcadEntity = Nothing
+        Dim vrRetPnt As Object = Nothing
+        Try
+            oApp.ActiveDocument.Utility.GetEntity(objCadEnt, vrRetPnt, "Seleccione Polilinea")
+            '' Si no seleccionamos nada, salimos
+            If objCadEnt Is Nothing Then
+                '' Volver a solicitar entidad
+                GoTo repetir
+                'Return resultado
+                'Exit Function
+            ElseIf Not (TypeOf objCadEnt Is AcadLWPolyline) Then
+                '' Volver a solicitar entidad
+                GoTo repetir
+            End If
+        Catch ex As System.Exception
+            Return resultado
+            Exit Function
+        End Try
+        '' Si el objeto seleccionado es una polilinea
+        If objCadEnt.ObjectName = "AcDbPolyline" Then   '|-- Checking for 2D Polylines --|
+            Dim objLWPline As AcadLWPolyline
+            Dim objSSet As AcadSelectionSet
+            Dim dblCurCords() As Double
+            Dim dblNewCords() As Double
+            Dim iMaxCurArr, iMaxNewArr As Integer
+            Dim iCurArrIdx, iNewArrIdx, iCnt As Integer
+            objLWPline = objCadEnt
+            dblCurCords = objLWPline.Coordinates    '|-- The returned coordinates are 2D only --|
+            iMaxCurArr = UBound(dblCurCords)
+            If iMaxCurArr = 3 Then
+                oApp.ActiveDocument.Utility.Prompt("La polilinea debe tener un minimo de 2 segmentos...")
+                Return resultado
+                Exit Function
+            Else
+                '|-- The 2D Coordinates are insufficient to use in SelectByPolygon method --|
+                '|-- So convert those into 3D coordinates --|
+                iMaxNewArr = ((iMaxCurArr + 1) * 1.5) - 1   '|-- New array dimension
+                ReDim dblNewCords(iMaxNewArr)
+                iCurArrIdx = 0 : iCnt = 1
+                For iNewArrIdx = 0 To iMaxNewArr
+                    If iCnt = 3 Then    '|-- The z coordinate is set to 0 --|
+                        dblNewCords(iNewArrIdx) = 0
+                        iCnt = 1
+                    Else
+                        dblNewCords(iNewArrIdx) = dblCurCords(iCurArrIdx)
+                        iCurArrIdx = iCurArrIdx + 1
+                        iCnt = iCnt + 1
+                    End If
+                Next
+                ''
+                '' Creamos el selectionsets para poner ahí la nueva selección
+                Try
+                    objSSet = oApp.ActiveDocument.SelectionSets.Item(nSel)
+                Catch ex As System.Exception
+                    objSSet = oApp.ActiveDocument.SelectionSets.Add(nSel)
+                End Try
+                '' Quitamos los objetos que hubiera seleccionados.
+                objSSet.Clear()
+                ''
+                '' Para filtrar entidades
+                ''Dim gpCode(0) As Integer
+                'Dim dataValue(0) As Variant
+                'gpCode(0) = 0
+                'dataValue(0) = "Circle"
+                'Dim groupCode As Variant, dataCode As Variant
+                'groupCode = gpCode
+                'dataCode = dataValue
+                oApp.ActiveDocument.Activate()
+                objSSet.SelectByPolygon(AcSelect.acSelectionSetWindowPolygon, dblNewCords)
+                objSSet.Highlight(True)
+                'objSSet.Delete
+                '' Mostrar o no mensaje.
+                Dim mensaje As String
+                mensaje = "Nº de Objetos = " & objSSet.Count & vbCrLf & vbCrLf
+                Dim nBlo, nPol, nSom, nLin As Integer
+                For x As Integer = 0 To objSSet.Count - 1
+                    If TypeOf objSSet.Item(x) Is AcadPolyline Then
+                        nPol += 1
+                    ElseIf TypeOf objSSet.Item(x) Is AcadLWPolyline Then
+                        nPol += 1
+                    ElseIf TypeOf objSSet.Item(x) Is AcadBlockReference Then
+                        nBlo += 1
+                    ElseIf TypeOf objSSet.Item(x) Is AcadHatch Then
+                        nSom += 1
+                    ElseIf TypeOf objSSet.Item(x) Is AcadLine Then
+                        nLin += 1
+                    End If
+                    resultado.Add(objSSet.Item(x).ObjectID)
+                Next
+                ''
+                mensaje = mensaje &
+        "Bloques = " & nBlo & vbCrLf &
+        "Polilineas = " & nPol & vbCrLf &
+        "Sombreados = " & nSom & vbCrLf &
+        "Lineas = " & nLin
+                'MsgBox ("Objetos seleccionados = " & objSSet.Count)
+                If conMensaje Then
+                    MsgBox(mensaje)
+                End If
+                objSSet.Highlight(False)
+                objSSet.Delete()
+                objSSet = Nothing
+            End If
+            ''
+        End If
+        ''
+        Return resultado
+    End Function
+
+    ''
+    '' Obtener todos los objetos AutoCAD que hay dentro.
+    Public Function DameEntitiesDentroPolilinea(objLWPline As AcadLWPolyline, Optional conMensaje As Boolean = False, Optional seleccionar As Boolean = True) As List(Of Long)
+        Dim resultado As New List(Of Long)
+        ''
+
+        '' Si el objeto seleccionado es una polilinea
+        Dim objSSet As AcadSelectionSet
+        Dim dblCurCords() As Double
+        Dim dblNewCords() As Double
+        Dim iMaxCurArr, iMaxNewArr As Integer
+        Dim iCurArrIdx, iNewArrIdx, iCnt As Integer
+        dblCurCords = objLWPline.Coordinates    '|-- The returned coordinates are 2D only --|
+        iMaxCurArr = UBound(dblCurCords)
+        If iMaxCurArr = 3 Then
+            oApp.ActiveDocument.Utility.Prompt("La polilinea debe tener un minimo de 2 segmentos...")
+            Return resultado
+            Exit Function
+        Else
+            '|-- The 2D Coordinates are insufficient to use in SelectByPolygon method --|
+            '|-- So convert those into 3D coordinates --|
+            iMaxNewArr = ((iMaxCurArr + 1) * 1.5) - 1   '|-- New array dimension
+            ReDim dblNewCords(iMaxNewArr)
+            iCurArrIdx = 0 : iCnt = 1
+            For iNewArrIdx = 0 To iMaxNewArr
+                If iCnt = 3 Then    '|-- The z coordinate is set to 0 --|
+                    dblNewCords(iNewArrIdx) = 0
+                    iCnt = 1
+                Else
+                    dblNewCords(iNewArrIdx) = dblCurCords(iCurArrIdx)
+                    iCurArrIdx = iCurArrIdx + 1
+                    iCnt = iCnt + 1
+                End If
+            Next
+            ''
+            '' Creamos el selectionsets para poner ahí la nueva selección
+            Try
+                objSSet = oApp.ActiveDocument.SelectionSets.Item(nSel)
+            Catch ex As System.Exception
+                objSSet = oApp.ActiveDocument.SelectionSets.Add(nSel)
+            End Try
+            '' Quitamos los objetos que hubiera seleccionados.
+            objSSet.Clear()
+            ''
+            '' Para filtrar entidades
+            ''Dim gpCode(0) As Integer
+            'Dim dataValue(0) As Variant
+            'gpCode(0) = 0
+            'dataValue(0) = "Circle"
+            'Dim groupCode As Variant, dataCode As Variant
+            'groupCode = gpCode
+            'dataCode = dataValue
+            oApp.ActiveDocument.Activate()
+            objSSet.SelectByPolygon(AcSelect.acSelectionSetWindowPolygon, dblNewCords)
+            If seleccionar Then objSSet.Highlight(True)
+            'objSSet.Delete
+            '' Mostrar o no mensaje.
+            Dim mensaje As String
+            mensaje = "Nº de Objetos = " & objSSet.Count & vbCrLf & vbCrLf
+            Dim nBlo, nPol, nSom, nLin As Integer
+            For x As Integer = 0 To objSSet.Count - 1
+                If TypeOf objSSet.Item(x) Is AcadPolyline Then
+                    nPol += 1
+                ElseIf TypeOf objSSet.Item(x) Is AcadLWPolyline Then
+                    nPol += 1
+                ElseIf TypeOf objSSet.Item(x) Is AcadBlockReference Then
+                    nBlo += 1
+                ElseIf TypeOf objSSet.Item(x) Is AcadHatch Then
+                    nSom += 1
+                ElseIf TypeOf objSSet.Item(x) Is AcadLine Then
+                    nLin += 1
+                End If
+                resultado.Add(objSSet.Item(x).ObjectID)
+            Next
+            ''
+            mensaje = mensaje &
+        "Bloques = " & nBlo & vbCrLf &
+        "Polilineas = " & nPol & vbCrLf &
+        "Sombreados = " & nSom & vbCrLf &
+        "Lineas = " & nLin
+            'MsgBox ("Objetos seleccionados = " & objSSet.Count)
+            If conMensaje Then
+                MsgBox(mensaje)
+            End If
+            objSSet.Highlight(False)
+            objSSet.Delete()
+            objSSet = Nothing
+        End If
+        ''
+        ''
+        Return resultado
+    End Function
 End Module
 
 Public Enum queCapa As Integer
