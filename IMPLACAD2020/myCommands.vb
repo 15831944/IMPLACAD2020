@@ -1296,6 +1296,43 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             Application.ShowAlertDialog(mensaje)
             ''
         End Sub
+
+
+        <CommandMethod(regAPP, "IMPLACADXDATA", "IMPLACADXDATA", CommandFlags.Modal)>
+        Public Sub IMPLACADXDATA() ' This method can have any name
+            ' Put your command code here
+            If oApp Is Nothing Then _
+        oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, Autodesk.AutoCAD.Interop.AcadApplication)
+            Dim NBorrados As Integer = 0
+            For Each OEnt As AcadEntity In oApp.ActiveDocument.ModelSpace
+                ' Solo procesar bloques.
+                If TypeOf OEnt Is AcadBlockReference = False Then Continue For
+                Dim OBl As AcadBlockReference = oApp.ActiveDocument.HandleToObject(OEnt.Handle)
+                Dim EsImplacad As Boolean = False
+                For Each pre As String In PreEtiquetas
+                    If OBl.EffectiveName.StartsWith(pre) Then
+                        EsImplacad = True
+                        Exit For
+                    End If
+                Next
+                '
+                If EsImplacad = False Then
+                    NBorrados += 1
+                    XData.XBorrar(OBl)
+                End If
+                OBl = Nothing
+            Next
+            Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor.WriteMessage(NBorrados & " borrados" & vbCr)
+            'oDoc = oApp.ActiveDocument
+            '' 0.- Anular cualquier comando
+            ''oApp.ActiveDocument.PostCommand(Chr(27) & Chr(27))
+            'CapaCeroActiva()
+            'Try
+            '    Dim oMg As AcadMenuGroups = Application.MenuGroups
+            '    Call oMg.Load(IO.Path.Combine(dirApp, "IMPLACAD.cuix"))
+            'Catch ex As Autodesk.AutoCAD.Runtime.Exception
+            'End Try
+        End Sub
         ''
         Public Function DescargaFicheroZIPDescomprime(queFiWeb As String,
                                                       queFiLocal As String,

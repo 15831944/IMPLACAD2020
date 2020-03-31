@@ -68,6 +68,7 @@ Module modVar
     Public Const balizas As String = "PLANOS_Y_BALIZAMIENTOS"
     Public sep As String = IO.Path.DirectorySeparatorChar
     Public nSel As String = "Temporal"          ' Nombre fijo de el SelectionSet.
+    Public PreEtiquetas As String() = {"AC", "AD", "EV", "EX", "OB", "PR", "SIA"}
     '
     ' CAMINOS
     Public appPath As String = System.Reflection.Assembly.GetExecutingAssembly.Location

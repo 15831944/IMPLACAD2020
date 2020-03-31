@@ -39,13 +39,13 @@ Module XData
         Dim DataType(0) As Short
         Dim Data(0) As Object
         DataType(0) = 1001 : Data(0) = regAPP
-        If TypeOf objA Is AcadLWPolyline Then
-            objA = CType(objA, AcadLWPolyline)
-        ElseIf TypeOf objA Is AcadBlockReference Then
-            objA = CType(objA, AcadBlockReference)
-        ElseIf TypeOf objA Is AcadTable Then
-            objA = CType(objA, AcadTable)
-        End If
+        'If TypeOf objA Is AcadLWPolyline Then
+        '    objA = CType(objA, AcadLWPolyline)
+        'ElseIf TypeOf objA Is AcadBlockReference Then
+        '    objA = CType(objA, AcadBlockReference)
+        'ElseIf TypeOf objA Is AcadTable Then
+        '    objA = CType(objA, AcadTable)
+        'End If
         objA.SetXData(DataType, Data)
         objA.Update()
     End Sub
@@ -106,6 +106,7 @@ Module XData
     Public Function XLeeDatos(ByVal objA As AcadEntity, Optional ByVal app As String = "") As Object         'Devuelve todos los datos de SERICAD 0-SERICAD, 1-CAPA
         Return XLeeDatos(CType(objA, AcadObject), app)
     End Function
+    '
     Public Function XLeeDato(ByVal objA As AcadObject, ByVal queNombre As String,
                               Optional SoloValor As Boolean = True) As String
         Dim resultado As String = ""
@@ -115,11 +116,19 @@ Module XData
             '
             objA.GetXData(regAPP, xtipos, xdatos)
             '' Si el objeto no tiene XData
-            If xdatos Is Nothing Then
-                XNuevo(objA)
+            If xtipos Is Nothing OrElse xdatos Is Nothing Then
+                Return resultado
+            End If
+            ' Cambiar los XData viejos (4 datos) al nuevo con (2 datos. RegApp y Textos)
+            If xdatos.Length = 4 Then
+                ' Coger el texto que había en el 4º elemento (3)
+                Dim Txt4 As String = xdatos(3)
+                Txt4 = Txt4.Replace("vacio", "")
+                ' Crear XData con 1001 y 1000 (poner ya el valor de 1000 = Txt4)
+                XNuevo(objA, Txt4)
                 objA.GetXData(regAPP, xtipos, xdatos)
             End If
-            '
+            ' Tiene XData
             'Dim App As String = xdatos(0)   ' Nombre de la App registrada
             Dim todo As String = ""  ' xdatos(1)  '' Cadena de texto con todas los datos de texto, concatenados con |.
             Dim indice As Integer = -1
