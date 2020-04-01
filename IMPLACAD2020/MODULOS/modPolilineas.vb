@@ -1,5 +1,8 @@
-﻿Imports Autodesk.AutoCAD.ApplicationServices
+﻿Imports System.Linq
+Imports Autodesk.AutoCAD.ApplicationServices
 Imports Autodesk.AutoCAD.DatabaseServices
+Imports Autodesk.AutoCAD.EditorInput
+Imports Autodesk.AutoCAD.Interop
 Imports Autodesk.AutoCAD.Interop.Common
 
 Module modPolilineas

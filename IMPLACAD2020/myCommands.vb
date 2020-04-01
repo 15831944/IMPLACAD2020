@@ -461,7 +461,7 @@ Namespace IMPLACAD
             'oApp.ActiveDocument.SendCommand(Chr(27) & Chr(27))
             ''
             ' ConfiguraDibujo()
-            TablaDatosInserta()
+            TablaDatos_Inserta()
         End Sub
 
         ''
@@ -486,7 +486,7 @@ Namespace IMPLACAD
             'oApp.ActiveDocument.SendCommand(Chr(27) & Chr(27))
             ''
             'ConfiguraDibujo()
-            TablaEscalerasInserta()
+            TablaEscaleras_Inserta()
         End Sub
 
         ''
@@ -1475,7 +1475,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
                     ' There are selected entities
                     ' Put your command using pickfirst set code here
                     'MsgBox("TABLAPARCIAL" & vbCrLf & vbCrLf & "Seleccionados : " & result.Value.Count)
-                    TablaDatosParcialInserta()
+                    TablaDatosParcial_Inserta()
                 Else
                     ' There are no selected entities
                     ' Put your command code here

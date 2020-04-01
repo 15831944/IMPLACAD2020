@@ -230,9 +230,11 @@
     <Compile Include="frmZonas.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="modImplacad.vb" />
+    <Compile Include="MODULOS\modCapas.vb" />
+    <Compile Include="MODULOS\modImplacad.vb" />
     <Compile Include="MODULOS\modBloques.vb" />
     <Compile Include="MODULOS\modPolilineas.vb" />
+    <Compile Include="MODULOS\modTablas.vb" />
     <Compile Include="modVar.vb" />
     <Compile Include="modWeb.vb" />
     <Compile Include="modZIP.vb" />
@@ -376,6 +378,9 @@
   <ItemGroup>
     <Content Include="INSTALADOR_Inno\IMPLACAD_InstaladorInno_x64.iss" />
     <Content Include="INSTALADOR_Inno\IMPLACAD_InstaladorInno_x64_CONLIBRERIAS.iss" />
+    <None Include="RECURSOS\BOTONES PNG\PNG\TABLA-DATOS16.png" />
+    <None Include="RECURSOS\BOTONES PNG\PNG\TABLA-DATOS32.png" />
+    <None Include="RECURSOS\BOTONES PNG\PNG\IMPRESORA32.png" />
     <None Include="Resources\Search_256x256.png" />
     <Resource Include="IMPLACAD.ico" />
     <Content Include="IMPLACADHelp.htm" />

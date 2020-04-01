@@ -19,6 +19,7 @@ Public Class frmZonas
     End Sub
 
     Private Sub frmZonas_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
+        CapaCeroActiva()
         FrmZ.Dispose()
         FrmZ = Nothing
     End Sub
@@ -141,4 +142,26 @@ Public Class frmZonas
         End Using
     End Sub
 
+    Private Sub BtnTablaSeleccion_Click(sender As Object, e As EventArgs) Handles BtnTablaSeleccion.Click
+        Try
+            Me.Visible = False
+            AutoCAD_PonFoco()
+        Catch ex As Exception
+            Debug.Print(ex.ToString)
+        Finally
+            Me.Visible = True
+        End Try
+
+    End Sub
+
+    Private Sub BtnTablaTodas_Click(sender As Object, e As EventArgs) Handles BtnTablaTodas.Click
+        Try
+            Me.Visible = False
+            AutoCAD_PonFoco()
+        Catch ex As Exception
+            Debug.Print(ex.ToString)
+        Finally
+            Me.Visible = True
+        End Try
+    End Sub
 End Class

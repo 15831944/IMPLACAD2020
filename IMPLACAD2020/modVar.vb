@@ -26,6 +26,8 @@ Module modVar
     Public TablaDatos As Autodesk.AutoCAD.Interop.Common.AcadTable = Nothing
     Public TablaDatosParcial As Autodesk.AutoCAD.Interop.Common.AcadTable = Nothing
     Public TablaEscaleras As Autodesk.AutoCAD.Interop.Common.AcadTable = Nothing
+    Public TablaZonas As Autodesk.AutoCAD.Interop.Common.AcadTable = Nothing
+    Public TablaZona As Autodesk.AutoCAD.Interop.Common.AcadTable = Nothing
     Public textoEstilo As Autodesk.AutoCAD.Interop.Common.AcadTextStyle = Nothing
 
     ''
@@ -74,8 +76,6 @@ Module modVar
     Public sep As String = IO.Path.DirectorySeparatorChar
     Public nSel As String = "Temporal"          ' Nombre fijo de el SelectionSet.
     Public PreEtiquetas As String() = {"AC", "AD", "EV", "EX", "OB", "PR", "SIA"}
-
-    '
     ' CAMINOS
     Public appPath As String = System.Reflection.Assembly.GetExecutingAssembly.Location
 
