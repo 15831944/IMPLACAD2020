@@ -2,9 +2,11 @@
 Imports ClosedXML.Excel
 
 Public Class Etiqueta
+
     'Public IMPLACAD_DATA As String = "C:\ProgramData\IMPLACAD\"
     'REFERENCIA	TIPO	TIPO1	TIPO2	TIPO3	LARGO	ANCHO	STOCK	DESCRIPCION
     Public Property REFERENCIA As String = ""
+
     Public Property TIPO As String = ""
     Public Property TIPO1 As String = ""
     Public Property TIPO2 As String = ""
@@ -20,6 +22,7 @@ Public Class Etiqueta
 
     Public Sub New()
     End Sub
+
     Public Sub New(fila As IXLRow)
         Dim nFila As Integer = fila.RowNumber
         Me.STOCK = True
@@ -46,6 +49,7 @@ Public Class Etiqueta
             PonFullPath_DWGPNG()
         End If
     End Sub
+
     Public Sub New(ref As String, t As String, t1 As String, t2 As String, t3 As String, l As String, a As String, s As String, d As String)
         'REFERENCIA	TIPO	TIPO1	TIPO2	TIPO3	LARGO	ANCHO	STOCK	DESCRIPCION	PNG	DWG
         Me.REFERENCIA = ref
@@ -60,6 +64,7 @@ Public Class Etiqueta
         Me.DESCRIPCION = d
         PonFullPath_DWGPNG()
     End Sub
+
     '
     Private Sub PonFullPath_DWGPNG()
         DWG = IMPLACAD_DATA & IIf(IMPLACAD_DATA.EndsWith("\") = False, sep, "") & TIPO
@@ -84,4 +89,5 @@ Public Class Etiqueta
             End If
         End If
     End Sub
+
 End Class

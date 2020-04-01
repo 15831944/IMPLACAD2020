@@ -18,7 +18,7 @@
 		Name="2aCAD Graitec Group"
 		Phone="976 45 81 45"
 		Url="http://www.2acad.es/"
-		Email="comercial@2acad.com"/>
+		Email="comercial@2acad.com" />
 	<RuntimeRequirements
 		SeriesMin="R23.0"
 		SeriesMax="R23.1"
@@ -38,7 +38,7 @@
 				OS="Win32|Win64"
 				Platform="LDT|AIP|AIPRS|AIPSIM|Civil|AOEM|AIS|ECSCAD|ACADM|ACADE|ADT|AutoCAD*|AutoCAD"
 				SeriesMin="R23.0"
-				SeriesMax="R23.1"/>
+				SeriesMax="R23.1" />
 			<Commands GroupName="IMPLACAD">
 				<Command Local="INSERTAREDITAR" Global="ETIQUETAS" Description="Insertar o Editar etiquetas" />
 			</Commands>

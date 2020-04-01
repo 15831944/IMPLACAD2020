@@ -1,10 +1,7 @@
-﻿Imports System
-Imports System.Net
-Imports System.IO
-Imports System.IO.Compression
-Imports System.IO.Compression.ZipFile
+﻿Imports System.Net
 
 Module modWeb
+
     ''
     Public Sub DescargaFicheroWEB(origenURL As String, destinoHD As String, Optional quePb As System.Windows.Forms.ProgressBar = Nothing)
         ' Put your command code here
@@ -12,7 +9,7 @@ Module modWeb
         'Exit Sub
         'End If
         ''
-        '' 
+        ''
         Dim webRequest As HttpWebRequest = Net.WebRequest.Create(origenURL)
         webRequest.Method = "GET"
         webRequest.ContentType = "application/x-www-form-urlencoded"
@@ -22,7 +19,6 @@ Module modWeb
         Dim remoteStream As Stream
         Dim localStream As Stream
         Dim response As WebResponse
-
 
         response = webRequest.GetResponse()
         If Not response Is Nothing Then
@@ -35,9 +31,8 @@ Module modWeb
 
             'Declare buffer as byte array
             Dim myBuffer As Byte()
-            'Byte array initialization 
+            'Byte array initialization
             ReDim myBuffer(1024)
-
 
             Dim bytesRead As Integer
             bytesRead = remoteStream.Read(myBuffer, 0, 1024)
@@ -59,6 +54,7 @@ Module modWeb
             localStream.Close()
         End If
     End Sub
+
     ''
     Public Function DameTamañoFicheroWEB(origenURL As String) As Long
         Dim resultado As Long = 0
@@ -84,6 +80,7 @@ Module modWeb
         Return resultado
         ''
     End Function
+
     ''
     Public Function DameFechaFicheroWEB(origenURL As String, Optional verdatos As Boolean = False) As Date
         Dim resultado As Date = New System.DateTime(0)
@@ -135,6 +132,7 @@ Module modWeb
         Return resultado
         ''
     End Function
+
     ''
     Public Function DameDatosFicheroWEB(origenURL As String) As String
         Dim resultado As String = ""
@@ -167,5 +165,6 @@ Module modWeb
         Return resultado
         ''
     End Function
+
     ''
 End Module

@@ -1,27 +1,9 @@
-﻿Imports System
-Imports System.Text
-Imports System.Linq
-Imports System.Xml
-Imports System.Reflection
-Imports System.ComponentModel
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Windows
-Imports System.Windows.Media.Imaging
-Imports System.Windows.Forms
-Imports System.IO
+﻿Imports System.Text
 
 Imports Autodesk.AutoCAD.ApplicationServices
 Imports Autodesk.AutoCAD.DatabaseServices
-Imports Autodesk.AutoCAD.Runtime
-Imports Autodesk.AutoCAD.EditorInput
 Imports Autodesk.AutoCAD.Interop
-Imports Autodesk.AutoCAD.Interop.Common
-Imports Autodesk.AutoCAD.Geometry
 Imports AXApp = Autodesk.AutoCAD.ApplicationServices.Application
-Imports AXDoc = Autodesk.AutoCAD.ApplicationServices.Document
-Imports AXWin = Autodesk.AutoCAD.Windows
-
 
 '
 ''' <summary>
@@ -34,17 +16,23 @@ Partial Public Class Eventos
     '
     ' ***** Los tipos de objetos que vamos a controlar con eventos
     Public Shared lTypesAXObj As String() = {"BlockReference", "Circle", "MLeader"}
+
     Public Shared lTypesCOMObj As String() = {"AcDbCircle", "AcDbBlockReference", "AcadMLeader"}
     Public Shared lIds As List(Of ObjectId)     ' Lista de objetos modificados
+
     '
     ' ***** Variables
     Public Shared ultimoObjectId As ObjectId = Nothing
+
     Public Shared ultimoAXDoc As String = ""
     Public Shared FicheroLog As String = ""
+
     ' ***** FLAG
     Public Const coneventos As Boolean = True
+
     Public Const logeventos As Boolean = False
     Public Shared SYSMON As Object = 0
+
     '
     Public Shared Sub Eventos_Inicializa()
         FicheroLog = System.IO.Path.Combine(System.IO.Path.GetTempPath, "logeventos.csv")
@@ -67,6 +55,7 @@ Partial Public Class Eventos
         'Subscribe_COMApp()
         'Subscribe_AXDocM()
     End Sub
+
     Public Shared Sub Eventos_Vacia()
         Try
             lIds = Nothing
@@ -87,6 +76,7 @@ Partial Public Class Eventos
         File.AppendAllText(FicheroLog, queTexto, Encoding.UTF8)
         'PonLogEvAsync(queTexto)  ' Falla al dejar abierto el fichero
     End Sub
+
     'Public Shared Async Sub PonLogEvAsync(quetexto As String)
     '    Exit Sub  ' Anulado hasta resolver problema con cerrar fichero.
     '    Dim uniencoding As UnicodeEncoding = New UnicodeEncoding()
@@ -111,6 +101,7 @@ Partial Public Class Eventos
         '    End If
         'Next
     End Sub
+
     '
     Public Shared Function AXEventM() As Autodesk.AutoCAD.Internal.Reactors.ApplicationEventManager
         Return Autodesk.AutoCAD.Internal.Reactors.ApplicationEventManager.Instance
@@ -123,12 +114,15 @@ Partial Public Class Eventos
     Public Shared Function AXDoc() As Autodesk.AutoCAD.ApplicationServices.Document
         Return AXDocM.MdiActiveDocument
     End Function
+
     Public Shared Function AXDb() As Autodesk.AutoCAD.DatabaseServices.Database
         Return AXDoc.Database
     End Function
+
     Public Shared Function AXEditor() As Autodesk.AutoCAD.EditorInput.Editor
         Return AXDoc.Editor
     End Function
+
     Public Shared Function COMApp() As Autodesk.AutoCAD.Interop.AcadApplication  ' Object ' Autodesk.AutoCAD.Interop.AcadApplication
         ' 22 (2018), 23(2019), 23.1(2020), 24(2021)
         Dim resultado As Autodesk.AutoCAD.Interop.AcadApplication = Nothing
@@ -168,13 +162,16 @@ Partial Public Class Eventos
         End If
         Return resultado
     End Function
+
     Public Shared Function COMDoc() As Autodesk.AutoCAD.Interop.AcadDocument
         'Return COMApp.ActiveDocument
         Return AXDocM.MdiActiveDocument.GetAcadDocument
     End Function
+
     Public Shared Function COMDb() As Autodesk.AutoCAD.Interop.Common.AcadDatabase
         Return COMDoc.Database
     End Function
+
     '
     Public Shared Sub AcadPopupMenuItem_PonerQuitar(ByRef ShortcutMenu As AcadPopupMenu, comando As String, queLabel As String, poner As Boolean)
         'AXDoc.Editor.WriteMessage("AcadPopupMenuItem_PonerQuitar")
@@ -202,6 +199,7 @@ Partial Public Class Eventos
 
         End Try
     End Sub
+
     Public Shared Sub SYSMONVAR(Optional guardar As Boolean = False)
         If guardar Then
             SYSMON = AXApp.GetSystemVariable("SYSMON")
@@ -210,6 +208,7 @@ Partial Public Class Eventos
             AXApp.SetSystemVariable("SYSMON", SYSMON)
         End If
     End Sub
+
     Public Shared Sub SYSMONVARCOM(Optional guardar As Boolean = False)
         If guardar Then
             SYSMON = Convert.ToInt32(Eventos.COMDoc.GetVariable("SYSMON"))
@@ -218,4 +217,5 @@ Partial Public Class Eventos
             Eventos.COMDoc.SetVariable("SYSMON", SYSMON)
         End If
     End Sub
+
 End Class

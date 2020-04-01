@@ -1,28 +1,7 @@
-﻿Imports System
-Imports System.Text
-Imports System.Linq
-Imports System.Xml
-Imports System.Reflection
-Imports System.ComponentModel
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Windows
-Imports System.Windows.Media.Imaging
-Imports System.Windows.Forms
-Imports System.IO
-
-Imports Autodesk.AutoCAD.ApplicationServices
-Imports Autodesk.AutoCAD.DatabaseServices
-Imports Autodesk.AutoCAD.Runtime
-Imports Autodesk.AutoCAD.EditorInput
-Imports Autodesk.AutoCAD.Interop
-Imports Autodesk.AutoCAD.Interop.Common
-Imports Autodesk.AutoCAD.Geometry
-Imports AXApp = Autodesk.AutoCAD.ApplicationServices.Application
-Imports AXDoc = Autodesk.AutoCAD.ApplicationServices.Document
-Imports AXWin = Autodesk.AutoCAD.Windows
+﻿Imports Autodesk.AutoCAD.ApplicationServices
 
 Partial Public Class Eventos
+
     Public Shared Sub Subscribe_AXApp()
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.BeginCloseAll, AddressOf AXApp_BeginCloseAll
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.BeginCustomizationMode, AddressOf AXApp_BeginCustomizationMode
@@ -41,6 +20,7 @@ Partial Public Class Eventos
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.SystemVariableChanged, AddressOf AXApp_SystemVariableChanged
         AddHandler Autodesk.AutoCAD.ApplicationServices.Application.SystemVariableChanging, AddressOf AXApp_SystemVariableChanging
     End Sub
+
     Public Shared Sub Unsubscribe_AXApp()
         Try
             'RemoveHandler Autodesk.AutoCAD.ApplicationServices.Application.BeginCloseAll, AddressOf AXApp_BeginCloseAll
@@ -59,10 +39,11 @@ Partial Public Class Eventos
             'RemoveHandler Autodesk.AutoCAD.ApplicationServices.Application.QuitWillStart, AddressOf AXApp_QuitWillStart
             'RemoveHandler Autodesk.AutoCAD.ApplicationServices.Application.SystemVariableChanged, AddressOf AXApp_SystemVariableChanged
             'RemoveHandler Autodesk.AutoCAD.ApplicationServices.Application.SystemVariableChanging, AddressOf AXApp_SystemVariableChanging
-        Catch ex As system.Exception
+        Catch ex As System.Exception
             Debug.Print(ex.ToString)
         End Try
     End Sub
+
     Public Shared Sub AXApp_BeginCloseAll(sender As Object, e As BeginCloseAllEventArgs) ' As BeginCloseAllEventArgs)
         'AXDoc.Editor.WriteMessage("AXApp_BeginCloseAll")
         If logeventos Then PonLogEv("AXApp_BeginCloseAll")
@@ -150,22 +131,23 @@ Partial Public Class Eventos
         'AXDoc.Editor.WriteMessage("AXApp_SystemVariableChanging")
         If logeventos Then PonLogEv("AXApp_SystemVariableChanging")
     End Sub
+
 End Class
+
 '
 'BeginCloseAll                      Se activa justo antes de cerrar todos los documentos.
 'BeginCustomizationMode:            Se activa justo antes de que AutoCAD entre en modo de personalización.
-'BeginDoubleClick:                  Se activa cuando se hace doble clic en el botón del mouse. 
+'BeginDoubleClick:                  Se activa cuando se hace doble clic en el botón del mouse.
 'BeginQuit:                         Se activa justo antes de que finalice una sesión de AutoCAD.
 'DisplayingCustomizeDialog:         Se activa justo antes de que se muestre el cuadro de diálogo Personalizar.
-'DisplayingDraftingSettingsDialog:  Se activa justo antes de que se muestre el cuadro de diálogo Configuración de dibujo. 
-'DisplayingOptionDialog:            Se activa justo antes de que se muestre el cuadro de diálogo Opciones. 
-'EndCustomizationMode:              Se activa cuando AutoCAD sale del modo de personalización. 
+'DisplayingDraftingSettingsDialog:  Se activa justo antes de que se muestre el cuadro de diálogo Configuración de dibujo.
+'DisplayingOptionDialog:            Se activa justo antes de que se muestre el cuadro de diálogo Opciones.
+'EndCustomizationMode:              Se activa cuando AutoCAD sale del modo de personalización.
 'EnterModal:                        Se activa justo antes de que se muestre un cuadro de diálogo modal.
-'Idle:                              Se activa cuando el texto de AutoCAD. 
-'LeaveModal:                        Se activa cuando se cierra un cuadro de diálogo modal. 
-'PreTranslateMessage:               Se activa justo antes de que AutoCAD traduzca un mensaje. 
+'Idle:                              Se activa cuando el texto de AutoCAD.
+'LeaveModal:                        Se activa cuando se cierra un cuadro de diálogo modal.
+'PreTranslateMessage:               Se activa justo antes de que AutoCAD traduzca un mensaje.
 'QuitAborted:                       Se activa cuando se cancela un intento de apagar AutoCAD.
-'QuitWillStart:                     Se activa después del evento BeginQuit y antes de que comience el apagado. 
-'SystemVariableChanged:             Se activa cuando se realiza un intento de cambiar una variable del sistema. 
-'SystemVariableChanging:            Se activa justo antes de que se intente cambiar una variable del sistema. 
-
+'QuitWillStart:                     Se activa después del evento BeginQuit y antes de que comience el apagado.
+'SystemVariableChanged:             Se activa cuando se realiza un intento de cambiar una variable del sistema.
+'SystemVariableChanging:            Se activa justo antes de que se intente cambiar una variable del sistema.

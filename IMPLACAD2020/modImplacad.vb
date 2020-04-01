@@ -1,18 +1,32 @@
-﻿Imports System
-Imports Autodesk.AutoCAD.EditorInput
-Imports Autodesk.AutoCAD.Runtime
+﻿Imports System.Linq
 Imports Autodesk.AutoCAD.ApplicationServices
+Imports Autodesk.AutoCAD.DatabaseServices
+Imports Autodesk.AutoCAD.EditorInput
 Imports Autodesk.AutoCAD.Interop
 Imports Autodesk.AutoCAD.Interop.Common
-Imports Autodesk.AutoCAD.DatabaseServices
-Imports Autodesk.AutoCAD.Ribbon
-Imports System.Linq
-Imports System.Collections.Generic
-
 
 Module modImplacad
+
     ''
     Public WithEvents oTimer As System.Timers.Timer
+
+    Public Sub AutoCAD_PonFoco()
+        ' Foco en AutoCAD
+        Autodesk.AutoCAD.Internal.Utils.SetFocusToDwgView()
+    End Sub
+
+    Public Sub AutoCAD_PonFoco1()
+        ' Foco en AutoCAD
+        Call Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Window.Focus()
+        'Dim doc As AcadDocument = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.GetAcadDocument
+    End Sub
+
+    Public Sub AutoCAD_PonFoco2()
+        ' Foco en AutoCAD
+        Call Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor.WriteMessage(vbLf)
+        'Dim doc As AcadDocument = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.GetAcadDocument
+    End Sub
+
     ''
     '' Configurar Dibujo Actual
     Public Sub ConfiguraDibujo()
@@ -76,6 +90,7 @@ Module modImplacad
             'XrefImagenDame()
         End Using
     End Sub
+
     ''
     Public Function GetAcadPath() As String
         Dim resultado As String = ""
@@ -107,9 +122,10 @@ Module modImplacad
                 End Try
             Next
         End Try
-        '' 
+        ''
         Return resultado
     End Function
+
     ''
     Public Sub PonTRUSTEDPATHS()
         Dim str_TR As String = Autodesk.AutoCAD.ApplicationServices.Application.GetSystemVariable("TRUSTEDPATHS")
@@ -132,7 +148,7 @@ Module modImplacad
                 Old_Path_Ary.Add(Str)
             End If
         Next
-        '' Quitar los que están vacios en 
+        '' Quitar los que están vacios en
         For x As Integer = Old_Path_Ary.Count - 1 To 0 Step -1
             If Old_Path_Ary(x) = "" Then
                 Old_Path_Ary.RemoveAt(x)
@@ -141,6 +157,7 @@ Module modImplacad
         ''
         Autodesk.AutoCAD.ApplicationServices.Application.SetSystemVariable("TRUSTEDPATHS", String.Join(";", Old_Path_Ary.ToArray()))
     End Sub
+
     ''
     Public Function EsParaTrabajar() As Boolean
         Dim queValor As Object = Nothing
@@ -169,6 +186,7 @@ Module modImplacad
         'End Try
         ''
     End Function
+
     ''
     Public Function PropiedadLee(quePro As String) As String
         Dim queValor As String = ""
@@ -181,6 +199,7 @@ Module modImplacad
         ''
         Return queValor
     End Function
+
     ''
     Public Sub PropiedadEscribe(quePro As String, queVal As String)
         Dim valoractual As String = ""
@@ -196,8 +215,11 @@ Module modImplacad
         End Try
         ''
     End Sub
+
     ''
+
 #Region "TABLADATOS"
+
     ''
     '' Insertar tabla para datos de etiquetas o la actualiza si ya existe.
     Public Sub TablaDatosInserta()
@@ -237,8 +259,8 @@ Module modImplacad
             TablaDatos.SetText(0, 0, "IMPLACAD ES UN PRODUCTO IMPLASER")        '' Titulo tabla
             TablaDatos.SetText(1, 0, "** BALIZAMIENTO **")                  '' Cabecera
             TablaDatos.SetText(1, 1, "** METROS **")                '' Cabecera
-            TablaDatos.SetText(2, 0, "SUELO")        '' 
-            TablaDatos.SetText(3, 0, "PARED")        '' 
+            TablaDatos.SetText(2, 0, "SUELO")        ''
+            TablaDatos.SetText(3, 0, "PARED")        ''
             TablaDatos.SetText(4, 0, "TOTAL SEÑALES --->")        '' Titulo tabla
             'TablaDatos.SetText(4, 1, DameTotalBloquesImplacad)        '' Titulo tabla
             TablaDatos.SetText(5, 0, "** REFERENCIA **")        '' Titulo tabla
@@ -266,6 +288,7 @@ Module modImplacad
         TablaDatos = Nothing
         'vermensajes = True
     End Sub
+
     ''
     Public Sub TablaDatosActualiza()
         If colBloquesCantidad IsNot Nothing Then colBloquesCantidad.Clear()
@@ -336,6 +359,7 @@ Module modImplacad
         XData.XNuevo(TablaDatos, "Clase=tabla")
         'TablaDatos = Nothing
     End Sub
+
     ''
     Public Function DameTablaDatos() As AcadTable
         Dim resultado As AcadTable = Nothing
@@ -344,7 +368,7 @@ Module modImplacad
         Dim F2(1) As Object
         Dim vF1 As Object = Nothing
         Dim vF2 As Object = Nothing
-        '' 
+        ''
         '' Filtros para seleccionar la Tabla
         'F1(0) = 100 : F2(0) = "AcDbSymbolTableRecord"
         'F1(1) = 100 : F2(1) = "AcDbLayerTableRecord"
@@ -392,8 +416,11 @@ Module modImplacad
         Return resultado
         Exit Function
     End Function
+
 #End Region
+
     ''
+
 #Region "TABLAPARCIAL"
 
     ''
@@ -431,8 +458,8 @@ Module modImplacad
         TablaDatosParcial.SetText(0, 0, "IMPLACAD ES UN PRODUCTO IMPLASER (TABLA PARCIAL)")        '' Titulo tabla
         TablaDatosParcial.SetText(1, 0, "** BALIZAMIENTO **")                  '' Cabecera
         TablaDatosParcial.SetText(1, 1, "** METROS **")                '' Cabecera
-        TablaDatosParcial.SetText(2, 0, "SUELO")        '' 
-        TablaDatosParcial.SetText(3, 0, "PARED")        '' 
+        TablaDatosParcial.SetText(2, 0, "SUELO")        ''
+        TablaDatosParcial.SetText(3, 0, "PARED")        ''
         TablaDatosParcial.SetText(4, 0, "TOTAL SEÑALES --->")        '' Titulo tabla
         'TablaDatos.SetText(4, 1, DameTotalBloquesImplacad)        '' Titulo tabla
         TablaDatosParcial.SetText(5, 0, "** REFERENCIA **")        '' Titulo tabla
@@ -445,6 +472,7 @@ Module modImplacad
         TablaDatosParcial = Nothing
         'vermensajes = True
     End Sub
+
     ''
     Public Sub TablaDatosParcialActualiza()
         ''
@@ -520,9 +548,13 @@ Module modImplacad
         If arrBloquesIdParcial IsNot Nothing Then arrBloquesIdParcial.Clear()
         arrBloquesIdParcial = Nothing
     End Sub
+
 #End Region
+
     ''
+
 #Region "TABLAESCALERAS"
+
     '' Insertar tabla para ESCALERAS o la actualiza si ya existe.
     Public Sub TablaEscalerasInserta()
         If DameBalizasEscaleras(queTipoBE.Todas).Count = 0 Then
@@ -590,6 +622,7 @@ Module modImplacad
         TablaEscaleras = Nothing
         'vermensajes = True
     End Sub
+
     ''
     ''
     Public Sub TablaEscalerasActualiza()
@@ -626,7 +659,7 @@ Module modImplacad
                 Dim metrostotales As Double = Format(Math.Truncate((CDbl(numeroescalones) * metrosescalon) + 1), "##0.#")
                 ''
                 '(4)
-                TablaEscaleras.SetText(colIni, 0, StrDup(28, "*"))             '' Fila 2.0 = separador 
+                TablaEscaleras.SetText(colIni, 0, StrDup(28, "*"))             '' Fila 2.0 = separador
                 TablaEscaleras.SetText(colIni, 1, StrDup(28, "*"))             '' Fila 2.1 = separador
                 ''
                 colIni += 1 '(5)
@@ -697,6 +730,7 @@ Module modImplacad
         XData.XNuevo(TablaEscaleras, "Clase=tablaescaleras")
         'TablaEscaleras = Nothing
     End Sub
+
     ''
     Public Function DameTablaEscaleras() As AcadTable
         Dim resultado As AcadTable = Nothing
@@ -705,7 +739,7 @@ Module modImplacad
         Dim F2(1) As Object
         Dim vF1 As Object = Nothing
         Dim vF2 As Object = Nothing
-        '' 
+        ''
         '' Filtros para seleccionar la Tabla
         'F1(0) = 100 : F2(0) = "AcDbSymbolTableRecord"
         'F1(1) = 100 : F2(1) = "AcDbLayerTableRecord"
@@ -753,6 +787,7 @@ Module modImplacad
         Return resultado
         Exit Function
     End Function
+
     ''
     Public Function DameBalizasEscaleras(Optional queTipo As queTipoBE = queTipoBE.Todas) As ArrayList
         Dim resultado As New ArrayList
@@ -761,7 +796,7 @@ Module modImplacad
         Dim F2(1) As Object
         Dim vF1 As Object = Nothing
         Dim vF2 As Object = Nothing
-        '' 
+        ''
         '' Filtros para seleccionar la Tabla
         'F1(0) = 100 : F2(0) = "AcDbSymbolTableRecord"
         'F1(0) = 0 : F2(0) = "Table"
@@ -818,9 +853,13 @@ Module modImplacad
         Return resultado
         Exit Function
     End Function
+
 #End Region
+
     ''
+
 #Region "UTILIDADES"
+
     ''
     '' Permite escalar el dibujo para ponerlo en metros.
     '' Pide 2 puntos para calcular medida y nos pide cuando debe medir esto en metros.
@@ -867,9 +906,13 @@ Module modImplacad
         ''
         Return resultado
     End Function
+
 #End Region
+
     ''
+
 #Region "DAMETOTALES"
+
     '
     ' Nos dará todas las Polilineas en capa "Zonas"
     Public Function DamePolilineasZonasImplacad(Optional capa As String = "Zonas") As List(Of AcadLWPolyline)
@@ -937,6 +980,7 @@ Module modImplacad
         oSelTemp = Nothing
         Return resultado
     End Function
+
     Public Function DameTodoImplacad() As ArrayList
         Dim arrEnt As ArrayList = Nothing
         'Dim cSeleccion As AcadSelectionSets
@@ -1005,6 +1049,7 @@ Module modImplacad
         Return arrEnt
         ''
     End Function
+
     ''
     Public Sub TablaDatosParcialRellenaColecciones(queSel As AcadSelectionSet)
         '' Rellenar los 3 arrays con: Balizas Pared, Balizas Suelo, BloquesImplacad.
@@ -1040,6 +1085,7 @@ Module modImplacad
             Next
         End If
     End Sub
+
     ''
     Public Function DameTotalBloquesImplacad(Optional queArr As ArrayList = Nothing) As Integer
         Dim resultado As Integer = 0
@@ -1220,6 +1266,7 @@ Module modImplacad
         Return resultado
         Exit Function
     End Function
+
     ''
     'Public Sub SumaConjuntos(nomBlo As String, ByRef colBl As SortedList, ByRef cont As Integer)
     '    ''
@@ -1246,7 +1293,7 @@ Module modImplacad
         Dim vF1 As Object = Nothing
         Dim vF2 As Object = Nothing
         Dim capa As String = ""
-        ''  
+        ''
         '' Filtro de nombre entidad
         F1(0) = 0 : F2(0) = "LINE"
         'F1(0) = 100 : F2(0) = "AcDbLine"
@@ -1310,7 +1357,9 @@ Module modImplacad
         End If
         Exit Function
     End Function
+
 #End Region
+
     ''
     Public Sub SeleccionaBloquesImplacad(Optional ByVal nombre As Object = "", Optional ByVal capa As Object = "", Optional ByVal DatosX As Boolean = True, Optional ByVal SelTemp As Boolean = False)
         'Dim cSeleccion As AcadSelectionSets
@@ -1549,6 +1598,7 @@ Module modImplacad
             ''
         End Try
     End Sub
+
     ''
     Public Sub CambiaBloquePorImagen(ByRef oDoc As AcadDocument)
         ''
@@ -1721,6 +1771,7 @@ Module modImplacad
         oApp.ActiveDocument.Regen(AcRegenType.acAllViewports)
         oDoc.Save()
     End Sub
+
     ''
     Public Sub CambiaBloqueViejoPorNuevo(ByRef oDoc As AcadDocument)
         ''
@@ -1839,6 +1890,7 @@ Module modImplacad
         '
         'oApp.ActiveDocument.Regen(AcRegenType.acAllViewports)
     End Sub
+
     Public Sub CapaCreaActivaBalizamientoSuelo()
         ''
         '' Crear una capa y poner sus características.
@@ -1872,6 +1924,7 @@ Module modImplacad
         ''
         oApp.ActiveDocument.Regen(AcRegenType.acAllViewports)
     End Sub
+
     ''
     Public Sub CapaCreaActivaRutaEvacuacion(queTipo As TipoEvacuacion)
         ''
@@ -1939,14 +1992,15 @@ Module modImplacad
         'oApp.Preferences.User.ADCInsertUnitsDefaultTarget = AcInsertUnits.acInsertUnitsMeters
         oApp.ActiveDocument.Regen(AcRegenType.acAllViewports)
     End Sub
+
     ''
     ''
     Public Sub CapaCreaActivaTablaDatos()
         '(SETQ capacuadro "CUADRO")
-        '(IF   (NULL (TBLOBJNAME "LAYER" capacuadro)) 
-        '(ENTMAKE (LIST '(0 . "LAYER")'(100 . "AcDbSymbolTableRecord")'(100 . "AcDbLayerTableRecord") 
-        '                     (CONS 2 capacuadro)'(70 . 0)(CONS 62 7) (CONS 370 25))) 
-        ' ) 
+        '(IF   (NULL (TBLOBJNAME "LAYER" capacuadro))
+        '(ENTMAKE (LIST '(0 . "LAYER")'(100 . "AcDbSymbolTableRecord")'(100 . "AcDbLayerTableRecord")
+        '                     (CONS 2 capacuadro)'(70 . 0)(CONS 62 7) (CONS 370 25)))
+        ' )
         '' 70 = reutilizar 0
         '' 62 = Color 7
         '' 370 = ACAD_LWEIGHT.acLnWt25 'grosor 2 mm
@@ -1982,15 +2036,16 @@ Module modImplacad
         ''
         oApp.ActiveDocument.Regen(AcRegenType.acAllViewports)
     End Sub
+
     ''
     ''
     Public Sub CapaCreaActivaBalizamientoPared()
         ' (DEFUN c:BalizarPared ( / )
         '  (SETQ capabalizar1 "BALIZAMIENTO PARED")
-        '   (IF   (NULL (TBLOBJNAME "LAYER" capabalizar1)) 
-        '   (ENTMAKE (LIST '(0 . "LAYER")'(100 . "AcDbSymbolTableRecord")'(100 . "AcDbLayerTableRecord") 
-        '                        (CONS 2 capabalizar1)'(70 . 0)(CONS 62 52) (CONS 370 100))) 
-        '     );If 
+        '   (IF   (NULL (TBLOBJNAME "LAYER" capabalizar1))
+        '   (ENTMAKE (LIST '(0 . "LAYER")'(100 . "AcDbSymbolTableRecord")'(100 . "AcDbLayerTableRecord")
+        '                        (CONS 2 capabalizar1)'(70 . 0)(CONS 62 52) (CONS 370 100)))
+        '     );If
         '(SETVAR "clayer" capabalizar1)
         '  (COMMAND "_line")
         '  (PRINC)
@@ -2030,18 +2085,19 @@ Module modImplacad
         ''oApp.ActiveDocument.SendCommand("_line ")
         oApp.ActiveDocument.Regen(AcRegenType.acAllViewports)
     End Sub
+
     ''
     ''
     Public Sub CapaCreaActivaBalizamientoEscalera()
         ' (SETQ capabalizarescalera "BALIZAMIENTO ESCALERA")
-        '   (IF   (NULL (TBLOBJNAME "LAYER" capabalizarescalera)) 
-        '   (ENTMAKE (LIST '(0 . "LAYER")'(100 . "AcDbSymbolTableRecord")'(100 . "AcDbLayerTableRecord") 
-        '                        (CONS 2 capabalizarescalera)'(70 . 0)(CONS 62 68) (CONS 370 100))) 
+        '   (IF   (NULL (TBLOBJNAME "LAYER" capabalizarescalera))
+        '   (ENTMAKE (LIST '(0 . "LAYER")'(100 . "AcDbSymbolTableRecord")'(100 . "AcDbLayerTableRecord")
+        '                        (CONS 2 capabalizarescalera)'(70 . 0)(CONS 62 68) (CONS 370 100)))
         '     );If
         '(SETQ capacuadro "CUADRO")
-        '   (IF   (NULL (TBLOBJNAME "LAYER" capacuadro)) 
-        '   (ENTMAKE (LIST '(0 . "LAYER")'(100 . "AcDbSymbolTableRecord")'(100 . "AcDbLayerTableRecord") 
-        '                        (CONS 2 capacuadro)'(70 . 0)(CONS 62 7) (CONS 370 25))) 
+        '   (IF   (NULL (TBLOBJNAME "LAYER" capacuadro))
+        '   (ENTMAKE (LIST '(0 . "LAYER")'(100 . "AcDbSymbolTableRecord")'(100 . "AcDbLayerTableRecord")
+        '                        (CONS 2 capacuadro)'(70 . 0)(CONS 62 7) (CONS 370 25)))
         '    )
         '' 70 = reutilizar 0
         '' 62 = Color 68
@@ -2096,6 +2152,7 @@ Module modImplacad
         oApp.ActiveDocument.ActiveLayer = oApp.ActiveDocument.Layers.Item("0")
         ''
     End Sub
+
     ''
     Public Function GetPuntoDame_NET(mensaje As String) As Object
         Dim resultado As Object = Nothing
@@ -2128,6 +2185,7 @@ Module modImplacad
         acCurDb = Nothing
         Return resultado
     End Function
+
     ''
     Public Function GetOpcionDame_NET() As String
         Dim resultado As String = ""
@@ -2150,6 +2208,7 @@ Module modImplacad
         'MsgBox("You entered " & resultado, , "GetKeyword Example")
         Return resultado
     End Function
+
     ''
     Public Function GetOpcionPrimariaSecundariaDame() As String
         Dim resultado As String = ""
@@ -2173,6 +2232,7 @@ Module modImplacad
         If resultado = "" Then resultado = "Primaria"
         Return resultado
     End Function
+
     ''
     Public Function DameOpcionTexto(mensaje As String, queopciones As String()) As String
         Dim resultado As String = ""
@@ -2201,6 +2261,7 @@ Module modImplacad
         ''
         Return resultado
     End Function
+
     ''
     ''
     Public Function GetDINDame_NET() As String
@@ -2223,6 +2284,7 @@ Module modImplacad
         'MsgBox("You entered " & resultado, , "GetKeyword Example")
         Return resultado
     End Function
+
     ''
     '' Le daremos array de ancho, largo (A4, A3, A2, A1 o A0), el largo actual (X) y el ancho actual (Y)
     '' Nos devolverá qué escala tenemos que aplicar para encajarlo en el papel indicado.
@@ -2258,6 +2320,7 @@ Module modImplacad
         ''
         Return resultado
     End Function
+
     ''
     Public Sub CierraDibujo(queFullname As String)
         If oApp Is Nothing Then _
@@ -2283,6 +2346,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
         Next
         oApp.Documents.Close()
     End Sub
+
     ''
     Public Function XrefComprueba() As Hashtable
         Dim resultado As Hashtable = New Hashtable
@@ -2332,6 +2396,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
         If mensaje <> "" Then MsgBox(mensaje)
         Return resultado
     End Function
+
     ''
     Public Function UltimoObjeto() As AcadEntity
         If oApp Is Nothing Then _
@@ -2339,6 +2404,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
         ''
         Return oApp.ActiveDocument.ModelSpace.Item(oApp.ActiveDocument.ModelSpace.Count - 1)
     End Function
+
     ''
     Public Function DameBloque(quenombre As String) As AcadBlockReference
         Dim oBl As AcadBlockReference = Nothing
@@ -2410,6 +2476,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
         End Using
         If ConMensaje Then MsgBox(mensaje)
     End Sub
+
     Public Sub XRef_IMGListar(Optional ConMensaje As Boolean = False)
         Dim doc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
         Dim db As Database = doc.Database
@@ -2463,6 +2530,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
         End Using
         If ConMensaje Then MsgBox(mensaje)
     End Sub
+
     'Public Sub XRef_Listar()
     '    Dim doc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
     '    Dim db As Database = doc.Database
@@ -2537,6 +2605,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             Selecciona_AcadObject(obj)
         End If
     End Sub
+
     Public Sub SeleccionaPorHandle(ThisDrawing As AcadDocument, objEnt As AcadEntity, Optional comando As String = "")
         Dim queHandle As String = objEnt.Handle
         Dim lisp As String = "(handent " & Chr(34) & queHandle & Chr(34) & ") "
@@ -2581,6 +2650,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
         End Try
         oApp.ActiveDocument.SetVariable("pickadd", 2)   ' Quitar la seleccion que hubiera.
     End Sub
+
     Public Sub Selecciona_AcadID(IdEnt As Long)
         oApp.ActiveDocument.SetVariable("pickadd", 0)   ' Quitar la seleccion que hubiera.
         Try
@@ -2593,6 +2663,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
         End Try
         oApp.ActiveDocument.SetVariable("pickadd", 2)   '' La seleccion actual se suma a la que hubiera.
     End Sub
+
     Public Sub Selecciona_AcadID(IdEnt As Long())
         oApp.ActiveDocument.SetVariable("pickadd", 0)   ' Quitar la seleccion que hubiera.
         Dim colIds As New List(Of ObjectId)
@@ -2607,6 +2678,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
         End Try
         oApp.ActiveDocument.SetVariable("pickadd", 2)   '' La seleccion actual se suma a la que hubiera.
     End Sub
+
     Public Sub Selecciona_AcadID(IdEnt As ObjectId())
         oApp.ActiveDocument.SetVariable("pickadd", 0)   ' Quitar la seleccion que hubiera.
         Try
@@ -2616,7 +2688,6 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
         End Try
         oApp.ActiveDocument.SetVariable("pickadd", 2)   '' La seleccion actual se suma a la que hubiera.
     End Sub
-
 
     ''' <summary>
     ''' Seleccionamos objetos indicando su tipo, capa, Xdata y
@@ -2743,6 +2814,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
         '
         Return resultado
     End Function
+
     Public Function SeleccionaTodosObjetosXData(nombreXData As String, valueXData As String, Optional igual As Boolean = False) As List(Of Long)
         Dim resultado As New List(Of Long)
         'Dim cSeleccion As AcadSelectionSets
@@ -2833,6 +2905,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
         Return resultado
         Exit Function
     End Function
+
     '
     ''' <summary>
     ''' Devuelve arrayList con todas las polilineas que cumplan el criterio
@@ -2885,6 +2958,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
         ''
         Return resultado
     End Function
+
     ''
     '' Seleccionamos una polilinea cerrada o no y la usamos
     '' para hacer una seleccion PV (Poligono Ventana) y obtener todos
@@ -3094,29 +3168,44 @@ repetir:
         ''
         Return resultado
     End Function
+
+    Public Sub VaciaMemoria()
+        Try
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
+        Catch ex As System.Exception
+            '
+        End Try
+    End Sub
+
 End Module
 
 Public Enum queCapa As Integer
     BALIZAMIENTOSUELO = 0
     BALIZAMIENTOPARED = 1
 End Enum
+
 ''
 Public Enum queTipoBE As Integer
     Todas = 0
     Ascendente = 1
     Descendente = 2
 End Enum
+
 ''
 Public Enum CapaEstado As Integer
     Desactivar = 0
     Activar = 1
     Inverso = 2
 End Enum
+
 ''
 Public Enum TipoEvacuacion As Integer
     Primaria = 0
     Accesibilidad = 1
 End Enum
+
 ''
 Public Enum ActivarBotones As Integer
     NoActivado = 1
@@ -3124,6 +3213,7 @@ Public Enum ActivarBotones As Integer
     SiActivadoConEscala = 3
     Cualquiera = 4
 End Enum
+
 ''
 Public Enum Estado As Integer
     ActiNo = 0

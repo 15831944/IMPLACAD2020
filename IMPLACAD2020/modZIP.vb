@@ -1,6 +1,4 @@
 ﻿' Importar referencia System.IO.Compression y System.IO.Compression.FileSystem
-Imports System.IO
-Imports System.IO.Compression
 Imports System.Windows.Forms
 
 Public Module Module1
@@ -17,6 +15,7 @@ Public Module Module1
     'End Sub
 
 #Region "FICHEROS_GZ"
+
     Public Sub Compress(directorySelected As DirectoryInfo)
         For Each fileToCompress As FileInfo In directorySelected.GetFiles()
             Using originalFileStream As FileStream = fileToCompress.OpenRead()
@@ -36,7 +35,6 @@ Public Module Module1
         Next
     End Sub
 
-
     Private Sub Decompress(ByVal fileToDecompress As FileInfo)
         Using originalFileStream As FileStream = fileToDecompress.OpenRead()
             Dim currentFileName As String = fileToDecompress.FullName
@@ -50,9 +48,11 @@ Public Module Module1
             End Using
         End Using
     End Sub
+
 #End Region
 
 #Region "FICHEROS_ZIP"
+
     'Sub Main()
     '    Dim startPath As String = "c:\example\start"
     '    Dim zipPath As String = "c:\example\result.zip"
@@ -113,6 +113,7 @@ Public Module Module1
         End If
         System.IO.Compression.ZipFile.ExtractToDirectory(queOrigenZIP, queDestinoDIR)
     End Sub
+
     ''
     Public Function FicheroZIP_DameCantidadFicheros(quefi As String, tipo As QueTipo) As Integer
         Dim cantidad As Integer = 0
@@ -136,6 +137,7 @@ Public Module Module1
         ''
         Return cantidad
     End Function
+
     ''
     Public Enum QueTipo As Integer
         FicherosTodos = 0
@@ -143,5 +145,7 @@ Public Module Module1
         FicherosPNG = 2
         Carpetas = 3
     End Enum
+
 #End Region
+
 End Module

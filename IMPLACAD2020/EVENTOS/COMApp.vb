@@ -1,28 +1,8 @@
-﻿Imports System
-Imports System.Text
-Imports System.Linq
-Imports System.Xml
-Imports System.Reflection
-Imports System.ComponentModel
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Windows
-Imports System.Windows.Media.Imaging
-Imports System.Windows.Forms
-Imports System.IO
+﻿Imports Autodesk.AutoCAD.Interop.Common
 
-Imports Autodesk.AutoCAD.ApplicationServices
-Imports Autodesk.AutoCAD.DatabaseServices
-Imports Autodesk.AutoCAD.Runtime
-Imports Autodesk.AutoCAD.EditorInput
-Imports Autodesk.AutoCAD.Interop
-Imports Autodesk.AutoCAD.Interop.Common
-Imports Autodesk.AutoCAD.Geometry
-Imports AXApp = Autodesk.AutoCAD.ApplicationServices.Application
-Imports AXDoc = Autodesk.AutoCAD.ApplicationServices.Document
-Imports AXWin = Autodesk.AutoCAD.Windows
 '
 Partial Public Class Eventos
+
     Public Shared Sub Subscribe_COMApp()
         AddHandler COMApp.AppActivate, AddressOf COMApp_AppActivate
         AddHandler COMApp.AppDeactivate, AddressOf COMApp_AppDeactivate
@@ -74,10 +54,11 @@ Partial Public Class Eventos
             'RemoveHandler COMApp.SysVarChanged, AddressOf COMApp_SysVarChanged
             'RemoveHandler COMApp.WindowChanged, AddressOf COMApp_WindowChanged
             'RemoveHandler COMApp.WindowMovedOrResized, AddressOf COMApp_WindowMovedOrResized
-        Catch ex As system.Exception
+        Catch ex As System.Exception
             Debug.Print(ex.ToString)
         End Try
     End Sub
+
     Public Shared Sub COMApp_AppActivate()
         'AXDoc.Editor.WriteMessage("COMApp_AppActivate")
         If logeventos Then PonLogEv("COMApp_AppActivate")
@@ -193,20 +174,22 @@ Partial Public Class Eventos
         'AXDoc.Editor.WriteMessage("COMApp_WindowMovedOrResized")
         If logeventos Then PonLogEv("COMApp_WindowMovedOrResized")
     End Sub
+
 End Class
+
 '
-'AppActivate:           Se activa justo antes de que se active la ventana principal de la aplicación. 
-'AppDeactivate:         Se activa justo antes de que se desactive la ventana principal de la aplicación. 
-'ARXLoaded:             Se activa cuando se carga una aplicación ObjectARX. 
-'ARXUnloaded:           Se activa cuando una aplicación ObjectARX se ha descargado. 
-'BeginCommand:          Se activa inmediatamente después de que se emite un comando, pero antes de que se complete. 
+'AppActivate:           Se activa justo antes de que se active la ventana principal de la aplicación.
+'AppDeactivate:         Se activa justo antes de que se desactive la ventana principal de la aplicación.
+'ARXLoaded:             Se activa cuando se carga una aplicación ObjectARX.
+'ARXUnloaded:           Se activa cuando una aplicación ObjectARX se ha descargado.
+'BeginCommand:          Se activa inmediatamente después de que se emite un comando, pero antes de que se complete.
 'BeginFileDrop:         Se activa cuando se suelta un archivo en la ventana principal de la aplicación.
 'BeginLISP:             Se activa inmediatamente después de que AutoCAD recibe una solicitud para evaluar una expresión LISP.
-'BeginModal:            Se activa justo antes de que se muestre un cuadro de diálogo modal. 
-'BeginOpen:             Se activa inmediatamente después de que AutoCAD recibe una solicitud para abrir un dibujo existente. 
+'BeginModal:            Se activa justo antes de que se muestre un cuadro de diálogo modal.
+'BeginOpen:             Se activa inmediatamente después de que AutoCAD recibe una solicitud para abrir un dibujo existente.
 'BeginPlot:             Se activa inmediatamente después de que AutoCAD recibe una solicitud para imprimir un dibujo.
-'BeginQuit:             Se activa justo antes de que finalice una sesión de AutoCA. 
-'BeginSave:             Se activa inmediatamente después de que AutoCAD recibe una solicitud para guardar el dibujo. 
+'BeginQuit:             Se activa justo antes de que finalice una sesión de AutoCA.
+'BeginSave:             Se activa inmediatamente después de que AutoCAD recibe una solicitud para guardar el dibujo.
 'EndCommand:            Se activa inmediatamente después de que se completa un comandos.
 'EndLISP:               Se activa al finalizar la evaluación de una expresión LISP.
 'EndModal:              Se activa justo después de que se descarta un cuadro de diálogo modal.
@@ -217,4 +200,4 @@ End Class
 'NewDrawing:            Se activa justo antes de que se cree un nuevo dibujo.
 'SysVarChanged:         Se activa cuando se cambia el valor de una variable del sistema.
 'WindowChanged:         Se activa cuando hay un cambio en la ventana de la aplicación.
-'WindowMovedOrResized:  Se activa justo después de que la ventana de la Aplicación se haya movido o cambiado de tamaño. 
+'WindowMovedOrResized:  Se activa justo después de que la ventana de la Aplicación se haya movido o cambiado de tamaño.

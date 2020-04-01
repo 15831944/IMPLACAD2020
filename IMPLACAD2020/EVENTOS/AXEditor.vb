@@ -1,28 +1,8 @@
-﻿Imports System
-Imports System.Text
-Imports System.Linq
-Imports System.Xml
-Imports System.Reflection
-Imports System.ComponentModel
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Windows
-Imports System.Windows.Media.Imaging
-Imports System.Windows.Forms
-Imports System.IO
+﻿Imports Autodesk.AutoCAD.EditorInput
 
-Imports Autodesk.AutoCAD.ApplicationServices
-Imports Autodesk.AutoCAD.DatabaseServices
-Imports Autodesk.AutoCAD.Runtime
-Imports Autodesk.AutoCAD.EditorInput
-Imports Autodesk.AutoCAD.Interop
-Imports Autodesk.AutoCAD.Interop.Common
-Imports Autodesk.AutoCAD.Geometry
-Imports AXApp = Autodesk.AutoCAD.ApplicationServices.Application
-Imports AXDoc = Autodesk.AutoCAD.ApplicationServices.Document
-Imports AXWin = Autodesk.AutoCAD.Windows
 '
 Partial Public Class Eventos
+
     Public Shared Sub Subscribe_AXEditor()
         AddHandler AXEditor().SelectionRemoved, AddressOf AXEditor_SelectionRemoved_Handler
         AddHandler AXEditor().SelectionAdded, AddressOf AXEditor_SelectionAdded_Handler
@@ -94,7 +74,7 @@ Partial Public Class Eventos
             'RemoveHandler AXEditor().EnteringQuiescentState, AddressOf AXEditor_EnteringQuiescentState_Handler
             'RemoveHandler AXEditor().DraggingEnded, AddressOf AXEditor_DraggingEnded_Handler
             'RemoveHandler AXEditor().Dragging, AddressOf AXEditor_Dragging_Handler
-        Catch ex As system.Exception
+        Catch ex As System.Exception
             Debug.Print(ex.ToString)
         End Try
     End Sub
@@ -108,7 +88,6 @@ Partial Public Class Eventos
         'AXDoc.Editor.WriteMessage("AXEditor_DraggingEnded_Handler")
         If logeventos Then PonLogEv("AXEditor_DraggingEnded_Handler")
     End Sub
-
 
     ' AutoCAD entre en estado inactivo (Esta trabajando) is Quiescent = es inactivo
     Public Shared Sub AXEditor_EnteringQuiescentState_Handler(ByVal sender As Object, ByVal e As EventArgs)
@@ -266,5 +245,5 @@ Partial Public Class Eventos
         'AXDoc.Editor.WriteMessage("AXEditor_SelectionRemoved_Handler")
         If logeventos Then PonLogEv("AXEditor_SelectionRemoved_Handler")
     End Sub
-End Class
 
+End Class

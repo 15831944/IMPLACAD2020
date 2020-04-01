@@ -1,7 +1,4 @@
-﻿Imports System.Linq
-Imports ClosedXML.Excel
-Imports Autodesk.AutoCAD.Interop
-Imports Autodesk.AutoCAD.Interop.Common
+﻿Imports Autodesk.AutoCAD.Interop.Common
 
 Public Class Zona
     Public Property Handle As String = ""
@@ -16,4 +13,5 @@ Public Class Zona
     Public Function oPol() As AcadLWPolyline
         Return CType(oApp.ActiveDocument.HandleToObject(Me.Handle), AcadLWPolyline)
     End Function
+
 End Class

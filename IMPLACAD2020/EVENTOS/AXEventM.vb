@@ -1,28 +1,6 @@
-﻿Imports System
-Imports System.Text
-Imports System.Linq
-Imports System.Xml
-Imports System.Reflection
-Imports System.ComponentModel
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Windows
-Imports System.Windows.Media.Imaging
-Imports System.Windows.Forms
-Imports System.IO
-
-Imports Autodesk.AutoCAD.ApplicationServices
-Imports Autodesk.AutoCAD.DatabaseServices
-Imports Autodesk.AutoCAD.Runtime
-Imports Autodesk.AutoCAD.EditorInput
-Imports Autodesk.AutoCAD.Interop
-Imports Autodesk.AutoCAD.Interop.Common
-Imports Autodesk.AutoCAD.Geometry
-Imports AXApp = Autodesk.AutoCAD.ApplicationServices.Application
-Imports AXDoc = Autodesk.AutoCAD.ApplicationServices.Document
-Imports AXWin = Autodesk.AutoCAD.Windows
-'
+﻿'
 Partial Public Class Eventos
+
     Public Shared Sub Subscribe_AXEventM()
         AddHandler Autodesk.AutoCAD.Internal.Reactors.ApplicationEventManager.Instance.ApplicationDockLayoutChanged, AddressOf AXEventM_ApplicationDockLayoutChanged
         AddHandler Autodesk.AutoCAD.Internal.Reactors.ApplicationEventManager.Instance.ApplicationDocumentFrameChanged, AddressOf AXEventM_ApplicationDocumentFrameChanged
@@ -38,7 +16,7 @@ Partial Public Class Eventos
             'RemoveHandler Autodesk.AutoCAD.Internal.Reactors.ApplicationEventManager.Instance.ApplicationMainWindowMoved, AddressOf AXEventM_ApplicationMainWindowMoved
             'RemoveHandler Autodesk.AutoCAD.Internal.Reactors.ApplicationEventManager.Instance.ApplicationMainWindowSized, AddressOf AXEventM_ApplicationMainWindowSized
             'RemoveHandler Autodesk.AutoCAD.Internal.Reactors.ApplicationEventManager.Instance.ApplicationMainWindowVisibleChanged, AddressOf AXEventM_ApplicationMainWindowVisibleChanged
-        Catch ex As system.Exception
+        Catch ex As System.Exception
             Debug.Print(ex.ToString)
         End Try
     End Sub
@@ -67,4 +45,5 @@ Partial Public Class Eventos
         'AXDoc.Editor.WriteMessage("AXEventM_ApplicationMainWindowVisibleChanged")
         If logeventos Then PonLogEv("AXEventM_ApplicationMainWindowVisibleChanged")
     End Sub
+
 End Class

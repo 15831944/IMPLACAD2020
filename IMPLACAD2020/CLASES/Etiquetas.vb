@@ -10,6 +10,7 @@ Public Class Etiquetas
     Public Property DConjuntos As New Dictionary(Of String, Etiqueta)
     Public Property DSustituciones As New Dictionary(Of String, String)
     Public Property LRows As New List(Of IXLRow)
+
     Public Sub New()
         LRows = modClosedXML.Excel_LeeFilas(appXLSX)
         For Each fila As IXLRow In LRows.AsParallel
@@ -42,6 +43,5 @@ Public Class Etiquetas
             System.Windows.Forms.Application.DoEvents()
         Next
     End Sub
+
 End Class
-
-

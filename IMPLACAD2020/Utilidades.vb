@@ -1,46 +1,57 @@
 Option Compare Text
-Imports Microsoft.Win32
-Imports System.Runtime.InteropServices
-Imports System.Data
-Imports System.Drawing
 
 '' Agregar Referencias NET: "System.Speech" y COM: "Microsoft Speech Object Library"
 Module Utilidades
+
     '' ****************************************
     Public dirApp As String = My.Application.Info.DirectoryPath & "\"
+
     Public dirAppSin As String = My.Application.Info.DirectoryPath
+
     'Public recursos As String = dirApp & "RECURSOS\"
     Public nApp As String = My.Application.Info.AssemblyName
+
     Public nIni As String = IO.Path.Combine(dirApp, nApp & ".ini")
+
     'Public nOpe As String = IO.Path.Combine(dirApp, "Operaciones.ini")
     'Public nAyuda As String = IO.Path.Combine(dirApp, nApp & ".chm")
     Public nLog As String = IO.Path.Combine(dirApp, nApp & "_log.txt")
+
     Public nImp As String = IO.Path.Combine(dirApp, nApp & ".imp")
+
     'Public claveDia As String = IO.Path.Combine(dirApp, "ati.txt")
     Public log As Boolean = False
+
     Public CuantoTiempo As Stopwatch
     Public Const nFijo As String = "2aCAD"
     Public appVersion As String = My.Application.Info.Version.ToString
     Public usuarioActual As String = System.Environment.UserName.ToLower
     Public equipoActual As String = System.Environment.MachineName.ToLower
+
     '' ***** COLECCIONES *****
     Public colFicherosProc As Hashtable = Nothing   ' Coleccion de FullFilename/Procesado (True/False)
+
     '' ****************************************
     Public contar As Integer
+
     Public PermisosFi As System.Security.Permissions.FileIOPermission
     Public Licencia As String = ""
     Public miMaquina As String = ""
     Public miMaquina1 As String = ""
     Public FechaHoy As Date = Nothing
+
     '' Variable principal para saber si el usuario conectado tiene o no soporte CAD y licencia para la aplicaciÛn, sin conexiÛn a internet.
     Public TieneSoporte As Boolean = True   ' Para que no haga falta conectar con BD. False
+
     Public esComercial As Boolean = False
+
     'ALBERTOPORTATIL =  (Complejo="k)rRl!ky|Pz(ydvêyFxE~Óg≥~Ho®vﬁ"    /   Simple="FOGHWWTSTUYDYLQ")
     '31/12/2011 =       (Complejo=":ª7Ä9ı6u;´5È<ô6‰Cß?π"    /   Simple="8444727364"
     'LICENCIA =         (Complejo="v˘o´mzk”x©iÅsΩgÍ"    /   Simple="QLHHSFND")
     'QLHHSFND=          (Complejo=""    /   Simple="FOGHWWTSTUYDYLQ∑8444727364")
     '' Argumentos de la linea de comandos: 2aCAD Bgik8$l. (sÛlo para modo Debug)
     Public Const clave1 As String = "<°gÄMOGßN~"
+
     Public Const superClave As String = "LWmEsÙqlBC*˚vW4É"
     Public superAcceso As Boolean = False
     Public ConfReg As System.Globalization.CultureInfo
@@ -163,7 +174,7 @@ Module Utilidades
     End Enum
 
     ''' <summary>
-    ''' Buscar todos los fichero dentro en directorio (opciÛn subdirectorios y m·scara con extensiÛn) 
+    ''' Buscar todos los fichero dentro en directorio (opciÛn subdirectorios y m·scara con extensiÛn)
     ''' </summary>
     ''' <param name="strD1">Directorio donde se va a buscar</param>
     ''' <param name="queEstructura">Tipo de b˙squeda (Dir indicado solo o TambiÈn SubDir)</param>
@@ -174,7 +185,7 @@ Module Utilidades
         Dim colLista As New Collection
         Dim strD As String = CType(strD1, String)
 
-        For Each foundF As String In My.Computer.FileSystem.GetFiles( _
+        For Each foundF As String In My.Computer.FileSystem.GetFiles(
         strD, queEstructura, extension)
             'If todo = True Then
             'colLista.Add(foundF)
@@ -191,10 +202,9 @@ Module Utilidades
         BuscaFicheros = colLista
     End Function
 
-
     ''' <summary>
     ''' Buscar todos los fichero dentro en directorio (opciÛn subdirectorios y m·scara con extensiÛn)
-    ''' Llena el Hashtable "colListaProc" KEY=fullPath, VALUE=False (No procesado aun) 
+    ''' Llena el Hashtable "colListaProc" KEY=fullPath, VALUE=False (No procesado aun)
     ''' </summary>
     ''' <param name="strD1">Directorio donde se va a buscar</param>
     ''' <param name="queEstructura">Tipo de b˙squeda (Dir indicado solo o TambiÈn SubDir)</param>
@@ -204,7 +214,7 @@ Module Utilidades
         If colFicherosProc Is Nothing Then colFicherosProc = New Hashtable
         Dim strD As String = CType(strD1, String)
 
-        For Each foundF As String In My.Computer.FileSystem.GetFiles( _
+        For Each foundF As String In My.Computer.FileSystem.GetFiles(
         strD, queEstructura, extension)
             'If todo = True Then
             'colLista.Add(foundF)
@@ -299,6 +309,7 @@ Module Utilidades
         Valencia = 4
         Zaragoza = 5
     End Enum
+
     '' Direcciones de 2aCAD Delegaciones (8 lÌneas m·ximo)
     Public Function Direcciones2aCAD(ByVal queDire As D2aCAD) As String
         Dim resultado As String = ""
@@ -341,6 +352,7 @@ Module Utilidades
         End Select
         Return resultado
     End Function
+
     ''
     Public Function PermisosTodo() As String
         Dim resultado As String = ""
@@ -356,6 +368,7 @@ Module Utilidades
         resultado = PermisosFi.ToString
         Return resultado
     End Function
+
     ''
     Public Function PermisosTodoFichero(queFi As String) As String
         Dim resultado As String = ""
@@ -375,6 +388,7 @@ Module Utilidades
         resultado = PermisosFi.ToString
         Return resultado
     End Function
+
     ''
     Public Function PermisosTodoCarpeta(queCar As String, Optional recursivo As Boolean = True) As String
         Dim resultado As String = ""
@@ -406,6 +420,7 @@ Module Utilidades
         resultado = PermisosFi.ToString
         Return resultado
     End Function
+
     ''
     Public Sub BorraTodosFicheros(ByVal queDir As String, ByVal dirTambien As Boolean)
         If IO.Directory.Exists(queDir) = False Then
@@ -427,7 +442,6 @@ Module Utilidades
             Return My.Application.Info.AssemblyName
         End If
     End Function
-
 
     Public Function DameLetrasInicialesSplit(ByVal cadena As String) As String
         Dim resultado As String = ""
@@ -462,7 +476,6 @@ Module Utilidades
         Next
         Return resultado
     End Function
-
 
     Public Function DameNumerosIniciales(ByVal cadena As String) As String
         Dim resultado As String = ""
@@ -543,6 +556,7 @@ Module Utilidades
         ReDim Preserve queMatriz(queMatriz.GetUpperBound(0) + 1)
         queMatriz(queMatriz.GetUpperBound(0)) = queDato
     End Sub
+
     '' Le pasamos una cadena que contiene letras al inicio y n˙meros.
     '' Nos devolver· los n˙meros, rellenos con 0 a la izquierda hasta nTotal car·cteres
     '' Ejemplo: Le pasamos NumeroDameRelleno("V024", "0", 4) y nos devolver· "0024"
@@ -560,7 +574,6 @@ Module Utilidades
         End If
         Return resultado
     End Function
-
 
     '' Le pasamos una cadena y nos devuelve sÛlo el n˙mero, sin las unidades
     '' Ej.: Le pasamos 1000 cm y nos devuelve 1000
@@ -660,7 +673,6 @@ Module Utilidades
         Return resultado
     End Function
 
-
     Public Function CaracteresCorrectos(ByVal queTexto As String) As String
         Dim resultado As String = queTexto
 
@@ -712,4 +724,5 @@ Module Utilidades
         If ordenado = True Then arrNumeros.Sort()
         Return arrNumeros
     End Function
+
 End Module

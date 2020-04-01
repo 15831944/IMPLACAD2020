@@ -1,28 +1,8 @@
-﻿Imports System
-Imports System.Text
-Imports System.Linq
-Imports System.Xml
-Imports System.Reflection
-Imports System.ComponentModel
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Windows
-Imports System.Windows.Media.Imaging
-Imports System.Windows.Forms
-Imports System.IO
+﻿Imports Autodesk.AutoCAD.DatabaseServices
 
-Imports Autodesk.AutoCAD.ApplicationServices
-Imports Autodesk.AutoCAD.DatabaseServices
-Imports Autodesk.AutoCAD.Runtime
-Imports Autodesk.AutoCAD.EditorInput
-Imports Autodesk.AutoCAD.Interop
-Imports Autodesk.AutoCAD.Interop.Common
-Imports Autodesk.AutoCAD.Geometry
-Imports AXApp = Autodesk.AutoCAD.ApplicationServices.Application
-Imports AXDoc = Autodesk.AutoCAD.ApplicationServices.Document
-Imports AXWin = Autodesk.AutoCAD.Windows
 '
 Partial Public Class Eventos
+
     Public Shared Sub Subscribe_AXObj(ByRef AXObj As Autodesk.AutoCAD.DatabaseServices.DBObject)
         If AXObj Is Nothing Then Exit Sub
         '
@@ -39,6 +19,7 @@ Partial Public Class Eventos
         'AddHandler AXObj.SubObjectModified, AddressOf AXObj_SubObjectModified
         'AddHandler AXObj.Unappended, AddressOf AXObj_Unappended
     End Sub
+
     Public Shared Sub Unsubscribe_AXObj(ByRef AXObj As DBObject)
         Try
             If AXObj Is Nothing OrElse AXObj.IsDisposed = True Then Exit Sub
@@ -55,10 +36,11 @@ Partial Public Class Eventos
             'RemoveHandler AXObj.Reappended, AddressOf AXObj_Reappended
             'RemoveHandler AXObj.SubObjectModified, AddressOf AXObj_SubObjectModified
             'RemoveHandler AXObj.Unappended, AddressOf AXObj_Unappended
-        Catch ex As system.Exception
+        Catch ex As System.Exception
             Debug.Print(ex.ToString)
         End Try
     End Sub
+
     Public Shared Sub AXObj_Cancelled(sender As Object, e As EventArgs)
         'AXDoc.Editor.WriteMessage("AXObj_Cancelled")
         If logeventos Then PonLogEv("AXObj_Cancelled")
@@ -165,7 +147,9 @@ Partial Public Class Eventos
         '    Unsubscribre_EvObjCOM(CType(sender, DBObject).AcadObject)
         'End If
     End Sub
+
 End Class
+
 '
 'Cancelled          Se activa cuando la apertura del objeto es texto cancelado.
 'Copied             Activado después de clonar el objeto.
@@ -187,5 +171,3 @@ End Class
 'ObjectOpenedForModify  Se activa antes de que se modifique un objeto.
 'ObjectReappended       Se activa cuando un objeto se elimina de una base de datos después de una operación Deshacer Y luego se vuelve a agregar con una operación Rehacer.
 'ObjectUnappended       Se activa cuando un objeto se elimina de una base de datos después de una operación Deshacer.
-
-

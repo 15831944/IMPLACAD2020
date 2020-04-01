@@ -1,28 +1,9 @@
-﻿Imports System
-Imports System.Text
-Imports System.Linq
-Imports System.Xml
-Imports System.Reflection
-Imports System.ComponentModel
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Windows
-Imports System.Windows.Media.Imaging
-Imports System.Windows.Forms
-Imports System.IO
-
-Imports Autodesk.AutoCAD.ApplicationServices
-Imports Autodesk.AutoCAD.DatabaseServices
-Imports Autodesk.AutoCAD.Runtime
-Imports Autodesk.AutoCAD.EditorInput
-Imports Autodesk.AutoCAD.Interop
+﻿Imports System.Linq
 Imports Autodesk.AutoCAD.Interop.Common
-Imports Autodesk.AutoCAD.Geometry
-Imports AXApp = Autodesk.AutoCAD.ApplicationServices.Application
-Imports AXDoc = Autodesk.AutoCAD.ApplicationServices.Document
-Imports AXWin = Autodesk.AutoCAD.Windows
+
 '
 Partial Public Class Eventos
+
     Public Shared Sub Subscribre_COMObj(ByRef pObject As AcadObject)
         If pObject Is Nothing Then Exit Sub
         If lTypesCOMObj.Contains(pObject.ObjectName) = False Then Exit Sub
@@ -33,6 +14,7 @@ Partial Public Class Eventos
             'AddHandler pObject.Modified, AddressOf AcadCircle_Modified
         End If
     End Sub
+
     Public Shared Sub Unsubscribre_COMObj(pObject As AcadObject)
         Try
             'AXDoc.Editor.WriteMessage("COMDoc_Activate")
@@ -45,10 +27,11 @@ Partial Public Class Eventos
             ElseIf TypeOf pObject Is AcadCircle Then
                 'RemoveHandler pObject.Modified, AddressOf AcadCircle_Modified
             End If
-        Catch ex As system.Exception
+        Catch ex As System.Exception
             Debug.Print(ex.ToString)
         End Try
     End Sub
+
     Public Shared Sub AcadCircle_Modified(pObject As AcadObject)
         'AXDoc.Editor.WriteMessage("AcadCircle_Modified")
         If logeventos Then PonLogEv("AcadCircle_Modified")
@@ -70,4 +53,5 @@ Partial Public Class Eventos
 
         'End Try
     End Sub
+
 End Class

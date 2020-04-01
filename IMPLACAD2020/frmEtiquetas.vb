@@ -1,16 +1,12 @@
-﻿Imports System
-Imports Autodesk.AutoCAD.Runtime
-Imports Autodesk.AutoCAD.ApplicationServices
-'Imports Autodesk.AutoCAD.DatabaseServices
-Imports Autodesk.AutoCAD.Geometry
-Imports Autodesk.AutoCAD.EditorInput
-Imports Autodesk.AutoCAD.Interop
-Imports Autodesk.AutoCAD.Interop.Common
+﻿'Imports Autodesk.AutoCAD.DatabaseServices
 Imports System.Linq
+Imports Autodesk.AutoCAD.Interop.Common
 
 Public Class frmEtiquetas
+
     'Dim oTabla As DataTable
     Dim ultimoCaminoDWG As String
+
     Dim oEti As Etiqueta = Nothing
     Dim inicio As Boolean = True
     'Dim oTablaRef As DataTable
@@ -114,7 +110,6 @@ Public Class frmEtiquetas
         End If
     End Sub
 
-
     Private Sub btnCambiar_Click(sender As Object, e As EventArgs) Handles btnCambiar.Click
         If IO.Directory.Exists(IMPLACAD_DATA) = False Then
             MsgBox("No existe el directorio base --> " & IMPLACAD_DATA & vbCrLf & vbCrLf &
@@ -211,6 +206,7 @@ Public Class frmEtiquetas
             btnInsertar.Enabled = False
         End If
     End Sub
+
     ''
     Public Sub VaciaFicha()
         Me.txtREFERENCIA.Text = ""
@@ -223,8 +219,11 @@ Public Class frmEtiquetas
         Me.lbDim.Text = ""
         pbIMAGEN.Image = Nothing
     End Sub
+
     ''
+
 #Region "RELLENAR LISTADOS"
+
     Public Sub RellenaListados()
         If oEtis.LReferencias Is Nothing OrElse oEtis.LReferencias.Count = 0 Then Exit Sub
         inicio = True
@@ -247,12 +246,12 @@ Public Class frmEtiquetas
                 Select x.TIPO1
                 Distinct
         cbTIPO1.Items.AddRange(query.ToArray)
-            ' TIPO2
-            query = From x In oEtis.LReferencias
-                    Where x.STOCK <> False AndAlso x.TIPO <> ""
-                    Select x.TIPO2
-                    Distinct
-            cbTIPO2.Items.AddRange(query.ToArray)
+        ' TIPO2
+        query = From x In oEtis.LReferencias
+                Where x.STOCK <> False AndAlso x.TIPO <> ""
+                Select x.TIPO2
+                Distinct
+        cbTIPO2.Items.AddRange(query.ToArray)
         ' TIPO3
         query = From x In oEtis.LReferencias
                 Where x.STOCK <> False AndAlso x.TIPO <> ""
@@ -278,6 +277,7 @@ Public Class frmEtiquetas
         VaciaFicha()
         inicio = False
     End Sub
+
     Public Sub RellenaListados_Tabla(ByVal queTabla As DataTable)
         'If LConjuntos Is Nothing Then LConjuntos = New List(Of String)
         If queTabla.Rows.Count = 0 Then Exit Sub
@@ -327,9 +327,11 @@ Public Class frmEtiquetas
         lbCuantos.Text = lbETIQUETAS.Items.Count & " Etiquetas"
         VaciaFicha()
     End Sub
+
 #End Region
 
 #Region "FILTRAR DATOS"
+
     Public Sub FiltraListado()
         If oEtis Is Nothing Then Exit Sub
         If oEtis.LReferencias Is Nothing OrElse oEtis.LReferencias.Count = 0 Then Exit Sub
@@ -373,6 +375,7 @@ Public Class frmEtiquetas
         lbCuantos.Text = lbETIQUETAS.Items.Count & " Etiquetas"
         VaciaFicha()
     End Sub
+
     ''
 
     'Public Sub FiltraListado_Tabla()
@@ -439,6 +442,7 @@ Public Class frmEtiquetas
             cIni.IniWrite(nIni, "OPCIONES", "Tipo3", cbTIPO3.SelectedItem.ToString)
         End If
     End Sub
+
 #End Region
 
     Private Sub btnSel_Click(sender As Object, e As EventArgs) Handles btnSel.Click
@@ -530,4 +534,5 @@ Public Class frmEtiquetas
         VaciaFicha()
         inicio = False
     End Sub
+
 End Class

@@ -1,6 +1,6 @@
-﻿
-Option Strict On
+﻿Option Strict On
 Option Explicit On
+
 Imports System.Reflection
 
 Public Class clsINI
@@ -164,16 +164,17 @@ Public Class clsINI
         ' Devolver el array
         Return aSections
     End Function
+
     '
-    Public Shared Function AppPath( _
-            Optional ByVal backSlash As Boolean = False _
+    Public Shared Function AppPath(
+            Optional ByVal backSlash As Boolean = False
             ) As String
         ' System.Reflection.Assembly.GetExecutingAssembly...
         'Dim s As String = _
         'IO.Path.GetDirectoryName( _
         'System.Reflection.Assembly.GetExecutingAssembly.GetCallingAssembly.Location)
-        Dim s As String = _
-            IO.Path.GetDirectoryName( _
+        Dim s As String =
+            IO.Path.GetDirectoryName(
             Assembly.GetCallingAssembly.Location)
         ' si hay que añadirle el backslash
         If backSlash Then
@@ -181,5 +182,5 @@ Public Class clsINI
         End If
         Return s
     End Function
-End Class
 
+End Class

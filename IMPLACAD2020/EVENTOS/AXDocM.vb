@@ -1,28 +1,7 @@
-﻿Imports System
-Imports System.Text
-Imports System.Linq
-Imports System.Xml
-Imports System.Reflection
-Imports System.ComponentModel
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Windows
-Imports System.Windows.Media.Imaging
-Imports System.Windows.Forms
-Imports System.IO
-
-Imports Autodesk.AutoCAD.ApplicationServices
-Imports Autodesk.AutoCAD.DatabaseServices
-Imports Autodesk.AutoCAD.Runtime
-Imports Autodesk.AutoCAD.EditorInput
-Imports Autodesk.AutoCAD.Interop
-Imports Autodesk.AutoCAD.Interop.Common
-Imports Autodesk.AutoCAD.Geometry
-Imports AXApp = Autodesk.AutoCAD.ApplicationServices.Application
-Imports AXDoc = Autodesk.AutoCAD.ApplicationServices.Document
-Imports AXWin = Autodesk.AutoCAD.Windows
+﻿Imports Autodesk.AutoCAD.ApplicationServices
 
 Partial Public Class Eventos
+
     Public Shared Sub Subscribe_AXDocM()
         AddHandler AXDocM.DocumentActivated, AddressOf AXDocM_DocumentActivated
         AddHandler AXDocM.DocumentActivationChanged, AddressOf AXDocM_DocumentActivationChanged
@@ -38,6 +17,7 @@ Partial Public Class Eventos
         AddHandler AXDocM.DocumentToBeDeactivated, AddressOf AXDocM_DocumentToBeDeactivated
         AddHandler AXDocM.DocumentToBeDestroyed, AddressOf AXDocM_DocumentToBeDestroyed
     End Sub
+
     Public Shared Sub Unsubscribe_AXDocM()
         Try
             'RemoveHandler AXDocM.DocumentActivated, AddressOf AXDocM_DocumentActivated
@@ -124,7 +104,9 @@ Partial Public Class Eventos
         If logeventos Then PonLogEv("AXDocM_DocumentToBeDestroyed;" & e.Document.Name)
         Unsubscribe_AXDoc()
     End Sub
+
 End Class
+
 '
 'DocumentActivated              Se activa cuando se activa una ventana de documento.
 'DocumentActivationChanged      Se activa después de que la ventana del documento activo se desactiva o destruye.

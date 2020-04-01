@@ -28,6 +28,7 @@ Partial Class frmZonas
         Me.LblContar = New System.Windows.Forms.Label()
         Me.BtnCrear = New System.Windows.Forms.Button()
         Me.BtnEditar = New System.Windows.Forms.Button()
+        Me.BtnBorrar = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'TvZonas
@@ -76,11 +77,21 @@ Partial Class frmZonas
         Me.BtnEditar.Text = "Editar"
         Me.BtnEditar.UseVisualStyleBackColor = True
         '
+        'BtnBorrar
+        '
+        Me.BtnBorrar.Location = New System.Drawing.Point(211, 168)
+        Me.BtnBorrar.Name = "BtnBorrar"
+        Me.BtnBorrar.Size = New System.Drawing.Size(114, 32)
+        Me.BtnBorrar.TabIndex = 5
+        Me.BtnBorrar.Text = "Borrar"
+        Me.BtnBorrar.UseVisualStyleBackColor = True
+        '
         'frmZonas
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.Controls.Add(Me.BtnBorrar)
         Me.Controls.Add(Me.BtnEditar)
         Me.Controls.Add(Me.BtnCrear)
         Me.Controls.Add(Me.LblContar)
@@ -101,4 +112,5 @@ Partial Class frmZonas
     Friend WithEvents LblContar As Windows.Forms.Label
     Friend WithEvents BtnCrear As Windows.Forms.Button
     Friend WithEvents BtnEditar As Windows.Forms.Button
+    Friend WithEvents BtnBorrar As Windows.Forms.Button
 End Class

@@ -1,18 +1,16 @@
-﻿' (C) Copyright 2011 by  
+﻿' (C) Copyright 2011 by
 '
-Imports System
-Imports System.Net
-Imports System.IO
-Imports Autodesk.AutoCAD.Runtime
 Imports Autodesk.AutoCAD.ApplicationServices
 Imports Autodesk.AutoCAD.DatabaseServices
-Imports Autodesk.AutoCAD.Geometry
 Imports Autodesk.AutoCAD.EditorInput
+Imports Autodesk.AutoCAD.Geometry
 Imports Autodesk.AutoCAD.Interop
 Imports Autodesk.AutoCAD.Interop.Common
+Imports Autodesk.AutoCAD.Runtime
 
 ' This line is not mandatory, but improves loading performances
-<Assembly: CommandClass(GetType(IMPLACAD.MyCommands))> 
+<Assembly: CommandClass(GetType(IMPLACAD.MyCommands))>
+
 Namespace IMPLACAD
 
     ' This class is instantiated by AutoCAD for each document when
@@ -21,10 +19,10 @@ Namespace IMPLACAD
     ' is implicitly per-document!
     Public Class MyCommands
         Public WithEvents oTimer As Timers.Timer
-        ' The CommandMethod attribute can be applied to any public  member 
+        ' The CommandMethod attribute can be applied to any public  member
         ' function of any public class.
         ' The function should take no arguments and return nothing.
-        ' If the method is an instance member then the enclosing class is 
+        ' If the method is an instance member then the enclosing class is
         ' instantiated for each document. If the member is a static member then
         ' the enclosing class is NOT instantiated.
         '
@@ -32,16 +30,16 @@ Namespace IMPLACAD
         ' context menu.
 
         ' Modal Command with localized name
-        ' AutoCAD will search for a resource string with Id "MyCommandLocal" in the 
-        ' same namespace as this command class. 
-        ' If a resource string is not found, then the string "MyLocalCommand" is used 
+        ' AutoCAD will search for a resource string with Id "MyCommandLocal" in the
+        ' same namespace as this command class.
+        ' If a resource string is not found, then the string "MyLocalCommand" is used
         ' as the localized command name.
-        ' To view/edit the resx file defining the resource strings for this command, 
+        ' To view/edit the resx file defining the resource strings for this command,
         ' * click the 'Show All Files' button in the Solution Explorer;
         ' * expand the tree node for myCommands.vb;
         ' * and double click on myCommands.resx
 
-        <CommandMethod(regAPP, "IMPLACADMENU", "IMPLACADMENU", CommandFlags.Modal)> _
+        <CommandMethod(regAPP, "IMPLACADMENU", "IMPLACADMENU", CommandFlags.Modal)>
         Public Sub IMPLACADMENU() ' This method can have any name
             ' Put your command code here
             ''
@@ -49,7 +47,7 @@ Namespace IMPLACAD
             If ImplacadEscalaM() = False Then Exit Sub
             ''
             If EsParaTrabajar() = False Then
-                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
                        "Debe abrir el DWG original de trabajo")
                 Exit Sub
             End If
@@ -146,6 +144,7 @@ Namespace IMPLACAD
                 Exit Try
             End Try
         End Sub
+
         ''
         <CommandMethod(regAPP, "BALIZARSUELO", "BALIZARSUELO", CommandFlags.Modal)>
         Public Sub BALIZARSUELO() ' This method can have any name
@@ -213,6 +212,7 @@ Namespace IMPLACAD
             ''
             CapaCeroActiva()
         End Sub
+
         ''
         <CommandMethod(regAPP, "BALIZARPARED", "BALIZARPARED", CommandFlags.Modal)>
         Public Sub BALIZARPARED() ' This method can have any name
@@ -269,6 +269,7 @@ Namespace IMPLACAD
             End Try
             CapaCeroActiva()
         End Sub
+
         ''
         <CommandMethod(regAPP, "BALIZARESCALERA", "BALIZARESCALERA", CommandFlags.Modal)>
         Public Sub BALIZARESCALERA() ' This method can have any name
@@ -370,6 +371,7 @@ Namespace IMPLACAD
             'MsgBox(mensaje)
             CapaCeroActiva()
         End Sub
+
         ''
         <CommandMethod(regAPP, "RUTAEVACUACION", "RUTAEVACUACION", CommandFlags.Modal)>
         Public Sub RUTAEVACUACION() ' This method can have any name
@@ -436,6 +438,7 @@ Namespace IMPLACAD
             '' Ponemos la capa 0 como activa al terminar.
             CapaCeroActiva()
         End Sub
+
         ''
         <CommandMethod(regAPP, "TABLADATOS", "TABLADATOS", CommandFlags.Modal)>
         Public Sub TABLADATOS() ' This method can have any name
@@ -460,6 +463,7 @@ Namespace IMPLACAD
             ' ConfiguraDibujo()
             TablaDatosInserta()
         End Sub
+
         ''
         <CommandMethod(regAPP, "TABLABAESCALERAS", "TABLAESCALERAS", CommandFlags.Modal)>
         Public Sub TABLAESCALERAS() ' This method can have any name
@@ -484,6 +488,7 @@ Namespace IMPLACAD
             'ConfiguraDibujo()
             TablaEscalerasInserta()
         End Sub
+
         ''
         <CommandMethod(regAPP, "CAPASCOBERTURA", "CAPASCOBERTURA", CommandFlags.Modal)>
         Public Sub CAPASCOBERTURA() ' This method can have any name
@@ -534,6 +539,7 @@ Namespace IMPLACAD
             '' Activar/Desactivar grosores de linea
             GrosorLineasACTDES(CapaEstado.Inverso)
         End Sub
+
         ''
         <CommandMethod(regAPP, "ESCALAM", "ESCALAM", CommandFlags.Modal)>
         Public Sub ESCALAM() ' This method can have any name
@@ -589,6 +595,7 @@ Namespace IMPLACAD
             ''
             oApp.ActiveDocument.SendCommand("_zoom" & vbCr & "e" & vbCr)
         End Sub
+
         ''
         <CommandMethod(regAPP, "IMPRIMIRINS", "IMPRIMIRINS", CommandFlags.Modal)>
         Public Sub IMPRIMIRINS() ' This method can have any name
@@ -779,6 +786,7 @@ Namespace IMPLACAD
             oApp.ActiveDocument.SendCommand("_zoom" & vbCr & "e" & vbCr)
             oApp.ActiveDocument.Save()
         End Sub
+
         ''
         ''<CommandMethod(regAPP, "IMPRIMIREVA", "IMPRIMIREVA", CommandFlags.DocExclusiveLock)>
         <CommandMethod(regAPP, "IMPRIMIREVA", "IMPRIMIREVA", CommandFlags.Session)>
@@ -1176,6 +1184,7 @@ Namespace IMPLACAD
                    "** Anote las opciones de impresión")
             ''
         End Sub
+
         ''
         <CommandMethod(regAPP, "EXPLOTAEVA", "EXPLOTAEVA", CommandFlags.DocExclusiveLock)>
         Public Sub EXPLOTAEVA() ' This method can have any name
@@ -1218,6 +1227,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
                 MsgBox("No se ha encontrado ninguno de estos bloques :" & vbCrLf & vbCrLf & String.Join(vbCrLf, nEva))
             End If
         End Sub
+
         ''
         <CommandMethod(regAPP, "ACTUALIZARIMPLACAD", "ACTUALIZARIMPLACAD", CommandFlags.Session)>
         Public Sub ACTUALIZARIMPLACAD() ' This method can have any name
@@ -1297,7 +1307,6 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             ''
         End Sub
 
-
         <CommandMethod(regAPP, "IMPLACADXDATA", "IMPLACADXDATA", CommandFlags.Modal)>
         Public Sub IMPLACADXDATA() ' This method can have any name
             ' Put your command code here
@@ -1333,6 +1342,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             'Catch ex As Autodesk.AutoCAD.Runtime.Exception
             'End Try
         End Sub
+
         ''
         Public Function DescargaFicheroZIPDescomprime(queFiWeb As String,
                                                       queFiLocal As String,
@@ -1390,7 +1400,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             ''
             '' 4.- Comprobar si existe el fichero Local comprimido con los recursos
             If IO.File.Exists(queFiLocal) Then
-                '' Si existe 
+                '' Si existe
                 fechaLocal = New IO.FileInfo(queFiLocal).LastWriteTime.ToLocalTime
                 tamLocal = New IO.FileInfo(queFiLocal).Length
             End If
@@ -1429,6 +1439,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             'Application.ShowAlertDialog("Datos actualizados...")
             Return queFiWeb & " = " & "Datos actualizados..." & vbCrLf
         End Function
+
         ''
         ' Modal Command with pickfirst selection
         <CommandMethod(regAPP, "TABLAPARCIAL", "TABLAPARCIAL", CommandFlags.Modal + CommandFlags.UsePickSet)>
@@ -1526,7 +1537,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
         End Sub
 
         ' Application Session Command with localized name
-        <CommandMethod(regAPP, "MySessionCmd", "MySessionCmdLocal", CommandFlags.Modal + CommandFlags.Session)> _
+        <CommandMethod(regAPP, "MySessionCmd", "MySessionCmdLocal", CommandFlags.Modal + CommandFlags.Session)>
         Public Sub MySessionCmd() ' This method can have any name
             ' Put your command code here
             ''
@@ -1534,7 +1545,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             If ImplacadEscalaM() = False Then Exit Sub
             ''
             If EsParaTrabajar() = False Then
-                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
                        "Debe abrir el DWG original de trabajo")
                 Exit Sub
             End If
@@ -1547,10 +1558,10 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             ''
         End Sub
 
-        ' LispFunction is similar to CommandMethod but it creates a lisp 
+        ' LispFunction is similar to CommandMethod but it creates a lisp
         ' callable function. Many return types are supported not just string
         ' or integer.
-        <LispFunction("MyLispFunction", "MyLispFunctionLocal")> _
+        <LispFunction("MyLispFunction", "MyLispFunctionLocal")>
         Public Function MyLispFunction(ByVal args As ResultBuffer) ' This method can have any name
             ' Put your command code here
             ''
@@ -1564,7 +1575,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             End If
             ''
             If EsParaTrabajar() = False Then
-                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf & _
+                MsgBox("Este fichero DWG es sólo para imprimir" & vbCrLf & vbCrLf &
                        "Debe abrir el DWG original de trabajo")
                 Return 0
                 Exit Function
@@ -1584,6 +1595,7 @@ oApp = CType(Autodesk.AutoCAD.ApplicationServices.Application.AcadApplication, A
             'oTimer.Enabled = False
             'oDoc = oApp.ActiveDocument
         End Sub
+
     End Class
 
 End Namespace

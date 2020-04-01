@@ -1,31 +1,12 @@
-﻿Imports System
-Imports System.Text
-Imports System.Linq
-Imports System.Xml
-Imports System.Reflection
-Imports System.ComponentModel
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Windows
-Imports System.Windows.Media.Imaging
-Imports System.Windows.Forms
-Imports System.IO
-
-Imports Autodesk.AutoCAD.ApplicationServices
-Imports Autodesk.AutoCAD.DatabaseServices
-Imports Autodesk.AutoCAD.Runtime
-Imports Autodesk.AutoCAD.EditorInput
+﻿Imports System.Runtime.InteropServices
 Imports Autodesk.AutoCAD.Interop
 Imports Autodesk.AutoCAD.Interop.Common
-Imports Autodesk.AutoCAD.Geometry
-Imports AXApp = Autodesk.AutoCAD.ApplicationServices.Application
-Imports AXDoc = Autodesk.AutoCAD.ApplicationServices.Document
-Imports AXWin = Autodesk.AutoCAD.Windows
-Imports System.Runtime.InteropServices
+
 '
 Partial Public Class Eventos
+
     Public Shared Sub Subscribe_COMDoc()
-        If COMdoc Is Nothing Then Exit Sub
+        If COMDoc() Is Nothing Then Exit Sub
         AddHandler COMDoc.Activate, AddressOf COMDoc_Activate
         AddHandler COMDoc.BeginClose, AddressOf COMDoc_BeginClose
         AddHandler COMDoc.BeginDocClose, AddressOf COMDoc_BeginDocClose
@@ -89,14 +70,16 @@ Partial Public Class Eventos
             'RemoveHandler COMDoc.SelectionChanged, AddressOf COMDoc_SelectionChanged
             'RemoveHandler COMDoc.WindowChanged, AddressOf COMDoc_WindowChanged
             'RemoveHandler COMDoc.WindowMovedOrResized, AddressOf COMDoc_WindowMovedOrResized
-        Catch ex As system.Exception
+        Catch ex As System.Exception
             Debug.Print(ex.ToString)
         End Try
     End Sub
+
     Public Shared Sub COMDoc_Activate()
         'AXDoc.Editor.WriteMessage("COMDoc_Activate")
         If logeventos Then PonLogEv("COMDoc_Activate")
     End Sub
+
     Public Shared Sub COMDoc_BeginClose()
         'AXDoc.Editor.WriteMessage("COMDoc_BeginClose")
         If logeventos Then PonLogEv("COMDoc_BeginClose")
@@ -112,7 +95,7 @@ Partial Public Class Eventos
         'Ev.EvApp.ActiveDocument.SendCommand("_UPDATEFIELD _ALL  ")
 
         '
-        'Dim arrIdBloques As ArrayList     '' Arraylist con los IDs de los bloques que empiezan por 
+        'Dim arrIdBloques As ArrayList     '' Arraylist con los IDs de los bloques que empiezan por
         'arrIdBloques = clsA.SeleccionaTodosObjetos("INSERT",, True)
         '
         ' Procesamos todos los bloques (arralist de Ids)
@@ -318,24 +301,26 @@ Partial Public Class Eventos
         'AXDoc.Editor.WriteMessage("COMDoc_WindowMovedOrResized")
         If logeventos Then PonLogEv("COMDoc_WindowMovedOrResized;" & HWNDFrame & "|" & bMoved.ToString)
     End Sub
+
 End Class
+
 '
 'Activate:                  Se activa cuando se activa una ventana de documento.
-'BeginClose:                Se activa inmediatamente después de que AutoCAD recibe una solicitud para cerrar un dibujo. 
+'BeginClose:                Se activa inmediatamente después de que AutoCAD recibe una solicitud para cerrar un dibujo.
 'BeginDocClose:             Se activa justo después de recibir una solicitud para cerrar un dibujo.
-'BeginCommand:              Se activa inmediatamente después de que se emite un comando, pero antes de que se complete. 
-'BeginDoubleClick:          Se activa después de que el usuario haga doble clic en un objeto del dibujo. 
+'BeginCommand:              Se activa inmediatamente después de que se emite un comando, pero antes de que se complete.
+'BeginDoubleClick:          Se activa después de que el usuario haga doble clic en un objeto del dibujo.
 'BeginLISP:                 Se activa inmediatamente después de que AutoCAD recibe una solicitud para evaluar una expresión LISP.
 'BeginPlot:                 Se activa inmediatamente después de que AutoCAD recibe una solicitud para imprimir un dibujo.
 'BeginRightClick:           Se activa después de que el usuario hace clic con el botón derecho en la ventana Dibujo.
 'BeginSave:                 Se activa inmediatamente después de que AutoCAD recibe una solicitud para guardar el dibujo.
 'BeginShortcutMenuCommand:  Se activa después de que el usuario hace clic con el botón derecho en la ventana Dibujo y antes de que aparezca el menú contextual en el modo Comando..
-'BeginShortcutMenuDefault:  Se activa después de que el usuario haga clic con el botón derecho en la ventana Dibujo y antes de que aparezca el menú contextual en el modo Predeterminado. 
+'BeginShortcutMenuDefault:  Se activa después de que el usuario haga clic con el botón derecho en la ventana Dibujo y antes de que aparezca el menú contextual en el modo Predeterminado.
 'BeginShortcutMenuEdit:     Se activa después de que el usuario hace clic con el botón derecho en la ventana Dibujo y antes de que aparezca el menú contextual en el modo Editar.
 'BeginShortcutMenuGrip:     Se activa después de que el usuario haga clic con el botón derecho en la ventana Dibujo y antes de que aparezca el menú contextual en el modo Agarre.
 'BeginShortcutMenuOsnap:    Se activa después de que el usuario hace clic con el botón derecho en la ventana Dibujo y antes de que aparezca el menú contextual en modo Osnap.
 'Deactivate:                Se activa cuando la ventana de dibujo está desactivada.
-'EndCommand:                Se activa inmediatamente después de que se completa un comando. 
+'EndCommand:                Se activa inmediatamente después de que se completa un comando.
 'EndLISP:                   Se activa al finalizar la evaluación de una expresión LISP.
 'EndPlot:                   Se activa después de que se haya enviado un documento a la impresora.
 'EndSave:                   Se activa cuando AutoCAD ha terminado de guardar el dibujo.

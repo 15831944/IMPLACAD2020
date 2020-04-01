@@ -1,11 +1,8 @@
-﻿Imports System.Diagnostics
-Imports System.Collections
-Imports System.Windows.Forms
-
-Imports Autodesk.AutoCAD.Interop
+﻿Imports System.Windows.Forms
 Imports Autodesk.AutoCAD.Interop.Common
 
 Module XData
+
     ''***** XDatos que pondremos por defecto al crear los objetos Polilinea, Bloque y Muro.
     '' habrá que convertir a double para realizar operaciones FormatNumber(altura,2,tristate)
     ' 0 podrá tener los valores INSERT, POLYLINE, CIRCLE, LWPOLILINE, etc.
@@ -13,7 +10,9 @@ Module XData
     ' 1003 = Capa
     ' 1000=Clase;Tipo;Tipo1;Tipo2;Tipo3
     Public xTTodo As Short() = New Short() {1001, 1000}
+
     Public xDTodo As Object() = New Object() {regAPP, ""}
+
     'Public xDPol As Object() = New Object() {regAPP, 0, "0", "Clase=polilinea"}
     'Public xTBlo As Short() = New Short() {1001, 1040, 1003, 1000}
     'Public xDBlo As Object() = New Object() {regAPP, 0, "0", "Clase=etiqueta"}
@@ -96,6 +95,7 @@ Module XData
         End If
         Return xdatos
     End Function
+
     Public Function XLeeDatos(ByVal oId As Long, Optional ByVal app As String = "") As Object         'Devuelve todos los datos de SERICAD 0-SERICAD, 1-CAPA
         Return XLeeDatos(CType(oApp.ActiveDocument.ObjectIdToObject(oId), AcadObject), app)
     End Function
@@ -103,9 +103,11 @@ Module XData
     Public Function XLeeDatos(ByVal oHandle As String, Optional ByVal app As String = "") As Object         'Devuelve todos los datos de SERICAD 0-SERICAD, 1-CAPA
         Return XLeeDatos(CType(oApp.ActiveDocument.HandleToObject(oHandle), AcadObject), app)
     End Function
+
     Public Function XLeeDatos(ByVal objA As AcadEntity, Optional ByVal app As String = "") As Object         'Devuelve todos los datos de SERICAD 0-SERICAD, 1-CAPA
         Return XLeeDatos(CType(objA, AcadObject), app)
     End Function
+
     '
     Public Function XLeeDato(ByVal objA As AcadObject, ByVal queNombre As String,
                               Optional SoloValor As Boolean = True) As String
@@ -174,6 +176,7 @@ Module XData
     Public Function XLeeDato(ByVal oHandle As String, ByVal queNombre As String) As String
         Return XLeeDato(oApp.ActiveDocument.HandleToObject(oHandle), queNombre)
     End Function
+
     Public Function XLeeDato(ByVal oEnt As AcadEntity, ByVal queNombre As String) As String
         Return XLeeDato(CType(oEnt, AcadObject), queNombre)
     End Function
@@ -315,6 +318,7 @@ Module XData
         End If
         Return resultado
     End Function
+
 End Module
 
 '' EJEMPLOS XData....

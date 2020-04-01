@@ -1,28 +1,9 @@
-﻿Imports System
-Imports System.Text
-Imports System.Linq
-Imports System.Xml
-Imports System.Reflection
-Imports System.ComponentModel
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Windows
-Imports System.Windows.Media.Imaging
-Imports System.Windows.Forms
-Imports System.IO
-
-Imports Autodesk.AutoCAD.ApplicationServices
+﻿Imports Autodesk.AutoCAD.ApplicationServices
 Imports Autodesk.AutoCAD.DatabaseServices
-Imports Autodesk.AutoCAD.Runtime
-Imports Autodesk.AutoCAD.EditorInput
-Imports Autodesk.AutoCAD.Interop
-Imports Autodesk.AutoCAD.Interop.Common
-Imports Autodesk.AutoCAD.Geometry
-Imports AXApp = Autodesk.AutoCAD.ApplicationServices.Application
-Imports AXDoc = Autodesk.AutoCAD.ApplicationServices.Document
-Imports AXWin = Autodesk.AutoCAD.Windows
+
 '
 Partial Public Class Eventos
+
     Public Shared Sub Subscribe_AXDoc()
         AddHandler AXDoc.BeginDocumentClose, AddressOf AXDoc_BeginDocumentClose
         AddHandler AXDoc.BeginDwgOpen, AddressOf AXDoc_BeginDwgOpen
@@ -72,10 +53,11 @@ Partial Public Class Eventos
             'Unsubscribe_COMDoc()
             'Unsubscribe_AXBlockTR()
             'Unsubscribe_AXEditor()
-        Catch ex As system.Exception
+        Catch ex As System.Exception
             Debug.Print(ex.ToString)
         End Try
     End Sub
+
     Public Shared Sub AXDoc_BeginDocumentClose(sender As Object, e As DocumentBeginCloseEventArgs)
         'AXDoc.Editor.WriteMessage("AXDoc_BeginDocumentClose")
         If logeventos Then PonLogEv("AXDoc_BeginDocumentClose")
@@ -181,7 +163,9 @@ Partial Public Class Eventos
         'AXDoc.Editor.WriteMessage("AXDoc_ViewChanged")
         If logeventos Then PonLogEv("AXDoc_ViewChanged")
     End Sub
+
 End Class
+
 '
 'BeginDocumentClose         Se activa justo después de que se recibe una solicitud Para cerrar un dibujo.
 'BeginDwgOpen               Se activa cuando se va a abrir un dibujo.
@@ -199,4 +183,3 @@ End Class
 'LispWillStart              Se activa inmediatamente después de que AutoCAD recibe una solicitud Para evaluar una expresión LISP.
 'UnknownCommand             Se dispara inmediatamente cuando se ingresa un comando desconocido en el símbolo del sistema.
 'ViewChanged                Se activa después de que la vista de un dibujo ha cambiado.
-

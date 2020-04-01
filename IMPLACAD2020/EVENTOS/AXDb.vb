@@ -1,27 +1,8 @@
-﻿Imports System
-Imports System.Text
-Imports System.Linq
-Imports System.Xml
-Imports System.Reflection
-Imports System.ComponentModel
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Windows
-Imports System.Windows.Media.Imaging
-Imports System.Windows.Forms
-Imports System.IO
+﻿Imports Autodesk.AutoCAD.DatabaseServices
 
-Imports Autodesk.AutoCAD.DatabaseServices
-Imports Autodesk.AutoCAD.Runtime
-Imports Autodesk.AutoCAD.EditorInput
-Imports Autodesk.AutoCAD.Interop
-Imports Autodesk.AutoCAD.Interop.Common
-Imports Autodesk.AutoCAD.Geometry
-Imports AcadApplication = Autodesk.AutoCAD.ApplicationServices.Application
-Imports AcadDocument = Autodesk.AutoCAD.ApplicationServices.Document
-Imports AcadWindows = Autodesk.AutoCAD.Windows
 '
 Partial Public Class Eventos
+
     Public Shared Sub Subscribe_AXDB() 'docDb As Autodesk.AutoCAD.DatabaseServices.Database)
         If AXDb() Is Nothing Then Exit Sub
         AddHandler AXDb.AbortDxfOut, AddressOf AXDB_AbortDxfOut
@@ -134,10 +115,11 @@ Partial Public Class Eventos
             'RemoveHandler AXDb.XrefSubCommandAborted, AddressOf AXDB_XrefSubCommandAborted
             'RemoveHandler AXDb.XrefSubCommandEnd, AddressOf AXDB_XrefSubCommandEnd
             'RemoveHandler AXDb.XrefSubCommandStart, AddressOf AXDB_XrefSubCommandStart
-        Catch ex As system.Exception
+        Catch ex As System.Exception
             Debug.Print(ex.ToString)
         End Try
     End Sub
+
     Public Shared Sub AXDB_AbortDxfIn(sender As Object, e As EventArgs)
         'AXDoc.Editor.WriteMessage("AXDB_AbortDxfIn")
         If logeventos Then PonLogEv("AXDB_AbortDxfIn")
@@ -286,7 +268,6 @@ Partial Public Class Eventos
         If (app_procesointerno = True) Then Exit Sub
         If coneventos = False Then Exit Sub  ' Para que no haga nada después de un comando.
 
-
         app_procesointerno = False
     End Sub
 
@@ -415,7 +396,9 @@ Partial Public Class Eventos
         'AXDoc.Editor.WriteMessage("AXDB_XrefSubCommandStart")
         If logeventos Then PonLogEv("AXDB_XrefSubCommandStart")
     End Sub
+
 End Class
+
 '
 'Los siguientes son algunos de los eventos utilizados para responder a los cambios de objetos a nivel de base de datos
 'ObjectAppended         Se activa cuando se agrega un objeto a una base de datos.

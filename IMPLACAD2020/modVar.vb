@@ -1,65 +1,70 @@
-﻿Imports System
-Imports System.IO
-Imports System.IO.Compression
-Imports System.Xml
-Imports System.ComponentModel
-Imports System.Data
-Imports System.Drawing
-Imports System.Windows.Forms
-Imports System.Data.SqlClient
+﻿Imports System.Drawing
+
 '
-Imports Autodesk.AutoCAD.EditorInput
 'Imports Autodesk.AutoCAD.Runtime
-Imports Autodesk.AutoCAD.ApplicationServices
-Imports Autodesk.AutoCAD.Interop
 Imports Autodesk.AutoCAD.Interop.Common
-Imports System.Runtime.InteropServices
 
 Module modVar
+
     ''
     '' ***** FORMULARIOS
     Public FrmE As frmEtiquetas
+
     Public FrmZ As frmZonas
+
     '' OBJETOS AUTOCAD
     Public WithEvents oApp As Autodesk.AutoCAD.Interop.AcadApplication = Nothing
+
     Public WithEvents oDoc As Autodesk.AutoCAD.Interop.AcadDocument = Nothing
+
     'Public oDoc As Autodesk.AutoCAD.Interop.AcadDocument = Nothing
     'Public oDocImprimir As Autodesk.AutoCAD.Interop.AcadDocument = Nothing
     Public oSel As Autodesk.AutoCAD.Interop.AcadSelectionSet = Nothing       '"SERICAD"
+
     Public oSelTemp As Autodesk.AutoCAD.Interop.AcadSelectionSet = Nothing   '"TEMPORAL"
     Public bloqueEditar As Autodesk.AutoCAD.Interop.Common.AcadBlockReference = Nothing
     Public TablaDatos As Autodesk.AutoCAD.Interop.Common.AcadTable = Nothing
     Public TablaDatosParcial As Autodesk.AutoCAD.Interop.Common.AcadTable = Nothing
     Public TablaEscaleras As Autodesk.AutoCAD.Interop.Common.AcadTable = Nothing
     Public textoEstilo As Autodesk.AutoCAD.Interop.Common.AcadTextStyle = Nothing
+
     ''
     '' CLASSES
     Public cIni As clsINI = Nothing
+
     Public cfg As UtilesAlberto.Conf = Nothing
     Public ua As UtilesAlberto.Utiles = Nothing
     Public oEtis As Etiquetas = Nothing
+
     ''
     '' OTROS OBJETOS
     'Public WithEvents oTimer As Timer
     ''
     '' COLECCIONES
     Public arrBloquesIdParcial As ArrayList
+
     Public arrBalizaSuelo As ArrayList
     Public arrBalizaPared As ArrayList
     Public colBloquesCantidadParcial As SortedList  ' Hashtable  '' Colección de key=nombre del bloque, value=cantidad
     Public colBloquesCantidad As SortedList ' Hashtable  '' Colección de key=nombre del bloque, value=cantidad
+
     'Public arrBloquesId As ArrayList        '' Array de los ID de los bloques de etiqueta.
     Public colBotones As Hashtable          '' Hashtable de botones (Key=Nombre, Value=estado (true/false)
+
     Public arrBotones As ArrayList          '' ArrayList con el nombre de todos los botones.
     Public arrpreEti As ArrayList           '' ArrayList de los prefijos de etiquetas IMPLACAD (Solo estos se tendrán en cuenta) El resto se borrará XData
+
     'Public colConjuntos As Hashtable         '' Hashtable de conjuntos de etiquetas (Key=REFERENCIA, Value=Array de Referencias)
     'Public colSustituciones As Hashtable    '' Hashtable de sustituciones para plano EVA (Key=Referencia de bloque, Value=nombre de la imagen que la sustituye [Sin .png])
     'Public LConjuntos As List(Of String)    ' List de Conjuntos (TIPO3=CONJUNTO o Largo/Ancho=0)
     Public LLwPolyline As List(Of AcadLWPolyline) = Nothing
+
     Public LZona As List(Of Zona) = Nothing
+
     '
     ' CONSTANTES
     Public IMPLACAD_DATA As String = "C:\ProgramData\IMPLACAD\"
+
     Public Const IMPLACAD_BUNDLE = "C:\ProgramData\Autodesk\ApplicationPlugins\IMPLACAD.bundle\"
     Public arrPaths As List(Of String)
     Public Const regAPP As String = "IMPLACAD"
@@ -69,13 +74,16 @@ Module modVar
     Public sep As String = IO.Path.DirectorySeparatorChar
     Public nSel As String = "Temporal"          ' Nombre fijo de el SelectionSet.
     Public PreEtiquetas As String() = {"AC", "AD", "EV", "EX", "OB", "PR", "SIA"}
+
     '
     ' CAMINOS
     Public appPath As String = System.Reflection.Assembly.GetExecutingAssembly.Location
+
     Public appDir As String = IO.Path.GetDirectoryName(appPath)
     Public appFile As String = IO.Path.GetFileName(appPath)
     Public appName As String = IO.Path.GetFileNameWithoutExtension(appPath)
     Public appXLSX As String = IO.Path.ChangeExtension(appPath, ".xlsx")
+
     'Public appSDF As String = IO.Path.ChangeExtension(appPath, ".sdf")
     '
     ' VARIABLES
@@ -83,9 +91,11 @@ Module modVar
     'Public bloqueID As Long          ' Object ID del bloque a cambiar.
     '' escala=1 (si todo está en mm) / escala=0.1 (si todo está en cm) / escala=0.01 (Si todo esta en m)
     Public escalaTotal As Double = 0.02     '' Con esta variable escalaremos bloques y texto
+
     'Public dirApp As String
     'Public dirBase As String            '' Directorio Base de bloques C:\ProgramData\IMPLACAD  (Ponemos la barra al final)
     Public webActualiza As String       '' Direccion Web del directorio de descarga.
+
     Public vermensajes As Boolean = True
     Public nombreviejo As String = ""
     Public Tipo As String = "*"
@@ -93,6 +103,7 @@ Module modVar
     Public Tipo2 As String = "*"
     Public Tipo3 As String = "*"
     Public app_procesointerno As Boolean = False 'afleta
+
     ''
     Public Function INICargar(Optional ByVal nombreINI As String = "") As String
         If nombreINI = "" Then nombreINI = nIni
@@ -201,6 +212,7 @@ Module modVar
         fs.Write(bytes, 0, Convert.ToInt32(bytes.Length))
         fs.Close()
     End Sub
+
     ''
     Public Function ImplacadEstado() As Estado
         ''ActiNo = 0
@@ -244,6 +256,7 @@ Module modVar
         ''
         Return resultado
     End Function
+
     ''
     Public Function ImplacadActualizado(Optional conMensajes As Boolean = True) As Boolean
         If oApp Is Nothing Then _
@@ -254,7 +267,7 @@ Module modVar
         '' Comprobar si se ha actualizado la aplicación y se tienen los recursos principales.
         Dim ficheropri As String = "C:\ProgramData\IMPLACAD\IMPLACADDATOS.zip"
         If IO.File.Exists(ficheropri) = False Then
-            MsgBox("No existe fichero '" & ficheropri & "'" & vbCrLf & vbCrLf & _
+            MsgBox("No existe fichero '" & ficheropri & "'" & vbCrLf & vbCrLf &
                    "Actualice la aplicación desde ACTUALIZARIMPLACAD", MsgBoxStyle.Critical)
             Return False
             Exit Function
@@ -270,7 +283,7 @@ Module modVar
 
         ''
         If (nFicherosActDwg < nFicherosMinDwg) Or (nFicherosActPng < nFicherosMinPng) Or (nCarpetasAct < nCarpetasMin) Then
-            MsgBox("Faltan recurso en sub-carpetas de '" & IO.Path.GetDirectoryName(ficheropri) & "'" & vbCrLf & vbCrLf & _
+            MsgBox("Faltan recurso en sub-carpetas de '" & IO.Path.GetDirectoryName(ficheropri) & "'" & vbCrLf & vbCrLf &
                    "Actualice la aplicación desde ACTUALIZARIMPLACAD para tenerlos", MsgBoxStyle.Critical)
             Return False
             Exit Function
@@ -278,6 +291,7 @@ Module modVar
         ''
         Return True
     End Function
+
     ''
     Public Function ImplacadEscalaM(Optional conMensajes As Boolean = True) As Boolean
         If oApp Is Nothing Then _
@@ -290,13 +304,14 @@ Module modVar
         If PropiedadLee("ESCALAM") <> "" Then
             resultado = True
         Else
-            MsgBox("¡¡ ESCALAM no se ha ejecutado aún !!" & vbCrLf & vbCrLf & _
+            MsgBox("¡¡ ESCALAM no se ha ejecutado aún !!" & vbCrLf & vbCrLf &
                    "Use primero utilidad ESCALAM para poner la escala en metros y guarde el dibujo.", MsgBoxStyle.Critical)
             resultado = False
         End If
         ''
         Return resultado
     End Function
+
     ''
     Public Function ImplacadActivado(Optional conMensajes As Boolean = True) As Boolean
         If oApp Is Nothing Then _
@@ -318,7 +333,7 @@ Module modVar
                 resultado = True
             Else
                 If conMensajes Then
-                    MsgBox("¡¡ IMPLACAD no está activado !!" & vbCrLf & vbCrLf & _
+                    MsgBox("¡¡ IMPLACAD no está activado !!" & vbCrLf & vbCrLf &
                            "Introduzca el código de activación desde ACTUALIZAIMPLACAD.", MsgBoxStyle.Critical)
                 End If
                 resultado = False
@@ -327,11 +342,12 @@ Module modVar
         ''
         Return resultado
     End Function
+
     ''
     Public Function ImplacadGuardado() As Boolean
         Dim resultado As Boolean = False
         If oApp.ActiveDocument.FullName = "" Then
-            MsgBox("Este documento aún no se ha guardado por primera vez" & vbCrLf & vbCrLf & _
+            MsgBox("Este documento aún no se ha guardado por primera vez" & vbCrLf & vbCrLf &
                    "Guarde antes el documento y vuelva a probar...")
             resultado = False
         ElseIf (oApp.ActiveDocument.FullName <> "" And oApp.ActiveDocument.Saved = False) Then
@@ -343,6 +359,7 @@ Module modVar
         ''
         Return resultado
     End Function
+
     ''
     Public Sub ImplacadDibujoCierra(queFull As String)
         Dim oDoc As Autodesk.AutoCAD.Interop.AcadDocument = Nothing
@@ -355,9 +372,10 @@ Module modVar
             End If
         Next
     End Sub
+
     ''
-    Public Sub ImplacadActivaDocumento(queFull As String, _
-                                       Optional activar As Boolean = True, _
+    Public Sub ImplacadActivaDocumento(queFull As String,
+                                       Optional activar As Boolean = True,
                                        Optional guardar As Boolean = False)
         Dim oDoc As Autodesk.AutoCAD.Interop.AcadDocument = Nothing
         ''
@@ -369,6 +387,7 @@ Module modVar
             End If
         Next
     End Sub
+
     ''
     Public Sub ImplacadGuardaDocumentos()
         Dim oDoc As Autodesk.AutoCAD.Interop.AcadDocument = Nothing
@@ -377,6 +396,7 @@ Module modVar
             oDoc.Save()
         Next
     End Sub
+
     ''
     'Private Sub oApp_AppActivate() Handles oApp.AppActivate
     '    If oApp.Documents.Count = 0 Then Exit Sub
